@@ -1,0 +1,21 @@
+R     1000      700           
+NO   ./path_to_the_north_texture.xpm         
+     
+SO ./path_to_the_south_texture.xpm    
+SO ./path_to_the_south_texture.xpm    
+   WE ./path_to_the_west_texture.xpm
+EA ./path_to_the_east_texture.xpm
+
+S ./path_to_the_sprite_texture.xpm
+F 50, 156, 31
+C     53, 189, 219  
+
+1111111111111
+1001010100011
+1111111100011
+1000001100011
+10000N1111101111
+100000101000001
+100000101000111
+1000001100011
+11111111111111111
