@@ -83,27 +83,30 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int		render_next_frame2(t_data *data)
+/*
+int		render_texture(t_data *data)
 {
 	int	x;
 	int	y;
 	
-	init_ray(data, &data->ray);
+//	init_ray(data, &data->ray);
 	update_image(data);
-	y = 0;
-	while (y < data->settings.Resy)
+	x = 0;
+	while (x < data->NO.tw)
 	{
-		x = 0;
-		while (x < data->settings.Resx)
+		y = 0;
+		while (y < data->NO.th)
 		{
-			my_mlx_pixel_put(&data->img, x, y, (y * x * (data->keycode)));
-			x++;
+			int color = 889568;
+			my_mlx_pixel_put(&data->img, x, y, color);
+			y++;
 		}
-		y++;
+		x++;
 	}
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 	return (0);
 }
+*/
 
 int		main(int argc, char **argv)
 {
@@ -111,20 +114,24 @@ int		main(int argc, char **argv)
 
 	check_args_errors(&data, argc, argv);
 	//histoire du --save en bmp a faire
+//	data.mlx = mlx_init();
 	parse_cub(&data);
 	init_data(&data);//peut-etre remplacer par init window et ini image;
-//    int     img_width;
-//    int     img_height;
+//	ft_putstr_fd("INIT DATA OVER\n", 1);
 
-//  data.img.img = mlx_xpm_file_to_image(data.mlx, "./texture/test.xpm", &img_width, &img_height);
-//    data.img.addr = mlx_get_data_addr(data.img.img, &data.img.bits_per_pixel,
-//			&data.img.line_length, &data.img.endian);
-	mlx_put_image_to_window(data.mlx, data.win, data.img.img, 0, 0);
+	//    data.img.addr = mlx_get_data_addr(data.img.img, &data.img.bits_per_pixel,
+	//			&data.img.line_length, &data.img.endian);
+//	mlx_put_image_to_window(data.mlx, data.win, data.img.img, 0, 0);
+//	ft_putstr_fd("MLX IMG TO WIN OVER\n", 1);
 	hook_event(&data);
-//	mlx_hook(data.win, 2, 1L << 0, presskey, &data);
-//	mlx_loop_hook(data->mlx, render_next_frame, data);
-//	mlx_hook(data.win, 17, 1L << 17, red_cross, &data);
+//	ft_putstr_fd("HOOK EVENT OVER\n", 1);
+	//	mlx_hook(data.win, 2, 1L << 0, presskey, &data);
+	//	mlx_loop_hook(data->mlx, render_next_frame, data);
+	//	mlx_hook(data.win, 17, 1L << 17, red_cross, &data);
 	mlx_loop_hook(data.mlx, render_next_frame, &data);
+//	ft_putstr_fd("LOOP HOOK OVER\n", 1);
+//	print_params(&data);
+//	mlx_loop_hook(data.mlx, render_texture, &data);
 	mlx_loop(data.mlx);//permet a la fenetre de rester ouverte
 	//penser a enlever le fsanitize du makefile
 	return (0);

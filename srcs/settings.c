@@ -96,7 +96,7 @@ void	fill_map(t_data *data, char *line, int i, t_map *map)
 void	fill_resolution(t_data *data, char *line, t_settings *settings)
 {
 	int	i;
-
+//rqjouter un messqge d'erreur si res deja set
 	i = 1;
 	settings->Resx = 0;
 	settings->Resy = 0;
@@ -120,17 +120,55 @@ void	fill_resolution(t_data *data, char *line, t_settings *settings)
 		settings->Resy = 1440;
 }
 
+/*
+#include <mlx.h>
+
+int     main(void)
+{
+	void    *mlx;
+	void    *img;
+	char    *relative_path = "./test.xpm";
+	int     img_width;
+	int     img_height;
+
+	mlx = mlx_init();
+	img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
+}
+*/
+void	get_texture_img(t_data *data, char *path, t_img *textimg)
+{
+		printf("\nI GET THERE 2\n");
+		printf("\nI GET THERE 4\n");
+		textimg->tw = 0;
+		textimg->th = 0;
+	textimg->img = mlx_xpm_file_to_image(data->mlx, path, &textimg->tw, &textimg->th);
+		printf("\nI GET THERE 5\n");
+		printf("\nI GET THERE 5\n");
+	textimg->addr = mlx_get_data_addr(textimg->img, &textimg->bits_per_pixel,
+			&textimg->line_length, &textimg->endian);
+		printf("\nI GET THERE 7\n");
+		printf("\nI GET THERE 7\n");
+}
+
 void	fill_texture(t_data *data, char *line, char *texture)
 {
 	char	*tmp;
 
+	//renvoyer un message d'erreur si texture deja set
+
 	if (!(tmp = ft_strtrim(&line[2], " ")))
 		error_exit(data, "Failed allocating memory for path ", texture);
-	if (ft_memcmp(&tmp[ft_strlen(tmp) - 4], ".xpm", 4))
+	if (ft_memcmp(&tmp[ft_strlen(tmp) - 4], ".xpm", 4) &&
+			ft_memcmp(&tmp[ft_strlen(tmp) - 4], ".png", 4))
 		error_exit(data, "Wrong file for texture ", texture);
 	//ou check_texture_errors ? // erreur a changer en fonction extension voulue
 	if (!ft_strncmp(texture, "NO", 2))
+	{
 		data->settings.NO = ft_strdup(tmp);
+	//	printf("\nI GET THERE\n");
+	//	get_texture_img(data, tmp, &data->NO);
+
+	}
 	if (!ft_strncmp(texture, "SO", 2))
 		data->settings.SO = ft_strdup(tmp);
 	if (!ft_strncmp(texture, "WE", 2))
@@ -147,6 +185,8 @@ void	fill_color(t_data *data, char *line, char *color)
 {
 	char	*tmp;
 	int		rgb;
+
+	//rajouter un messqge d'erreur si color deja set
 
 	if (!(tmp = ft_strtrim(&line[2], " ")))
 		error_exit(data, "Failed allocating memory for color ", color);

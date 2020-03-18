@@ -14,11 +14,9 @@
 typedef struct  s_img{
 	void	*img;
 	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	int		th;
-	int		tw;
+	int	bits_per_pixel;
+	int	line_length;
+	int	endian;
 }               t_img;
 
 typedef struct 	s_settings{
@@ -53,7 +51,7 @@ typedef struct 	s_ray{
 	double	cameraX;
 	double	time;
 	double	oldTime;
-	double	mapX;
+	double	mapX;//current square ray is in
 	double	mapY;
 	double	sideDistX;
 	double	sideDistY;

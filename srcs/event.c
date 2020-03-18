@@ -17,13 +17,13 @@ int		presskey(int keycode, t_data *data)
 	double	oldDirX;
 	double oldPlaneX;
 	double	rotSpeed = 0.18;
-	double	moveSpeed = 0.15;
+	double	moveSpeed = 0.33;
 	t_ray	*ray;
 
 	ray = &data->ray;
 	data->keycode = keycode;
 	//	render_next_frame(data); //possibilite d'utliser cela si loop_hook non utilise dans hook_event mais les images se chevauchent...
-		printf("\nCMD = >%d<\n", keycode);
+	printf("\nCMD = >%d<\n", keycode);
 	if (keycode == ESC)
 		error_exit(data, "\nEverything went well ! ", "\\o/\n");
 	if (keycode == LOOK_LEFT)
@@ -58,16 +58,30 @@ int		presskey(int keycode, t_data *data)
 		if(data->map.map[(int)(data->map.pos_y - ray->dirY * moveSpeed)][(int)data->map.pos_x] != 49)
 			data->map.pos_y -= ray->dirY * moveSpeed;
 	}
+	if (keycode == MOVE_RIGHT)
+	{
+		if(data->map.map[(int)data->map.pos_y][(int)(data->map.pos_x - ray->dirY * moveSpeed)] != 49)
+			data->map.pos_x -= ray->dirY * moveSpeed;
+		if(data->map.map[(int)(data->map.pos_y + ray->dirX * moveSpeed)][(int)data->map.pos_x] != 49)
+			data->map.pos_y += ray->dirX * moveSpeed;
+	}
+	if (keycode == MOVE_LEFT)
+	{
+		if(data->map.map[(int)data->map.pos_y][(int)(data->map.pos_x + ray->dirY * moveSpeed)] != 49)
+			data->map.pos_x += ray->dirY * moveSpeed;
+		if(data->map.map[(int)(data->map.pos_y - ray->dirX * moveSpeed)][(int)data->map.pos_x] != 49)
+			data->map.pos_y -= ray->dirX * moveSpeed;
+	}
 	/*
 	//move backwards if no wall behind you
 	if (keyDown(SDLK_DOWN))
 	{
-		if(worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false) posX -= dirX * moveSpeed;
-		if(worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false) posY -= dirY * moveSpeed;
+	if(worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false) posX -= dirX * moveSpeed;
+	if(worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false) posY -= dirY * moveSpeed;
 	}
 	//	if (keycode == LOOK_RIGHT)
 	//		error_exit(data, "\nEverything went well ! ", "\\o/\n");
-*/
+	*/
 	int i = 0;
 	int j = 0;
 	while (i < data->map.Height)
@@ -117,7 +131,10 @@ int		presskey(int keycode, t_data *data)
 	printf("\nmap(mapY;mapX) (//!\\\\char) = %c", data->map.map[(int)data->ray.mapY][(int)data->ray.mapX]);
 	printf("\nrayX = %f", data->ray.rayX);
 	printf("\nrayY = %f", data->ray.rayY);
-	printf("\ncameraX = %f", data->ray.cameraX);
+	printf("\ndeltaDistX = %f", data->ray.deltaDistX);
+	printf("\ndeltaDistY = %f", data->ray.deltaDistY);
+	printf("\nsideDistX = %f", data->ray.sideDistX);
+	printf("\nsideDistY = %f", data->ray.sideDistY);
 	printf("\nstepX = %d", data->ray.stepX);
 	printf("\nstepY = %d", data->ray.stepY);
 	printf("\nside = %d", data->ray.side);
@@ -152,7 +169,8 @@ void	print_params(t_data *data)//outil de verification a supprimer
 	printf("\nMap_height = %d", data->map.Height);
 	printf("\nPlayer is located at (%f,%f)", data->map.pos_x, data->map.pos_y);
 	printf("\nPlayer orientation = >%c<", data->map.player_orientation);
-	printf("\n\n  -- RAYCASTING --\n--------------------\ninitdirX = %f", data->ray.dirX);
+	printf("\n\n  -- RAYCASTING --\n--------------------\ndirX = %f", data->ray.dirX);
+	printf("\ndirY = %f", data->ray.dirY);
 	printf("\nrayX = %f", data->ray.rayX);
 	printf("\nrayY = %f", data->ray.rayY);
 	printf("\ncameraX = %f", data->ray.cameraX);
@@ -206,20 +224,14 @@ int		render_next_frame(t_data *data)
 	t_ray	*ray;
 
 	ray = &data->ray;
-
-
 	width = (double)data->settings.Resx;
-	//	printf("\nwidtg in main is = %f\n", width);
-	//	init_ray(data, &data->ray);
-	//	update_image(data);
-	//	printf("MAIN POS A\n");
 	x = 0;
 	while (x < data->settings.Resx)
 		//	while (x < 2)
 	{
 		//init la position initiale du ray (ie, la position du player)
-		ray->mapX = data->map.pos_x;
-		ray->mapY = data->map.pos_y;
+		ray->mapX = (int)data->map.pos_x;
+		ray->mapY = (int)data->map.pos_y;
 
 
 		//ramplacer la valeur de la case du joueur par '0' pas sur que ce soit utile fait dans init.
@@ -237,22 +249,22 @@ int		render_next_frame(t_data *data)
 		if (ray->rayX < 0)
 		{
 			ray->stepX = -1;
-			ray->sideDistX = (data->map.pos_x - ray->mapX + 0.5) * ray->deltaDistX;
+			ray->sideDistX = (data->map.pos_x - ray->mapX) * ray->deltaDistX;
 		}
 		else
 		{
 			ray->stepX = 1;
-			ray->sideDistX = (ray->mapX + 0.5 - data->map.pos_x) * ray->deltaDistX;
+			ray->sideDistX = (ray->mapX + 1.0 - data->map.pos_x) * ray->deltaDistX;
 		}
 		if (data->ray.rayY < 0)
 		{
 			ray->stepY = -1;
-			ray->sideDistY = (data->map.pos_y - ray->mapY + 0.5) * ray->deltaDistY;
+			ray->sideDistY = (data->map.pos_y - ray->mapY) * ray->deltaDistY;
 		}
 		else
 		{
 			ray->stepY = 1;
-			ray->sideDistY = (ray->mapY + 0.5 - data->map.pos_y) * ray->deltaDistY;
+			ray->sideDistY = (ray->mapY + 1.0 - data->map.pos_y) * ray->deltaDistY;
 		}
 		data->ray.hit = 0;
 		//perform DDA 
@@ -268,7 +280,7 @@ int		render_next_frame(t_data *data)
 			   printf("\ndeltaDistY = %f", data->ray.deltaDistY);
 			   printf("\nsideDistX = %f", data->ray.sideDistX);
 			   printf("\nsideDistY = %f", data->ray.sideDistY);
-			 */
+			   */
 			if(ray->sideDistX < ray->sideDistY)
 			{
 				ray->sideDistX += ray->deltaDistX;
@@ -293,16 +305,14 @@ int		render_next_frame(t_data *data)
 		   printf("\ndeltaDistY = %f", data->ray.deltaDistY);
 		   printf("\nsideDistX = %f", data->ray.sideDistX);
 		   printf("\nsideDistY = %f\n\n", data->ray.sideDistY);
-		 */
+		   */
 		//	printf("MAIN POS E2\n");
 		//calculate distance to wall
-		ray->mapX = ray->mapX;
-		ray->mapY = ray->mapY;
 
 		if(ray->side == 0)
-			ray->perpWallDist = (ray->mapX - data->map.pos_x - data->map.pos_x + (int)data->map.pos_x + (1 - ray->stepX)/2)/ ray->rayX ;
+			ray->perpWallDist = (ray->mapX - data->map.pos_x + (1 - ray->stepX)/2)/ ray->rayX ;
 		else
-			ray->perpWallDist = (ray->mapY - data->map.pos_y - data->map.pos_y +(int)data->map.pos_y + (1 - ray->stepY)/2)/ ray->rayY;
+			ray->perpWallDist = (ray->mapY - data->map.pos_y + (1 - ray->stepY)/2)/ ray->rayY;
 		//		print_params(data);
 		//	printf("MAIN POS F\n");
 		//Calculate height of line to draw on screen
@@ -319,6 +329,26 @@ int		render_next_frame(t_data *data)
 		ray->drawEnd = ray->lineHeight / 2 + data->settings.Resy / 2;
 		if(ray->drawEnd >= data->settings.Resy)
 			ray->drawEnd = data->settings.Resy;
+			/*
+		int tw = data->NO.tw;
+		int th = data->NO.th;
+		//	int *texture = NULL;
+
+		//calculate value of wallX
+		double wallX; //where exactly the wall was hit
+		if (ray->side == 0)
+			wallX = data->map.pos_y + ray->perpWallDist * ray->rayY;
+		else
+			wallX = data->map.pos_x + ray->perpWallDist * ray->rayX;
+		wallX -= floor((wallX));
+
+		//x coordinate on the texture
+		int texX = (int)(wallX * (double)tw);
+		if(ray->side == 0 && ray->rayX > 0)
+			texX = tw - texX - 1;
+		if(ray->side == 1 && ray->rayY < 0)
+			texX = tw - texX - 1;
+			*/
 
 		//	printf("MAIN POS H\n");
 		int color;
@@ -347,9 +377,20 @@ int		render_next_frame(t_data *data)
 			my_mlx_pixel_put(&data->img, x, y, data->settings.C);
 			y++;
 		}
-
+/*
+		// How much to increase the texture coordinate per screen pixel
+		double step = 1.0 * th / ray->lineHeight;
+		// Starting texture coordinate
+		double texPos = (data->ray.drawStart - data->settings.Resy / 2 + ray->lineHeight / 2) * step;
+		*/
 		while (y < data->ray.drawEnd)
 		{
+			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+			//			int texY = (int)texPos & (th - 1);
+	//		texPos += step;
+			//	color = (int)&data->NO.img[th * texY + texX];
+			//	buffer[y][x] = color;
+
 			my_mlx_pixel_put(&data->img, x, y, color);
 			y++;
 		}
@@ -380,14 +421,14 @@ int		render_next_frame(t_data *data)
 				{
 					if (i == (int)data->map.pos_y && j == (int)data->map.pos_x)
 					{
-				if (data->ray.dirY <= 0 && (fabs(data->ray.dirY) > fabs(data->ray.dirX)))
-					printf("P^");
-				else if (data->ray.dirX >= 0  && (data->ray.dirX > fabs(data->ray.dirY)))
-					printf("P>");
-				else if (data->ray.dirY >= 0  && (data->ray.dirY > fabs(data->ray.dirX)))
-					printf("Pv");
-				else if (data->ray.dirX <= 0  && (fabs(data->ray.dirX) > fabs(data->ray.dirY)))
-					printf("<P");
+						if (data->ray.dirY <= 0 && (fabs(data->ray.dirY) > fabs(data->ray.dirX)))
+							printf("P^");
+						else if (data->ray.dirX >= 0  && (data->ray.dirX > fabs(data->ray.dirY)))
+							printf("P>");
+						else if (data->ray.dirY >= 0  && (data->ray.dirY > fabs(data->ray.dirX)))
+							printf("Pv");
+						else if (data->ray.dirX <= 0  && (fabs(data->ray.dirX) > fabs(data->ray.dirY)))
+							printf("<P");
 						else
 							printf("ERROR");
 					}

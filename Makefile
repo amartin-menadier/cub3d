@@ -12,7 +12,7 @@
 
 NAME			= Cub3D
 
-SRCS1			= cub3d.c errors.c event.c free_and_update.c init.c parsing.c scene.c
+SRCS1			= cub3d.c errors.c event.c free_and_update.c init.c parsing.c settings.c
 
 SRCS			= $(addprefix $(SRCS_DIR), $(SRCS1))
 OBJS			= $(addprefix $(OBJS_DIR), $(SRCS1:.c=.o))
