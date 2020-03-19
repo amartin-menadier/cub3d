@@ -14,100 +14,87 @@
 
 void	init_image(t_data *data, t_img *img)
 {
-	img->img = mlx_new_image(data->mlx, data->settings.Resx,
-			data->settings.Resy);
-	img->colors = (int *)mlx_get_data_addr(img->img, &img->bits_per_pixel,
+	img->ptr = mlx_new_image(data->mlx, data->settings.win_width,
+			data->settings.win_height);
+	img->colors = (int *)mlx_get_data_addr(img->ptr, &img->bits_per_pixel,
 			&img->line_length, &img->endian);
 	//bpp, line length et endian set automatiquement par mlx. Pas tout compris.
 }
 
 void	init_window(t_data *data)
 {
-//	data->mlx = mlx_init();
-	data->win = mlx_new_window(data->mlx, data->settings.Resx,
-			data->settings.Resy, "Cub3D");
+	data->mlx = mlx_init();
+	data->win = mlx_new_window(data->mlx, data->settings.win_width,
+			data->settings.win_height, "Cub3D");
 }
 
 void	init_settings(t_settings *settings)
 {
-//	ft_putstr_fd("\nI GET INTO INIT_SCENE\n", 1);
-	settings->Resx = -1;
-	settings->Resy = -1;
+	settings->win_width = 0;
+	settings->win_height = 0;
 	//recuperer ici la taile de l'ecran et mettre valeur Rx max et Ry max
-	settings->NO.colors = NULL;
-	settings->SO.colors = NULL;
-	settings->WE.colors = NULL;
-	settings->EA.colors = NULL;
-	settings->S = NULL;
-	settings->F = -1;
-	settings->C = -1;
+	settings->NO_path = NULL;
+	settings->SO_path = NULL;
+	settings->WE_path = NULL;
+	settings->EA_path = NULL;
+	settings->Sprite_path = NULL;
+	settings->Floor_color = -1;
+	settings->Ceiling_color = -1;
+	settings->map_width = 1;
+	settings->map_height = 0;
+	settings->player_orientation = (char)NULL;
+	settings->init_posX = -1;
+	settings->init_posY = -1;
+	settings->map = NULL;
 }
 
-void	init_map(t_map *map)
+void	init_frame(t_data *data, t_frame *frame)
 {
-	map->Width = 1;
-	map->Height = 0;
-	map->player_orientation = 0;
-	map->pos_x = -1;
-	map->pos_y = -1;
-	map->map = NULL;
-}
-
-void	init_ray(t_data *data, t_ray *ray)
-{
-		//init le vecteur initiale direction du ray et vecteur camera plane
-	if (data->map.player_orientation == 'N')
+		//init le vecteur initiale direction du frame et vecteur camera plane
+	if (data->settings.player_orientation == 'N')
 	{
-		ray->dirX = 0;
-		ray->dirY = -1;
-		ray->planeX = 0.6;
-		ray->planeY = 0;
+		frame->dirX = 0;
+		frame->dirY = -1;
+		frame->planeX = 0.7;
+		frame->planeY = 0;
 	}
-	if (data->map.player_orientation == 'E')
+	if (data->settings.player_orientation == 'E')
 	{
-		ray->dirX = 1;
-		ray->dirY = 0;
-		ray->planeX = 0;
-		ray->planeY = 0.6;
+		frame->dirX = 1;
+		frame->dirY = 0;
+		frame->planeX = 0;
+		frame->planeY = 0.7;
 	}
-	if (data->map.player_orientation == 'S')
+	if (data->settings.player_orientation == 'S')
 	{
-		ray->dirX = 0;
-		ray->dirY = 1;
-		ray->planeX = -0.6;
-		ray->planeY = 0;
+		frame->dirX = 0;
+		frame->dirY = 1;
+		frame->planeX = -0.7;
+		frame->planeY = 0;
 	}
-	if (data->map.player_orientation == 'W')//
+	if (data->settings.player_orientation == 'W')//
 	{
-		ray->dirX = -1;
-		ray->dirY = 0;
-		ray->planeX = 0;
-		ray->planeY = -0.6;
+		frame->dirX = -1;
+		frame->dirY = 0;
+		frame->planeX = 0;
+		frame->planeY = -0.7;
 	}
-	data->map.pos_x += 0.5;
-	data->map.pos_y += 0.5;
-	data->map.map[(int)data->map.pos_y][(int)data->map.pos_x] = '0';
-	//		ray->mapX = (int)data->map.pos_x;
-	//		ray->mapY = (int)data->map.pos_y;
-	//	ray->planeX = 0;
-	//	ray->planeY = 0.66;
-	//		ray->cameraX = 0;
-	//pour update ce sera cameraX = 2 * x / settingsResY - 1 
-	ray->time = 0;
-	ray->oldTime = 0;
-	ray->hit = 0;
-	//couleurs arbitraires a changer en textures.
-	ray->NO = 16562691;
-	ray->SO = 16711680;
-	ray->WE = 19240321;
-	ray->EA = 255;
-	ray->S = 65280;
-	//		ray->deltaDistX = fabs(1 / ray->raydirX);
+	data->frame.posX = data->settings.init_posX + 0.5;
+	data->frame.posY = data->settings.init_posY + 0.5;
+	data->settings.map[data->settings.init_posY][data->settings.init_posX] = '0';
+	frame->time = 0;
+	frame->oldTime = 0;
+	frame->hit = 0;
+	get_texture_img(data, data->settings.NO_path, &data->frame.NO_img);
+	get_texture_img(data, data->settings.SO_path, &data->frame.SO_img);
+	get_texture_img(data, data->settings.WE_path, &data->frame.WE_img);
+	get_texture_img(data, data->settings.WE_path, &data->frame.EA_img);
+//	get_texture_img(data, data->settings.Sprite_path, &data->frame.Sprite_img);
 }
 
 void	init_data(t_data *data)
 {
 	init_window(data);
 	init_image(data, &data->img);
-	init_ray(data, &data->ray);
+	init_frame(data, &data->frame);
 }

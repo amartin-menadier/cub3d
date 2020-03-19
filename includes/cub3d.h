@@ -12,7 +12,7 @@
 
 
 typedef struct  s_img{
-	void	*img;
+	void	*ptr;
 	int		*colors;
 	int		bits_per_pixel;
 	int		line_length;
@@ -22,24 +22,26 @@ typedef struct  s_img{
 }               t_img;
 
 typedef struct 	s_settings{
-	int	fd;
-	int	Resx;
-	int	Resy;
-	/*
-	char	*NO;
-	char	*SO;//south
-	char	*WE;
-	char	*EA;
-	*/
-	t_img		NO;
-	t_img		SO;
-	t_img		EA;
-	t_img		WE;
-	char	*S;//sprite
-	int	F;//Floor
-	int	C;//Ceiling
+	int		fd;
+	int		win_width;
+	int		win_height;
+	char	*NO_path;
+	char	*SO_path;
+	char	*EA_path;
+	char	*WE_path;
+	char	*Sprite_path;
+	int		Floor_color;
+	int		Ceiling_color;
+	char	**map;
+	int		map_width;
+	int		map_height;
+	char	player_orientation;
+	int		init_posX;
+	int		init_posY;
 }               t_settings;
 
+/*
+//potentiellement a degager...
 typedef struct 	s_map{
 	int		Width;
 	int		Height;
@@ -48,8 +50,11 @@ typedef struct 	s_map{
 	double		pos_y;
 	char	**map;
 }				t_map;	
+*/
 
-typedef struct 	s_ray{
+typedef struct 	s_frame{
+	double	posX;
+	double	posY;
 	double	dirX;
 	double	dirY;
 	double	rayX;
@@ -73,20 +78,22 @@ typedef struct 	s_ray{
 	int	lineHeight;
 	int	drawStart;
 	int	drawEnd;
-	int	NO;
-	int	SO;
-	int	WE;
-	int	EA;
-	int	S;
-}		t_ray;
+	double	wallX;
+	int		texX;
+	int		texY;
+	t_img	NO_img;
+	t_img	SO_img;
+	t_img	EA_img;
+	t_img	WE_img;
+	t_img	Sprite_img;
+}		t_frame;
 
 typedef struct 	s_data{
 	void		*mlx;
 	void		*win;
 	t_img		img;
 	t_settings	settings;
-	t_map		map;
-	t_ray		ray;
+	t_frame		frame;
 	int		keycode;
 }               t_data;
 
@@ -94,23 +101,14 @@ typedef struct 	s_data{
 ** cub3d.c
 */
 
-int		render_texture(t_data *data);
-int		close_window(t_data *data, int mod);
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
-void	get_texture_img(t_data *data, char *path, t_img *textimg);
-int     render_next_frame(t_data *data);
+void	check_args_errors(t_data *data, int argc, char **argv);
+int		main(int argc, char **argv);
 
 /*
-** errors.c
+** colors.c
 */
 
-int		error_exit(t_data *data, char *Error_msg, char *str);
-int		settings_is_set(t_settings *settings);
-int		is_map(t_data *data, t_map *map, int i, int j);
-void		check_map_neighbors(t_data *data, t_map *map, int i, int j);
-void	check_map_errors(t_data *data, t_map *map);
-void	check_settings_errors(t_data *data, char *line);
-void	check_args_errors(t_data *data, int argc, char **argv);
+void	fill_color(t_data *data, char *line, char *color);
 
 /*
 ** event.c
@@ -121,12 +119,31 @@ int		red_cross(t_data *data);
 void	hook_event(t_data *data);
 
 /*
-** free_and_update.c
+** exit.c
 */
 
-void	update_image(t_data *data);
-void	free_map(t_map *map);
+int		close_program(t_data *data, char *error_msg, char *str);
 void	free_settings(t_settings *settings);
+void	free_map(t_settings *settings);
+
+/*
+** frame.c
+*/
+
+void	draw_colum(t_data *data, t_frame *frame, t_img *textimg, int x);
+t_img	*pick_texture(t_frame *frame);
+void	set_drawing_limits(t_data *data, t_frame *frame);
+void	perform_DDA(t_data *data, t_frame *frame);
+void	set_ray(t_data *data, t_frame *frame, int x);
+int     render_next_frame(t_data *data);
+
+/*
+** img.c
+*/
+
+int		render_texture(t_data *data, t_img *textimg, int x, int y);
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	get_texture_img(t_data *data, char *path, t_img *textimg);
 
 /*
 ** init.c
@@ -135,35 +152,49 @@ void	free_settings(t_settings *settings);
 void	init_image(t_data *data, t_img *img);
 void	init_window(t_data *data);
 void	init_settings(t_settings *settings);
-void	init_map(t_map *map);
-void	init_ray(t_data *data, t_ray *ray);
+void	init_frame(t_data *data, t_frame *frame);
 void	init_data(t_data *data);
+
+/*
+** map.c
+*/
+
+int		is_map(t_data *data, t_settings *settings, int i, int j);
+void	check_map_errors(t_data *data, t_settings *settings);
+void	check_square_neighbors(t_data *data, t_settings *settings, int i, int j);
+char	**fill_tmp_map(t_data *data, t_settings *settings, char**tmp, char *line);
+void	fill_map(t_data *data, char *line, int i, t_settings *settings);
 
 /*
 ** parsing.c
 */
 
-void	parse_map(t_data *data, t_map *map);
-void	parse_settings(t_data *data, char *line);
+int		settings_all_set(t_data *data, t_settings *settings, char *line);
+int		check_settings(t_data *data, t_settings *settings, char *line);
+void	parse_line(t_data *data, char *line);
 int		parse_cub(t_data *data);
 
 /*
-** settings.c
+** resolution.c
 */
 
-char	**fill_tmp_map(t_data *data, t_map *map, char**tmp, char *line);
-void	fill_map(t_data *data, char *line, int i, t_map *map);
 void	fill_resolution(t_data *data, char *line, t_settings *settings);
+
+/*
+** textures.c
+*/
+
 void	fill_texture(t_data *data, char *line, char *texture);
-void	fill_color(t_data *data, char *line, char *color);
-void	fill_settings(t_data *data, char *line, int i);
 
 /*
 ** TO BE DELETED
 */
 
 void	print_params(t_data *data);
-void	print_params2(t_data *data);
+
+/*
+** KEY VALUES
+*/
 
 # define ESC 53
 # define LOOK_LEFT 123
