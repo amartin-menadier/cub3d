@@ -30,7 +30,7 @@ int		error_exit(t_data *data, char *error_msg, char *str)
 		ft_putstr_fd("Error\n", 1);
 	ft_putstr_fd(error_msg, 1);
 	ft_putstr_fd(str, 1);
-//	print_params(data);
+	print_params2(data);
 	free_settings(&data->settings);
 //	data->map.Height += 1;
 	free_map(&data->map);
@@ -45,8 +45,8 @@ int		error_exit(t_data *data, char *error_msg, char *str)
 
 int		settings_is_set(t_settings *settings)
 {
-	if (settings->Resx == -1 || settings->Resy == -1 || settings->NO == NULL ||
-			settings->SO == NULL || settings->WE == NULL || settings->EA == NULL ||
+	if (settings->Resx == -1 || settings->Resy == -1 ||
+			settings->SO.colors == NULL || settings->WE.colors == NULL || settings->EA.colors == NULL || settings->NO.colors == NULL ||
 			settings->S == NULL || settings->F == -1 || settings->C == -1)
 		return (0);
 	else

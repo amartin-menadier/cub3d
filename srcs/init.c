@@ -16,14 +16,14 @@ void	init_image(t_data *data, t_img *img)
 {
 	img->img = mlx_new_image(data->mlx, data->settings.Resx,
 			data->settings.Resy);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
+	img->colors = (int *)mlx_get_data_addr(img->img, &img->bits_per_pixel,
 			&img->line_length, &img->endian);
 	//bpp, line length et endian set automatiquement par mlx. Pas tout compris.
 }
 
 void	init_window(t_data *data)
 {
-	data->mlx = mlx_init();
+//	data->mlx = mlx_init();
 	data->win = mlx_new_window(data->mlx, data->settings.Resx,
 			data->settings.Resy, "Cub3D");
 }
@@ -34,10 +34,10 @@ void	init_settings(t_settings *settings)
 	settings->Resx = -1;
 	settings->Resy = -1;
 	//recuperer ici la taile de l'ecran et mettre valeur Rx max et Ry max
-	settings->NO = NULL;
-	settings->SO = NULL;
-	settings->WE = NULL;
-	settings->EA = NULL;
+	settings->NO.colors = NULL;
+	settings->SO.colors = NULL;
+	settings->WE.colors = NULL;
+	settings->EA.colors = NULL;
 	settings->S = NULL;
 	settings->F = -1;
 	settings->C = -1;

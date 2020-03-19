@@ -42,19 +42,19 @@ void	free_map(t_map *map)
 
 void	free_settings(t_settings *settings)
 {
-	if (settings->NO != NULL)
-		free(settings->NO);
-	if (settings->SO != NULL)
-		free(settings->SO);
-	if (settings->WE != NULL)
-		free(settings->WE);
-	if (settings->EA != NULL)
-		free(settings->EA);
+	if (settings->NO.colors != NULL)
+		free(settings->NO.colors);
+	if (settings->SO.colors != NULL)
+		free(settings->SO.colors);
+	if (settings->WE.colors != NULL)
+		free(settings->WE.colors);
+	if (settings->EA.colors != NULL)
+		free(settings->EA.colors);
 	if (settings->S != NULL)
 		free(settings->S);
-	settings->NO = NULL;
-	settings->SO = NULL;
-	settings->WE = NULL;
-	settings->EA = NULL;
+	settings->NO.colors = NULL;
+	settings->SO.colors = NULL;
+	settings->WE.colors = NULL;
+	settings->EA.colors = NULL;
 	settings->S = NULL;
 }

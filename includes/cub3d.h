@@ -13,7 +13,7 @@
 
 typedef struct  s_img{
 	void	*img;
-	char	*addr;
+	int		*colors;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
@@ -25,10 +25,16 @@ typedef struct 	s_settings{
 	int	fd;
 	int	Resx;
 	int	Resy;
+	/*
 	char	*NO;
 	char	*SO;//south
 	char	*WE;
 	char	*EA;
+	*/
+	t_img		NO;
+	t_img		SO;
+	t_img		EA;
+	t_img		WE;
 	char	*S;//sprite
 	int	F;//Floor
 	int	C;//Ceiling
@@ -88,8 +94,10 @@ typedef struct 	s_data{
 ** cub3d.c
 */
 
+int		render_texture(t_data *data);
 int		close_window(t_data *data, int mod);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	get_texture_img(t_data *data, char *path, t_img *textimg);
 int     render_next_frame(t_data *data);
 
 /*
@@ -155,6 +163,7 @@ void	fill_settings(t_data *data, char *line, int i);
 */
 
 void	print_params(t_data *data);
+void	print_params2(t_data *data);
 
 # define ESC 53
 # define LOOK_LEFT 123

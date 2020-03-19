@@ -329,17 +329,47 @@ int		render_next_frame(t_data *data)
 		ray->drawEnd = ray->lineHeight / 2 + data->settings.Resy / 2;
 		if(ray->drawEnd >= data->settings.Resy)
 			ray->drawEnd = data->settings.Resy;
-			/*
-		int tw = data->NO.tw;
-		int th = data->NO.th;
+
+
 		//	int *texture = NULL;
 
 		//calculate value of wallX
 		double wallX; //where exactly the wall was hit
-		if (ray->side == 0)
+		int tw;
+		int th;
+		int  *colors;
+		if (ray->side == 0)//EA and WE
+		{
 			wallX = data->map.pos_y + ray->perpWallDist * ray->rayY;
+			if (ray->rayX >0)//EA
+			{
+		tw = data->settings.EA.tw;
+		th = data->settings.EA.th;
+		colors = data->settings.EA.colors;
+			}
+			else//WE
+			{
+		tw = data->settings.WE.tw;
+		th = data->settings.WE.th;
+		colors = data->settings.WE.colors;
+			}
+		}
 		else
+		{
 			wallX = data->map.pos_x + ray->perpWallDist * ray->rayX;
+			if (ray->rayY >0)//SO
+			{
+		tw = data->settings.SO.tw;
+		th = data->settings.SO.th;
+		colors = data->settings.SO.colors;
+			}
+			else//NO
+			{
+		tw = data->settings.NO.tw;
+		th = data->settings.NO.th;
+		colors = data->settings.NO.colors;
+			}
+		}
 		wallX -= floor((wallX));
 
 		//x coordinate on the texture
@@ -348,9 +378,9 @@ int		render_next_frame(t_data *data)
 			texX = tw - texX - 1;
 		if(ray->side == 1 && ray->rayY < 0)
 			texX = tw - texX - 1;
-			*/
 
 		//	printf("MAIN POS H\n");
+		/*
 		int color;
 		if (ray->side == 1)
 		{
@@ -370,6 +400,7 @@ int		render_next_frame(t_data *data)
 				color = 11022898;
 			//	color = ray->WE;
 		}
+		*/
 
 		y = 0;
 		while (y < data->ray.drawStart)
@@ -377,18 +408,18 @@ int		render_next_frame(t_data *data)
 			my_mlx_pixel_put(&data->img, x, y, data->settings.C);
 			y++;
 		}
-/*
+
 		// How much to increase the texture coordinate per screen pixel
 		double step = 1.0 * th / ray->lineHeight;
 		// Starting texture coordinate
 		double texPos = (data->ray.drawStart - data->settings.Resy / 2 + ray->lineHeight / 2) * step;
-		*/
+
 		while (y < data->ray.drawEnd)
 		{
 			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-			//			int texY = (int)texPos & (th - 1);
-	//		texPos += step;
-			//	color = (int)&data->NO.img[th * texY + texX];
+				int texY = (int)texPos & (th - 1);
+		texPos += step;
+		int color = colors[th * texY + texX];
 			//	buffer[y][x] = color;
 
 			my_mlx_pixel_put(&data->img, x, y, color);
@@ -453,6 +484,10 @@ int		render_next_frame(t_data *data)
 	//	printf("y = %d\n", y);
 	//	print_params(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
+/*
+	render_texture(data);
+	mlx_put_image_to_window(data->mlx, data->win, data->NO.img, 0, 0);
+*/
 	//	mlx_hook(data->win, 2, 1L << 0, presskey, data);
 
 	return (0);

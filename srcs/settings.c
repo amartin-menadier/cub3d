@@ -135,20 +135,16 @@ int     main(void)
 	img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
 }
 */
+/*
 void	get_texture_img(t_data *data, char *path, t_img *textimg)
 {
-		printf("\nI GET THERE 2\n");
-		printf("\nI GET THERE 4\n");
 		textimg->tw = 0;
 		textimg->th = 0;
 	textimg->img = mlx_xpm_file_to_image(data->mlx, path, &textimg->tw, &textimg->th);
-		printf("\nI GET THERE 5\n");
-		printf("\nI GET THERE 5\n");
 	textimg->addr = mlx_get_data_addr(textimg->img, &textimg->bits_per_pixel,
 			&textimg->line_length, &textimg->endian);
-		printf("\nI GET THERE 7\n");
-		printf("\nI GET THERE 7\n");
 }
+*/
 
 void	fill_texture(t_data *data, char *line, char *texture)
 {
@@ -164,17 +160,21 @@ void	fill_texture(t_data *data, char *line, char *texture)
 	//ou check_texture_errors ? // erreur a changer en fonction extension voulue
 	if (!ft_strncmp(texture, "NO", 2))
 	{
-		data->settings.NO = ft_strdup(tmp);
+//		data->settings.NO = ft_strdup(tmp);
+	get_texture_img(data, tmp, &data->settings.NO);
 	//	printf("\nI GET THERE\n");
 	//	get_texture_img(data, tmp, &data->NO);
 
 	}
 	if (!ft_strncmp(texture, "SO", 2))
-		data->settings.SO = ft_strdup(tmp);
+	get_texture_img(data, tmp, &data->settings.SO);
+	//	data->settings.SO = ft_strdup(tmp);
 	if (!ft_strncmp(texture, "WE", 2))
-		data->settings.WE = ft_strdup(tmp);
+	get_texture_img(data, tmp, &data->settings.WE);
+	//	data->settings.WE = ft_strdup(tmp);
 	if (!ft_strncmp(texture, "EA", 2))
-		data->settings.EA = ft_strdup(tmp);
+	get_texture_img(data, tmp, &data->settings.EA);
+	//	data->settings.EA = ft_strdup(tmp);
 	if (!ft_strncmp(texture, "S ", 2))
 		data->settings.S = ft_strdup(tmp);
 	free(tmp);
