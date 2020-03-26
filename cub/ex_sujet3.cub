@@ -1,0 +1,22 @@
+R     700      500           
+NO   ./textures/roll.xpm         
+     
+SO ./textures/bat.xpm    
+   WE ./textures/zombie.xpm
+EA ./textures/microbeB.xpm
+
+S ./textures/barrel.xpm
+F 50, 156, 31
+C     53, 189, 219  
+
+1111111
+1101111
+1120001
+1001001
+1101111
+1000201
+1000201
+1111001
+1000001
+12000N1
+1111111

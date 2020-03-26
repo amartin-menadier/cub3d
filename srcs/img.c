@@ -23,6 +23,8 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 void	get_texture_img(t_data *data, char *path, t_img *textimg)
 {
 	textimg->ptr = mlx_xpm_file_to_image(data->mlx, path, &textimg->tw, &textimg->th);
+	if (textimg->ptr == NULL)
+		close_program(data, "Invalid or missing file at :\n   > ", path);
 	textimg->colors = (int*)mlx_get_data_addr(textimg->ptr, &textimg->bits_per_pixel,
 			&textimg->line_length, &textimg->endian);
 }

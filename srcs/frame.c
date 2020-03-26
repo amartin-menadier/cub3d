@@ -12,6 +12,214 @@
 
 #include "cub3d.h"
 
+void	draw_sprites(t_data *data, t_settings *settings, t_frame *frame, t_img *textimg)
+{
+	int i;
+	int	j;
+	t_frame *F;
+	t_settings *S;
+
+	F = frame;
+	S = settings;
+	i = 0;
+	j = 0;
+
+	while (i< settings->numSprites || j < settings->numSprites)
+	{
+		if (j == F->spriteorder[i])
+		{
+			//translate sprite position to relative to camera
+			F->spriteX = settings->spritex[i] - F->posX;
+			F->spriteY = settings->spritey[i] - F->posY;
+			//	print_sprites(data);//a supprimer. Fonction de verification
+			F->invDet = 1.0 / (F->planeX * F->dirY - F->dirX * F->planeY);
+			F->transfX = F->invDet * (F->dirY * F->spriteX - F->dirX * F->spriteY);
+			F->transfY = F->invDet * (F->planeX * F->spriteY - F->planeY * F->spriteX);
+			F->spriteScreenX = (int)((S->win_width / 2) * (1 + F->transfX / F->transfY));
+			F->spriteHeight = abs((int)(settings->win_height / (F->transfY)));
+			F->drawStartY = -F->spriteHeight / 2 + settings->win_height / 2;
+			if(F->drawStartY < 0) 
+				F->drawStartY = 0;
+			F->drawEndY = F->spriteHeight / 2 + settings->win_height / 2;
+			if(F->drawEndY >= settings->win_height)
+				F->drawEndY = settings->win_height - 1;
+			F->spriteWidth = abs((int)(settings->win_height / (F->transfY)));
+			F->drawStartX = -F->spriteWidth / 2 + F->spriteScreenX;
+			if(F->drawStartX < 0) 
+				F->drawStartX = 0;
+			F->drawEndX = F->spriteWidth / 2 + F->spriteScreenX;
+			if(F->drawEndX >= settings->win_width)
+				F->drawEndX = settings->win_width - 1;
+			int		stripe;
+			int		y;
+			int		d;
+			stripe = F->drawStartX;
+			while (stripe < F->drawEndX)
+			{
+				F->texX = (int)(256 * (stripe - (-F->spriteWidth / 2 
+								+ F->spriteScreenX)) * textimg->tw / F->spriteWidth) / 256;
+				if(F->transfY > 0 && stripe > 0 && stripe < settings->win_width && F->transfY < F->Zbuffer[stripe])
+				{
+					y = F->drawStartY;
+					while(y < F->drawEndY)
+					{
+						d = (y) * 256 - settings->win_height * 128 + F->spriteHeight * 128;
+						F->texY = ((d * textimg->th) / F->spriteHeight) / 256;
+
+						if ((textimg->colors[textimg->th * F->texY + F->texX] & 0x00FFFFFF) != 0)
+							my_mlx_pixel_put(&data->img, stripe, y,
+									textimg->colors[textimg->th * F->texY + F->texX]);
+						//		   Uint32 color = texture[sprite[spriteOrder[i]].texture][texWidth * texY + texX]; //get current color from the texture
+						//		   if((color & 0x00FFFFFF) != 0) buffer[y][stripe] = color; //paint pixel if it isn't black, black is the invisible color
+
+						y++;
+					}
+				}
+				stripe++;
+			}
+			j++;
+			i = -1;
+		}
+		i++;
+		/*
+		if (i == settings->numSprites && j < settings->numSprites)
+			i = 0;
+			*/
+		//		(void)data;
+		//	(void)textimg;
+
+	}
+}
+
+void	sort_sprites(t_data *data, t_settings *settings, t_frame *frame)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		tmporder;
+	t_frame *F = frame;
+
+	i = 0;
+	while (i < settings->numSprites && !F->sprites_sorted)
+	{
+		frame->spriteorder[i] = i;
+		frame->spritedist[i] = ((frame->posX - settings->spritex[i]) *
+				(frame->posX - settings->spritex[i]) + (frame->posY -
+					settings->spritey[i]) * (frame->posY - settings->spritey[i]));
+		i++;
+	}
+	/*
+	   i = 0;
+	   while (i<settings->numSprites && !F->sprites_sorted)
+	   {
+	   if (settings->spritetext[F->spriteorder[i]] == '2')//a supprimer a terme
+	   {
+	   if (i == 0)
+	   printf("\nBEFORE SORTING");
+	   if (i == 0)
+	   printf("\nsprites_sorted = >%d<", F->sprites_sorted);
+	   printf("\nspriteorder[%d] = >%d< ", i, F->spriteorder[i]);
+	   printf("\nspritex[%d] = >%.1f< ", i, settings->spritex[i]);
+	   printf("\nspritey[%d] = >%.1f< ", i, settings->spritey[i]);
+	   printf("\nspritedist[%d] = >%.2f< ", i, F->spritedist[i]);
+	   if (i == settings->numSprites -1)
+	   printf("\n---------");
+	   settings->spritetext[F->spriteorder[i]]++;//a supprimer. Fonction de verification
+	   }
+	   i++;
+	   }
+
+	   int x;
+	   */
+	i = 0;
+	while (i < settings->numSprites - 1)
+	{
+		k = 0;
+		j = i + 1;
+		while (j < settings->numSprites)
+		{
+			if ((frame->spritedist[i] < frame->spritedist[j] && 
+						frame->spriteorder[i] < frame->spriteorder[j]) || 
+					(frame->spritedist[i] > frame->spritedist[j] && 
+					 frame->spriteorder[i] > frame->spriteorder[j]))
+			{
+				k++;
+				/*
+				   x = i;
+				   i = 0;
+				   while (i<settings->numSprites)
+				   {
+				   if (settings->spritetext[F->spriteorder[i]] < '9')//a supprimer a terme
+				   {
+				   if (i== 0)
+				   printf("\ni=>%d<", x);
+				   if (i== 0)
+				   printf("\nj=>%d<", j);
+				   if (i== 0)
+				   printf("\nk=>%d<", k);
+				   if (i== 0)
+				   printf("\nsprites_sorted = >%d<", F->sprites_sorted);
+				   printf("\nspriteorder[%d] = >%d< ", i, F->spriteorder[i]);
+				   printf("\nspritex[%d] = >%.1f< ", i, settings->spritex[i]);
+				   printf("\nspritey[%d] = >%.1f< ", i, settings->spritey[i]);
+				   printf("\nspritedist[%d] = >%.2f< ", i, F->spritedist[i]);
+				   settings->spritetext[F->spriteorder[i]]++;//a supprimer. Fonction de verification
+				   if (i == settings->numSprites - 1)
+				   printf("\nCHANGING");
+				   }
+				   i++;
+				   }
+				   i = x;
+				   */
+				tmporder = frame->spriteorder[i];
+				frame->spriteorder[i] = frame->spriteorder[j];
+				frame->spriteorder[j] = tmporder;
+				/*
+				   i = 0;
+				   while (i<settings->numSprites)
+				   {
+				   if (settings->spritetext[F->spriteorder[i]] < '9')//a supprimer a terme
+				   {
+				   printf("\nspriteorder[%d] = >%d< ", i, F->spriteorder[i]);
+				   printf("\nspritex[%d] = >%.1f< ", i, settings->spritex[i]);
+				   printf("\nspritey[%d] = >%.1f< ", i, settings->spritey[i]);
+				   printf("\nspritedist[%d] = >%.2f< ", i, F->spritedist[i]);
+				   settings->spritetext[F->spriteorder[i]]++;//a supprimer. Fonction de verification
+				   if (i == settings->numSprites - 1)
+				   printf("\n---------");
+				   }
+				   i++;
+				   }
+				   i = x;
+				   */
+			}
+			j++;
+		}
+		if (k == 0)
+			i++;
+	}
+	/*
+	   i = 0;
+	   while (i<settings->numSprites && !frame->sprites_sorted)
+	   {
+	   if (settings->spritetext[F->spriteorder[i]] < '9')//a supprimer a terme
+	   {
+	   printf("\nspriteorder[%d] = >%d< ", i, F->spriteorder[i]);
+	//	printf("\nspritex[%d] = >%.1f< ", i, settings->spritex[i]);
+	//	printf("\nspritey[%d] = >%.1f< ", i, settings->spritey[i]);
+	printf("\nspritedist[%d] = >%.2f< ", i, F->spritedist[i]);
+	settings->spritetext[F->spriteorder[i]]++;//a supprimer. Fonction de verification
+	if (i == settings->numSprites - 1)
+	printf("\n---------");
+	}
+	i++;
+	}
+	*/
+	frame->sprites_sorted++;
+
+	(void)data;
+}
+
 void	draw_column(t_data *data, t_frame *frame, t_img *textimg, int x)
 {
 	int		y;
@@ -78,6 +286,10 @@ void	set_drawing_limits(t_data *data, t_frame *frame)
 	frame->wallX -= floor((frame->wallX));
 }
 
+/*
+ * DDA = Digital Differential Analyser
+ */
+
 void	perform_DDA(t_data *data, t_frame *frame)
 {
 	frame->hit = 0;
@@ -95,7 +307,7 @@ void	perform_DDA(t_data *data, t_frame *frame)
 			frame->mapY += frame->stepY;
 			frame->side = 1;
 		}
-		if(data->settings.map[(int)frame->mapY][(int)frame->mapX] > '0')
+		if(data->settings.map[(int)frame->mapY][(int)frame->mapX] == '1')
 			frame->hit = 1;
 	}
 	if(frame->side == 0)
@@ -105,6 +317,13 @@ void	perform_DDA(t_data *data, t_frame *frame)
 		frame->perpWallDist = (frame->mapY - data->frame.posY +
 				(1 - frame->stepY)/2)/ frame->rayY;
 }
+
+void	get_Zbuffer(t_data *data, t_frame *frame, int x)
+{
+	frame->Zbuffer[x] = frame->perpWallDist;
+	(void)data;
+}
+
 
 void	set_ray(t_data *data, t_frame *frame, int x)
 {
@@ -145,57 +364,20 @@ int		render_next_frame(t_data *data)
 	{
 		set_ray(data, &data->frame, x);
 		perform_DDA(data, &data->frame);
+		get_Zbuffer(data, &data->frame, x);
 		set_drawing_limits(data, &data->frame);
 		textimg = pick_texture(&data->frame);
 		draw_column(data, &data->frame, textimg, x);
-
-		x++;
-		t_frame *frame = &data->frame;
-		if (x == 1 && frame->time == 0)
+		if (x == 0)
 		{
-			frame->time++;
-			printf("\n Debut du raycasting");
-			int i = 0;
-			int j = 0;
-			while (i < data->settings.map_height)
-			{
-				j = 0;
-				if (i <= 9)
-					printf("\nmap [ %d] : > ", i);
-				else
-					printf("\nmap [%d] : > ", i);
-				while (j < (int)ft_strlen(data->settings.map[i]))
-				{
-					if (i == (int)data->frame.posY && j == (int)data->frame.posX)
-					{
-						if (data->frame.dirY <= 0 && (fabs(data->frame.dirY) > fabs(data->frame.dirX)))
-							printf("P^");
-						else if (data->frame.dirX >= 0  && (data->frame.dirX > fabs(data->frame.dirY)))
-							printf("P>");
-						else if (data->frame.dirY >= 0  && (data->frame.dirY > fabs(data->frame.dirX)))
-							printf("Pv");
-						else if (data->frame.dirX <= 0  && (fabs(data->frame.dirX) > fabs(data->frame.dirY)))
-							printf("<P");
-						else
-							printf("ERROR");
-					}
-					else if (i == (int)data->frame.mapY && j == (int)data->frame.mapX)
-						printf("r%c", data->settings.map[i][j]);
-					else if (data->settings.map[i][j] == '0') 
-						printf("  ");
-					else if (data->settings.map[i][j] == '1') 
-						printf("[]");
-					else
-						printf("%c ", data->settings.map[i][j]);
-
-					j++;
-				}
-				i++;
-				printf("<");
-			}
+			data->frame.first_mapX = data->frame.mapX;
+			data->frame.first_mapY = data->frame.mapY;
 		}
-
+		x++;
 	}
+	sort_sprites(data, &data->settings, &data->frame);
+	draw_sprites(data, &data->settings, &data->frame, &data->frame.Sprite_img);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.ptr, 0, 0);
 	return (0);
 }
+

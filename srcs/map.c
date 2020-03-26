@@ -12,75 +12,82 @@
 
 #include "cub3d.h"
 
-int		is_map(t_data *data, t_settings *settings, int i, int j)
+
+int		is_map(t_data *data, t_settings *settings, int x, int y)
 {
 	char c;
 
-	c = settings->map[i][j];
+	c = settings->map[y][x];
 	if (c == ' ')
 		return (1);
 	if (c == '1')
 		return (2);
-	if (c == '2' || c == '0')
+	if (c == '2')
+		return (3);
+	if (c == '0')
 		return (3);
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 	{
 		if (settings->player_orientation == (char)NULL)
 		{
 			settings->player_orientation = c;
-			settings->init_posX = j;
-			settings->init_posY = i;
+			settings->init_posX = x;
+			settings->init_posY = y;
 		}
-		else if (i != settings->init_posY || j != settings->init_posX)
+		else if (x != settings->init_posX || y != settings->init_posY)
 			close_program(data, "More than one player set", "");
 		return (4);
 	}
 	return (0);
 }
 
-void	check_map_errors(t_data *data, t_settings *settings)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < settings->map_height)
-	{
-		j = 0;
-		while (j < (int)ft_strlen(settings->map[i]))
-		{
-			if ((i == 0 || i == (settings->map_height - 1)) && is_map(data, settings, i, j) > 2)
-				close_program(data, "Map not closed at top or bottom", "");
-			if (!is_map(data, settings, i, j))
-				close_program(data, "Wrong object in map", "");
-			if (is_map(data, settings, i, j) >= 3)
-				check_square_neighbors(data, settings, i, j);
-			j++;
-		}
-		i++;
-	}
-	if (settings->player_orientation == (char)NULL)
-		close_program(data, "No map or no player set :'(", "");
-}
-
-void	check_square_neighbors(t_data *data, t_settings *settings, int i, int j)
+int		map_errors(t_data *data, t_settings *settings)
 {
 	int x;
 	int y;
 
-	x = j - 1;
-	while (x <= j + 1)
+	y = 0;
+	while (y < settings->map_height)
 	{
-		y = i - 1;
-		while (y <= i + 1)
+		x = 0;
+		while (x < (int)ft_strlen(settings->map[y]))
 		{
-			if (settings->map[y][x] == '\0' || settings->map[y][x] == ' ')
-				close_program(data, "Map not closed", "");
-			if (!is_map(data, settings, y, x))
+			if ((y == 0 || y == (settings->map_height - 1))
+				&& is_map(data, settings, x, y) > 2)
+				close_program(data, "Map not closed at top or bottom", "");
+			if (!is_map(data, settings, x, y))
 				close_program(data, "Wrong object in map", "");
-			y++;
+			if (is_map(data, settings, x, y) >= 3)
+				check_square_neighbors(data, settings, x, y);
+			x++;
 		}
-		x++;
+		y++;
+	}
+	if (settings->player_orientation == (char)NULL)
+		close_program(data, "No map or no player set :'(", "");
+	return(0);
+}
+
+void	check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
+{
+	int i;
+	int j;
+
+	if (settings->map[y][x] >= '2' && settings->map[y][x] <= '9')
+		settings->numSprites++;
+	i = x - 1;
+	while (i <= x + 1)
+	{
+		j = y - 1;
+		while (j <= y + 1)
+		{
+			if (settings->map[j][i] == '\0' || settings->map[j][i] == ' ')
+				close_program(data, "Map not closed", "");
+			if (!is_map(data, settings, i, j))
+				close_program(data, "Wrong object in map", "");
+			j++;
+		}
+		i++;
 	}
 }
 

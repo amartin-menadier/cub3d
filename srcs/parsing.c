@@ -83,6 +83,43 @@ void	parse_line(t_data *data, char *line)
 		fill_map(data, line, i, &data->settings);
 }
 
+void	fill_sprites_struct(t_data *data, t_settings *settings, char **map)
+{
+	int x;
+	int y;
+	int	i;
+//	t_sprite tmp[settings->numSprites];
+
+	y = 1;
+	i = 0;
+	init_sprites(data, settings, &data->frame);
+	while (y < settings->map_height - 1 && i < settings->numSprites)
+	{
+		x = 0;
+		while (x < (int)ft_strlen(map[y]) && i < settings->numSprites)
+		{
+			if (map[y][x] >= '2' && map[y][x] <= '9')
+				{
+				/*
+					tmp[i].x = x + 0.5;
+					tmp[i].y = y + 0.5;
+					tmp[i].texture = map[y][x];
+					*/
+					
+					settings->spritex[i] = x + 0.5;
+					settings->spritey[i] = y + 0.5;
+					settings->spritetext[i] = map[y][x];
+					
+					i++;
+				}
+			x++;
+		}
+		y++;
+	}
+//	print_sprites(data);
+	(void)data;
+}
+
 int		parse_cub(t_data *data)
 {
 	int		ret;
@@ -92,16 +129,25 @@ int		parse_cub(t_data *data)
 	init_settings(&data->settings);
 	while ((ret = get_next_line(data->settings.fd, &line)) > 0)
 	{
-		printf("GNL = %d - line is : >%s<\n", ret, line);//
+//		printf("GNL = %d - line is : >%s<\n", ret, line);//
 		parse_line(data, line);
 		free(line);
 		line = NULL;
 	}
 //	parse_settings(data, line);
-	printf("GNL = %d - line is : >%s<\n", ret, line);
+//	printf("GNL = %d - line is : >%s<\n", ret, line);
 	free(line);
 	line = NULL;
-	check_map_errors(data, &data->settings);
+	map_errors(data, &data->settings);
+//	print_settings(data);
+	fill_sprites_struct(data, &data->settings, data->settings.map);
+/*
+	if (!(settings->sprite = malloc(sizeof(t_sprite *) * (settings->numSprites + 1))))
+		close_program(data, "Couldn't allocate mem for sprite structs", "");
+	settings->sprite = fill_sprites_struct(data, &data->settings, data->settings.map);
+//	print_sprite(data);
+//	print_settings(data);
+//	*/
 	//penser a close fd + message d'erreur ou pas
 	return (data->settings.fd);
 }

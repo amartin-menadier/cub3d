@@ -21,11 +21,10 @@ void	init_image(t_data *data, t_img *img)
 	//bpp, line length et endian set automatiquement par mlx. Pas tout compris.
 }
 
-void	init_window(t_data *data)
+void	init_window(t_data *data, int *win_width, int *win_height)
 {
 	data->mlx = mlx_init();
-	data->win = mlx_new_window(data->mlx, data->settings.win_width,
-			data->settings.win_height, "Cub3D");
+	data->win = mlx_new_window(data->mlx, *win_width, *win_height, "Cub3D");
 }
 
 void	init_settings(t_settings *settings)
@@ -40,61 +39,91 @@ void	init_settings(t_settings *settings)
 	settings->Sprite_path = NULL;
 	settings->Floor_color = -1;
 	settings->Ceiling_color = -1;
+	settings->map = NULL;
 	settings->map_width = 1;
 	settings->map_height = 0;
 	settings->player_orientation = (char)NULL;
 	settings->init_posX = -1;
 	settings->init_posY = -1;
-	settings->map = NULL;
+	settings->numSprites = 0;
+	settings->spritex = NULL;
+	settings->spritey = NULL;
+	settings->spritetext = NULL;
+
+//	settings->sprite = NULL;
+
 }
 
-void	init_frame(t_data *data, t_frame *frame)
+void	init_dir_and_plane(t_settings *settings, t_frame *frame)
 {
-		//init le vecteur initiale direction du frame et vecteur camera plane
-	if (data->settings.player_orientation == 'N')
-	{
 		frame->dirX = 0;
 		frame->dirY = -1;
 		frame->planeX = 0.7;
 		frame->planeY = 0;
-	}
-	if (data->settings.player_orientation == 'E')
+	if (settings->player_orientation == 'E')
 	{
 		frame->dirX = 1;
 		frame->dirY = 0;
 		frame->planeX = 0;
 		frame->planeY = 0.7;
 	}
-	if (data->settings.player_orientation == 'S')
+	if (settings->player_orientation == 'S')
 	{
 		frame->dirX = 0;
 		frame->dirY = 1;
 		frame->planeX = -0.7;
 		frame->planeY = 0;
 	}
-	if (data->settings.player_orientation == 'W')//
+	if (settings->player_orientation == 'W')
 	{
 		frame->dirX = -1;
 		frame->dirY = 0;
 		frame->planeX = 0;
 		frame->planeY = -0.7;
-	}
-	data->frame.posX = data->settings.init_posX + 0.5;
-	data->frame.posY = data->settings.init_posY + 0.5;
-	data->settings.map[data->settings.init_posY][data->settings.init_posX] = '0';
-	frame->time = 0;
-	frame->oldTime = 0;
+	}	
+}
+
+void	init_sprites(t_data *data, t_settings *settings, t_frame *frame)
+{
+	if (!(settings->spritex = malloc(sizeof(double *) * (settings->numSprites))))
+		close_program(data, "Couldn't allocate mem for sprite structs", "");
+	if (!(settings->spritey = malloc(sizeof(double *) * (settings->numSprites))))
+		close_program(data, "Couldn't allocate mem for sprite structs", "");
+	if (!(settings->spritetext = malloc(sizeof(char *) * (settings->numSprites))))
+		close_program(data, "Couldn't allocate mem for sprite structs", "");
+	if(!(frame->Zbuffer = malloc(sizeof(double *) * settings->win_width)))
+		close_program(data, "Failed allocating Zbuffer", "");
+	if(!(frame->spriteorder = malloc(sizeof(int *) * settings->numSprites)))
+		close_program(data, "Failed allocating spriteorder", "");
+	if(!(frame->spritedist = malloc(sizeof(double *) * settings->numSprites)))
+		close_program(data, "Failed allocating spritedist", "");
+
+	
+}
+
+void	init_frame(t_data *data, t_settings *settings, t_frame *frame)
+{
+	init_dir_and_plane(settings, frame);
+	frame->posX = settings->init_posX + 0.5;
+	frame->posY = settings->init_posY + 0.5;
+	settings->map[settings->init_posY][settings->init_posX] = '0';
 	frame->hit = 0;
-	get_texture_img(data, data->settings.NO_path, &data->frame.NO_img);
-	get_texture_img(data, data->settings.SO_path, &data->frame.SO_img);
-	get_texture_img(data, data->settings.WE_path, &data->frame.WE_img);
-	get_texture_img(data, data->settings.WE_path, &data->frame.EA_img);
-//	get_texture_img(data, data->settings.Sprite_path, &data->frame.Sprite_img);
+	frame->sprites_sorted = 0;
+//	init_sprite(data, settings, frame);
+	get_texture_img(data, settings->NO_path, &frame->NO_img);
+	get_texture_img(data, settings->SO_path, &frame->SO_img);
+	get_texture_img(data, settings->WE_path, &frame->WE_img);
+	get_texture_img(data, settings->EA_path, &frame->EA_img);
+	get_texture_img(data, settings->Sprite_path, &frame->Sprite_img);
+	(void)data;
 }
 
 void	init_data(t_data *data)
 {
-	init_window(data);
+	init_window(data, &data->settings.win_width, &data->settings.win_height);
+//	ft_putstr_fd("\n INIT WINDOW DONE", 1);
 	init_image(data, &data->img);
-	init_frame(data, &data->frame);
+//	ft_putstr_fd("\n INIT IMAGE DONE", 1);
+	init_frame(data, &data->settings, &data->frame);
+//	ft_putstr_fd("\n INIT FRAME DONE", 1);
 }
