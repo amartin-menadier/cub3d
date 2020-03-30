@@ -12,40 +12,22 @@
 
 #include "cub3d.h"
 
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
+	void
+put_pixel(t_img *img, t_vector *pos, int color)
 {
 	char	*dst;
 
-	dst = (char *)img->colors + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	dst = (char *)img->colors 
+		+ (pos->y * img->line_length + pos->x * (img->bpp / 8));
+	*(int*)dst = color;
 }
 
-void	get_texture_img(t_data *data, char *path, t_img *textimg)
+	void
+create_texture_img(t_data *data, char *path, t_img *text)
 {
-	textimg->ptr = mlx_xpm_file_to_image(data->mlx, path, &textimg->tw, &textimg->th);
-	if (textimg->ptr == NULL)
+	text->ptr = mlx_xpm_file_to_image(data->mlx, path, &text->tw, &text->th);
+	if (text->ptr == NULL)
 		close_program(data, "Invalid or missing file at :\n   > ", path);
-	textimg->colors = (int*)mlx_get_data_addr(textimg->ptr, &textimg->bits_per_pixel,
-			&textimg->line_length, &textimg->endian);
-}
-
-int		render_texture(t_data *data, t_img *textimg, int x, int y)
-{
-	int	x_init;
-	int	y_init;
-
-	x_init = x;
-	y_init = y;
-	while (x < textimg->tw + x_init)
-	{
-		y = y_init;
-		while (y < textimg->th + y_init)
-		{
-			my_mlx_pixel_put(&data->img, x, y, textimg->colors[y + x]);
-			y++;
-		}
-		x++;
-	}
-mlx_put_image_to_window(data->mlx, data->win, &data->img, 0, 0);
-	return (0);
+	text->colors = (int*)mlx_get_data_addr(text->ptr, &text->bpp,
+			&text->line_length, &text->endian);
 }

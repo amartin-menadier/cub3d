@@ -14,18 +14,21 @@
 
 void	print_image(t_data *data)
 {
-	printf("\n         bpp = >%d<", data->img.bits_per_pixel);
+	printf("\n         bpp = >%d<", data->img.bpp);
 	printf("\n line length = >%d<", data->img.line_length);
 	printf("\n      endian = >%d<", data->img.endian);
 	printf("\nimage height = >%d<", data->img.th);
 	printf("\n image width = >%d<", data->img.tw);
+	printf("\n colors[     0] = >%d<", data->img.colors[0]);
+	printf("\n colors[ 50000] = >%d<", data->img.colors[50000]);
+	printf("\n colors[100000] = >%d<", data->img.colors[100000]);
+	printf("\n colors[150000] = >%d<", data->img.colors[150000]);
+	printf("\n colors[200000] = >%d<", data->img.colors[200000]);
 	printf("\n-------------------");
 }
 
 void	print_settings(t_data *data)//outil de verification a supprimer
 {
-	int i = 0;
-	int j = 0;
 	printf("\n-- SETTINGS --");
 	printf("\nwin_width = %d", data->settings.win_width);
 	printf("\nwin_height = %d", data->settings.win_height);
@@ -41,7 +44,10 @@ void	print_settings(t_data *data)//outil de verification a supprimer
 	printf("\nNumber of sprites = %d", data->settings.numSprites);
 	printf("\nPlayer started at (%d,%d)", data->settings.init_posX, data->settings.init_posY);
 	printf("\nPlayer orientation = >%c<", data->settings.player_orientation);
-	while (i < data->settings.map_height)
+/*
+	int i = 0;
+	int j = 0;
+while (i < data->settings.map_height)
 	{
 		j = 0;
 		if (i <= 9)
@@ -56,19 +62,18 @@ void	print_settings(t_data *data)//outil de verification a supprimer
 		i++;
 		printf("<");
 	}
+	*/
 	printf("\n\n");
 }
 
 void	print_situation(t_data* data)
 {
 	printf("\n\n  -- CURRENT SITUATION --\n--------------------");
-	printf("\nplayer is located at (%f;%f)", data->frame.posX, data->frame.posY);
-	printf("\ndirX = %f", data->frame.dirX);
-	printf("\ndirY = %f", data->frame.dirY);
-	printf("\ncamera planeX = %f", data->frame.planeX);
-	printf("\ncamera planeY = %f", data->frame.planeY);
-//	printf("\ntime = %f", data->frame.time);
-//	printf("\noldTime = %f", data->frame.oldTime);
+	printf("\nplayer is located at (%.1f;%.1f)", data->frame.posX, data->frame.posY);
+	printf("\ndirX = %.2f", data->frame.dirX);
+	printf("\ndirY = %.2f", data->frame.dirY);
+	printf("\ncamera planeX = %.2f", data->frame.planeX);
+	printf("\ncamera planeY = %.2f", data->frame.planeY);
 }
 
 void	print_Zbuffer(t_data *data)
@@ -88,20 +93,20 @@ void	print_Zbuffer(t_data *data)
 void	print_ray(t_data* data)
 {
 	printf("\n-- RAY --");
-	printf("\ncameraX = %f", data->frame.cameraX);
-	printf("\nrayX = %f", data->frame.rayX);
-	printf("\nrayY = %f", data->frame.rayY);
+	printf("\ncameraX = %.2f", data->frame.cameraX);
+	printf("\nrayX = %.2f", data->frame.rayX);
+	printf("\nrayY = %.2f", data->frame.rayY);
 	printf("\nstepX = %d", data->frame.stepX);
 	printf("\nstepY = %d", data->frame.stepY);
-	printf("\ndeltaDistX = %f", data->frame.deltaDistX);
-	printf("\ndeltaDistY = %f", data->frame.deltaDistY);
-	printf("\nsideDistX = %f", data->frame.sideDistX);
-	printf("\nsideDistY = %f", data->frame.sideDistY);
-	printf("\n(mapX;mapY) = (%f, %f)", data->frame.mapX, data->frame.mapY);
+	printf("\ndeltaDistX = %.2f", data->frame.deltaDistX);
+	printf("\ndeltaDistY = %.2f", data->frame.deltaDistY);
+	printf("\nsideDistX = %.2f", data->frame.sideDistX);
+	printf("\nsideDistY = %.2f", data->frame.sideDistY);
+	printf("\n(mapX;mapY) = (%.2f, %.2f)", data->frame.mapX, data->frame.mapY);
 	printf("\n(mapX;mapY) value = %c (char)", data->settings.map[(int)data->frame.mapY][(int)data->frame.mapX]);
 	printf("\nhit = %d", data->frame.hit);
 	printf("\nside = %d", data->frame.side);
-	printf("\nperpWallDist = %f", data->frame.perpWallDist);
+	printf("\nperpWallDist = %.2f", data->frame.perpWallDist);
 	printf("\nlineHeight = %d", data->frame.lineHeight);
 	printf("\ndrawStart = %d", data->frame.drawStart);
 	printf("\ndrawEnd = %d", data->frame.drawEnd);
@@ -112,7 +117,8 @@ void	print_sprites(t_data *data)
 {
 	int	i = 0;
 	int j = 0;
-
+	
+	printf("\n  -- SPRITES --\n-----------------");
 	while(i < data->settings.numSprites || j < data->settings.numSprites)
 	{
 		if (j == data->frame.spriteorder[i])
@@ -122,7 +128,7 @@ void	print_sprites(t_data *data)
 					data->settings.spritey[i], 
 					data->settings.spritetext[i]);
 			printf("\nspritedist[%d]= >%.3f<", i, data->frame.spritedist[i]);
-			/*
+			
 			   printf("\nspriteX = >%.1f<", data->frame.spriteX);
 			   printf("\nspriteY = >%.1f<", data->frame.spriteY);
 			   printf("\ninvDet = >%f<", data->frame.invDet);
@@ -135,7 +141,7 @@ void	print_sprites(t_data *data)
 			   printf("\ndrawEndX = >%d<", data->frame.drawEndX);
 			   printf("\ndrawStartY = >%d<", data->frame.drawStartY);
 			   printf("\ndrawEndY = >%d<", data->frame.drawEndY);
-			   */
+			   
 			j++;
 			i = - 1;
 		}
@@ -188,8 +194,8 @@ void	print_map(t_data *data)
 				else
 					printf("ERROR");
 			}
-			else if (i == (int)data->frame.first_mapY && j == (int)data->frame.first_mapX)
-				printf("r%c", data->settings.map[i][j]);
+//			else if (i == (int)data->frame.first_mapY && j == (int)data->frame.first_mapX)
+//				printf("r%c", data->settings.map[i][j]);
 			else if (i == (int)data->frame.mapY && j == (int)data->frame.mapX)
 				printf("R%c", data->settings.map[i][j]);
 			else if (data->settings.map[i][j] == '0') 

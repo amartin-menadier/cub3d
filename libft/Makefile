@@ -19,7 +19,7 @@ ft_memmove.c ft_memset.c ft_putchar_fd.c \
 ft_putendl_fd.c ft_putnbr_fd.c \
 ft_putstr_fd.c ft_strchr.c ft_split.c \
 ft_calloc.c ft_strdup.c ft_strjoin.c \
-ft_strlcat.c ft_strlen.c ft_strmapi.c ft_strncmp.c \
+ft_strcat.c ft_strlcat.c ft_strlen.c ft_strmapi.c ft_strncmp.c \
 ft_strcpy.c ft_strncpy.c ft_strlcpy.c ft_strnstr.c ft_strrchr.c \
 ft_strtrim.c ft_tolower.c ft_toupper.c ft_substr.c \
 get_next_line.c ft_strjoin_GNL.c ft_rgb_from_str.c \

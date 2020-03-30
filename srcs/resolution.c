@@ -12,7 +12,8 @@
 
 #include "cub3d.h"
 
-void	fill_resolution(t_data *data, char *line, t_settings *settings)
+	void
+get_resolution(t_data *data, char *line, t_settings *settings)
 {
 	int	i;
 	i = 1;

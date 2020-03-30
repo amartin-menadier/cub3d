@@ -12,7 +12,25 @@
 
 #include "cub3d.h"
 
-void	fill_color(t_data *data, char *line, char *color)
+	unsigned char*
+int_to_rgb(unsigned char *image, int color)
+{
+	int	blue;
+	int	green;
+	int	red;
+
+	blue = color % 256;
+	green = ((color - blue) / 256) % 256;
+	red = ((color - blue) / (256 * 256)) - green / 256;
+	image[0] = (unsigned char)blue;
+	image[1] = (unsigned char)green;
+	image[2] = (unsigned char)red;
+	image[3] = (unsigned char)0;
+	return (image);
+}
+
+	void
+get_color(t_data *data, char *line, char *color)
 {
 	char	*tmp;
 	int		rgb;

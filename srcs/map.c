@@ -13,7 +13,8 @@
 #include "cub3d.h"
 
 
-int		is_map(t_data *data, t_settings *settings, int x, int y)
+	int
+is_map(t_data *data, t_settings *settings, int x, int y)
 {
 	char c;
 
@@ -41,7 +42,8 @@ int		is_map(t_data *data, t_settings *settings, int x, int y)
 	return (0);
 }
 
-int		map_errors(t_data *data, t_settings *settings)
+	int
+check_map_errors(t_data *data, t_settings *settings)
 {
 	int x;
 	int y;
@@ -68,7 +70,8 @@ int		map_errors(t_data *data, t_settings *settings)
 	return(0);
 }
 
-void	check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
+	void
+check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
 {
 	int i;
 	int j;
@@ -95,7 +98,8 @@ void	check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
 // NB : map_height has not yet been incremented in fill_tmp hence +1 each time
 */
 
-char	**fill_tmp_map(t_data *data, t_settings *settings, char **tmp, char *line)
+	char
+**get_tmp_map(t_data *data, t_settings *settings, char **tmp, char *line)
 {
 	int i;
 
@@ -107,7 +111,8 @@ char	**fill_tmp_map(t_data *data, t_settings *settings, char **tmp, char *line)
 		if (!(tmp[i] = malloc(sizeof(char*) * (settings->map_width + 1))))
 			close_program(data, "Failed allocating memory for tmp map\n", "");
 		if (i != (settings->map_height))
-			tmp[i] = ft_strcharcpy(tmp[i], settings->map[i], settings->map_width, ' ');
+			tmp[i] = ft_strcharcpy
+				(tmp[i], settings->map[i], settings->map_width, ' ');
 		else
 			tmp[i] = ft_strcharcpy(tmp[i], line, settings->map_width, ' ');
 		i++;
@@ -115,7 +120,8 @@ char	**fill_tmp_map(t_data *data, t_settings *settings, char **tmp, char *line)
 	return (tmp);
 }
 
-void	fill_map(t_data *data, char *line, int i, t_settings *settings)
+	void
+get_map(t_data *data, char *line, int i, t_settings *settings)
 {
 	char	**tmp;
 
@@ -123,7 +129,7 @@ void	fill_map(t_data *data, char *line, int i, t_settings *settings)
 		settings->map_width = ft_strlen(line);
 	i = 0;
 	tmp = NULL;
-	tmp = fill_tmp_map(data, settings, tmp, line);
+	tmp = get_tmp_map(data, settings, tmp, line);
 	free_map(settings);
 	settings->map_height = settings->map_height + 1;
 	i = 0;
@@ -133,7 +139,8 @@ void	fill_map(t_data *data, char *line, int i, t_settings *settings)
 	{
 		if (!(settings->map[i] = malloc(sizeof(char*) * (settings->map_width))))
 			close_program(data, "Failed allocating memory for map\n", "");
-		settings->map[i] = ft_strcharcpy(settings->map[i], tmp[i], settings->map_width, ' ');
+		settings->map[i] =
+			ft_strcharcpy(settings->map[i], tmp[i], settings->map_width, ' ');
 		free(tmp[i]);
 		tmp[i] = NULL;
 		i++;

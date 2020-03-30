@@ -12,28 +12,31 @@
 
 #include "cub3d.h"
 
-void	check_args_errors(t_data *data, int argc, char **argv)
+	void
+check_args_errors(t_data *data, int argc, char **argv)
 {
 	if (argc == 1 || argc > 3)
 		close_program(data, "Invalid number of arguments\n", "");
 	if (argc == 3 && ft_memcmp(argv[2], "--save", 6))
 		close_program(data, "Second argument is not --save\n", "");
-	if (ft_memcmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4))
+	else if (argc == 3)
+		data->save = 1;
+	else
+		data->save = 0;
+	if(ft_memcmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4))
 		close_program(data, "File extension is not .cub\n", "");
 	if ((data->settings.fd = open(argv[1], O_RDONLY)) == -1)
 		close_program(data, "Couldn't open .cub file\n", "");
 }
 
-int		main(int argc, char **argv)
+	int
+main(int argc, char **argv)
 {
 	t_data data;
 
 	check_args_errors(&data, argc, argv);
-	//histoire du --save en bmp a faire
-	parse_cub(&data);
-//	print_settings(&data); // a supprimer a terme
+	parse_cub_file(&data);
 	init_data(&data);//peut-etre remplacer par init window et ini image;
-	create_bmp(&data);
 	hook_event(&data);
 	mlx_loop_hook(data.mlx, render_next_frame, &data);
 	mlx_loop(data.mlx);//permet a la fenetre de rester ouverte

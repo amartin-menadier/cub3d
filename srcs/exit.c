@@ -12,27 +12,26 @@
 
 #include "cub3d.h"
 
-int		close_program(t_data *data, char *error_msg, char *str)
+	int
+close_program(t_data *data, char *error_msg, char *str)
 {
 	if (ft_memcmp(str, "\\o/\n", 4))
 		ft_putstr_fd("Error\n", 1);
 	ft_putstr_fd(error_msg, 1);
 	ft_putstr_fd(str, 1);
 	free_settings(&data->settings);
-//	ft_putstr_fd("\nSETTINGS FREED", 1);
 	free_frame(data, &data->frame);
-//	ft_putstr_fd("\nFRAME FREED", 1);
 	mlx_destroy_image(data->mlx, data->img.ptr);
-	mlx_destroy_window(data->mlx, data->win);
-	ft_putstr_fd("\nEND_OF_PROGRAM\n", 1);//a supprimer
+	mlx_destroy_window(data->mlx, data->window);
+	ft_putstr_fd("\n_END_OF_PROGRAM_\n", 1);
 //	system("sudo leaks Cub3D"); //a supprimer
 	exit(0);
 	return (0);
 }
 
-void	free_frame(t_data *data, t_frame *frame)
+	void
+free_frame(t_data *data, t_frame *frame)
 {
-//rajouter des if non NULL ?
 	mlx_destroy_image(data->mlx, data->frame.NO_img.ptr);
 	mlx_destroy_image(data->mlx, data->frame.SO_img.ptr);
 	mlx_destroy_image(data->mlx, data->frame.EA_img.ptr);
@@ -46,7 +45,8 @@ void	free_frame(t_data *data, t_frame *frame)
 	frame->spritedist = NULL;
 }
 
-void	free_sprites(t_settings *settings)
+	void
+free_sprites(t_settings *settings)
 {
 	if (settings->spritex != NULL)
 		free(settings->spritex);
@@ -57,10 +57,10 @@ void	free_sprites(t_settings *settings)
 	settings->spritex = NULL;
 	settings->spritey = NULL;
 	settings->spritetext = NULL;
-
 }
 
-void	free_settings(t_settings *settings)
+	void
+free_settings(t_settings *settings)
 {
 	if (settings->NO_path != NULL)
 		free(settings->NO_path);
@@ -81,7 +81,8 @@ void	free_settings(t_settings *settings)
 	free_map(settings);
 }
 
-void	free_map(t_settings *settings)
+	void
+free_map(t_settings *settings)
 {
 	int i;
 
