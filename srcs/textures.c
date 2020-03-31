@@ -15,28 +15,28 @@
 	t_img
 *get_texture_img(t_frame *frame)
 {
-	t_img	*textimg;
+	t_img	*text_img;
 
 	if (frame->side == 0)
 	{
-		if (frame->rayX >0)
-			textimg = &frame->EA_img;
+		if (frame->ray.x >0)
+			text_img = &frame->EA_img;
 		else
-			textimg = &frame->WE_img;
+			text_img = &frame->WE_img;
 	}
 	else
 	{
-		if (frame->rayY >0)
-			textimg = &frame->SO_img;
+		if (frame->ray.y >0)
+			text_img = &frame->SO_img;
 		else
-			textimg = &frame->NO_img;
+			text_img = &frame->NO_img;
 	}
-	frame->texX = (int)(frame->wallX * (double)textimg->tw);
-	if(frame->side == 0 && frame->rayX > 0)
-		frame->texX = textimg->tw - frame->texX - 1;
-	if(frame->side == 1 && frame->rayY < 0)
-		frame->texX = textimg->tw - frame->texX - 1;
-	return (textimg);
+	frame->text.x = (int)(frame->wall_x * (double)text_img->size.x);
+	if(frame->side == 0 && frame->ray.x > 0)
+		frame->text.x = text_img->size.x - frame->text.x - 1;
+	if(frame->side == 1 && frame->ray.y < 0)
+		frame->text.x = text_img->size.x - frame->text.x - 1;
+	return (text_img);
 }
 
 	void
@@ -58,7 +58,7 @@ get_texture(t_data *data, char *line, char *texture)
 	if (!ft_strncmp(texture, "EA", 2))
 		data->settings.EA_path = ft_strdup(tmp);
 	if (!ft_strncmp(texture, "S ", 2))
-		data->settings.Sprite_path = ft_strdup(tmp);
+		data->settings.S_path = ft_strdup(tmp);
 	free(tmp);
 	tmp = NULL;
 }

@@ -15,107 +15,106 @@
 	void
 init_settings(t_settings *settings)
 {
-	settings->win_width = 0;
-	settings->win_height = 0;
+	settings->win_size.x = 0;
+	settings->win_size.y = 0;
 	settings->NO_path = NULL;
 	settings->SO_path = NULL;
 	settings->WE_path = NULL;
 	settings->EA_path = NULL;
-	settings->Sprite_path = NULL;
-	settings->Floor_color = -1;
-	settings->Ceiling_color = -1;
+	settings->S_path = NULL;
+	settings->floor_color = -1;
+	settings->ceiling_color = -1;
 	settings->map = NULL;
-	settings->map_width = 1;
-	settings->map_height = 0;
+	settings->map_size.x = 1;
+	settings->map_size.y = 0;
 	settings->player_orientation = (char)NULL;
-	settings->init_posX = -1;
-	settings->init_posY = -1;
-	settings->numSprites = 0;
-	settings->spritex = NULL;
-	settings->spritey = NULL;
-	settings->spritetext = NULL;
+	settings->starting_pos.x = -1;
+	settings->starting_pos.y = -1;
+	settings->spr_count = 0;
+	settings->spr_x = NULL;
+	settings->spr_y = NULL;
+	settings->spr_text = NULL;
+	settings->done = 0;
 }
 
 	void
 init_dir_and_plane(t_settings *settings, t_frame *frame)
 {
-		frame->dirX = 0;
-		frame->dirY = -1;
-		frame->planeX = 0.7;
-		frame->planeY = 0;
+		frame->dir.x = 0;
+		frame->dir.y = -1;
+		frame->plane.x = 0.7;
+		frame->plane.y = 0;
 	if (settings->player_orientation == 'E')
 	{
-		frame->dirX = 1;
-		frame->dirY = 0;
-		frame->planeX = 0;
-		frame->planeY = 0.7;
+		frame->dir.x = 1;
+		frame->dir.y = 0;
+		frame->plane.x = 0;
+		frame->plane.y = 0.7;
 	}
 	if (settings->player_orientation == 'S')
 	{
-		frame->dirX = 0;
-		frame->dirY = 1;
-		frame->planeX = -0.7;
-		frame->planeY = 0;
+		frame->dir.x = 0;
+		frame->dir.y = 1;
+		frame->plane.x = -0.7;
+		frame->plane.y = 0;
 	}
 	if (settings->player_orientation == 'W')
 	{
-		frame->dirX = -1;
-		frame->dirY = 0;
-		frame->planeX = 0;
-		frame->planeY = -0.7;
+		frame->dir.x = -1;
+		frame->dir.y = 0;
+		frame->plane.x = 0;
+		frame->plane.y = -0.7;
 	}	
 }
 
 	void
 init_sprites(t_data *data, t_settings *settings, t_frame *frame)
 {
-	if (!(settings->spritex = malloc(sizeof(double *) * (settings->numSprites))))
-		close_program(data, "Couldn't allocate mem for spritex", "");
-	if (!(settings->spritey = malloc(sizeof(double *) * (settings->numSprites))))
-		close_program(data, "Couldn't allocate mem for spritey", "");
-	if (!(settings->spritetext = malloc(sizeof(char *) * (settings->numSprites))))
-		close_program(data, "Couldn't allocate mem for spritetext", "");
-	if(!(frame->Zbuffer = malloc(sizeof(double *) * settings->win_width)))
-		close_program(data, "Failed allocating Zbuffer", "");
-	if(!(frame->spriteorder = malloc(sizeof(int *) * settings->numSprites)))
-		close_program(data, "Failed allocating spriteorder", "");
-	if(!(frame->spritedist = malloc(sizeof(double *) * settings->numSprites)))
-		close_program(data, "Failed allocating spritedist", "");
+	if (!(settings->spr_x = malloc(sizeof(double *) * (settings->spr_count))))
+		close_program(data, "Couldn't allocate mem for spr_x", "");
+	if (!(settings->spr_y = malloc(sizeof(double *) * (settings->spr_count))))
+		close_program(data, "Couldn't allocate mem for spr_y", "");
+	if (!(settings->spr_text = malloc(sizeof(char *) * (settings->spr_count))))
+		close_program(data, "Couldn't allocate mem for spr_text", "");
+	if(!(frame->z_buffer = malloc(sizeof(double *) * settings->win_size.x)))
+		close_program(data, "Failed allocating z_buffer", "");
+	if(!(frame->spr_order = malloc(sizeof(int *) * settings->spr_count)))
+		close_program(data, "Failed allocating spr_order", "");
+	if(!(frame->spr_dist = malloc(sizeof(double *) * settings->spr_count)))
+		close_program(data, "Failed allocating spr_dist", "");
 }
 
 	void
 init_frame(t_data *data, t_settings *settings, t_frame *frame)
 {
 	init_dir_and_plane(settings, frame);
-	frame->posX = settings->init_posX + 0.5;
-	frame->posY = settings->init_posY + 0.5;
-	settings->map[settings->init_posY][settings->init_posX] = '0';
-	frame->hit = 0;
-	frame->sprites_sorted = 0;
+	frame->pos.x = settings->starting_pos.x + 0.5;
+	frame->pos.y = settings->starting_pos.y + 0.5;
+	settings->map[settings->starting_pos.y][settings->starting_pos.x] = '0';
+	frame->spr_sorted = 0;
 	create_texture_img(data, settings->NO_path, &frame->NO_img);
 	create_texture_img(data, settings->SO_path, &frame->SO_img);
 	create_texture_img(data, settings->WE_path, &frame->WE_img);
 	create_texture_img(data, settings->EA_path, &frame->EA_img);
-	create_texture_img(data, settings->Sprite_path, &frame->Sprite_img);
+	create_texture_img(data, settings->S_path, &frame->S_img);
 }
 
 	void
 init_data(t_data *data)
 {
-	int		height;
-	int		width;
+	t_int	win_size;
 	t_img	*img;
 
-	height = data->settings.win_height;
-	width = data->settings.win_width;
+	win_size.x = data->settings.win_size.x;
+	win_size.y = data->settings.win_size.y;
 	data->mlx = mlx_init();
-	data->window = mlx_new_window(data->mlx, width, height, "Cub3D");
+	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "Cub3D");
 	img = &data->img;
-	img->ptr = mlx_new_image(data->mlx, data->settings.win_width,
-			data->settings.win_height);
+	img->ptr = mlx_new_image(data->mlx, data->settings.win_size.x,
+			data->settings.win_size.y);
 	img->colors = (int *)mlx_get_data_addr(img->ptr, &img->bpp,
 			&img->line_length, &img->endian);
-	img->th = data->settings.win_height;
-	img->tw = data->settings.win_width;
+	img->size.x = data->settings.win_size.x;
+	img->size.y = data->settings.win_size.y;
 	init_frame(data, &data->settings, &data->frame);
 }

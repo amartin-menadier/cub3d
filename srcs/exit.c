@@ -20,9 +20,12 @@ close_program(t_data *data, char *error_msg, char *str)
 	ft_putstr_fd(error_msg, 1);
 	ft_putstr_fd(str, 1);
 	free_settings(&data->settings);
-	free_frame(data, &data->frame);
-	mlx_destroy_image(data->mlx, data->img.ptr);
-	mlx_destroy_window(data->mlx, data->window);
+	if(data->settings.done)
+	{
+		free_frame(data, &data->frame);
+		mlx_destroy_image(data->mlx, data->img.ptr);
+		mlx_destroy_window(data->mlx, data->window);
+	}
 	ft_putstr_fd("\n_END_OF_PROGRAM_\n", 1);
 //	system("sudo leaks Cub3D"); //a supprimer
 	exit(0);
@@ -36,27 +39,27 @@ free_frame(t_data *data, t_frame *frame)
 	mlx_destroy_image(data->mlx, data->frame.SO_img.ptr);
 	mlx_destroy_image(data->mlx, data->frame.EA_img.ptr);
 	mlx_destroy_image(data->mlx, data->frame.WE_img.ptr);
-	mlx_destroy_image(data->mlx, data->frame.Sprite_img.ptr);
-	free(frame->Zbuffer);
-	frame->Zbuffer = NULL; 
-	free(frame->spriteorder);
-	frame->spriteorder = NULL;
-	free(frame->spritedist);
-	frame->spritedist = NULL;
+	mlx_destroy_image(data->mlx, data->frame.S_img.ptr);
+	free(frame->z_buffer);
+	frame->z_buffer = NULL; 
+	free(frame->spr_order);
+	frame->spr_order = NULL;
+	free(frame->spr_dist);
+	frame->spr_dist = NULL;
 }
 
 	void
 free_sprites(t_settings *settings)
 {
-	if (settings->spritex != NULL)
-		free(settings->spritex);
-	if (settings->spritey != NULL)
-		free(settings->spritey);
-	if (settings->spritetext != NULL)
-		free(settings->spritetext);
-	settings->spritex = NULL;
-	settings->spritey = NULL;
-	settings->spritetext = NULL;
+	if (settings->spr_x != NULL)
+		free(settings->spr_x);
+	if (settings->spr_y != NULL)
+		free(settings->spr_y);
+	if (settings->spr_text != NULL)
+		free(settings->spr_text);
+	settings->spr_x = NULL;
+	settings->spr_y = NULL;
+	settings->spr_text = NULL;
 }
 
 	void
@@ -70,13 +73,13 @@ free_settings(t_settings *settings)
 		free(settings->WE_path);
 	if (settings->EA_path != NULL)
 		free(settings->EA_path);
-	if (settings->Sprite_path != NULL)
-		free(settings->Sprite_path);
+	if (settings->S_path != NULL)
+		free(settings->S_path);
 	settings->NO_path = NULL;
 	settings->SO_path = NULL;
 	settings->WE_path = NULL;
 	settings->EA_path = NULL;
-	settings->Sprite_path = NULL;
+	settings->S_path = NULL;
 	free_sprites(settings);
 	free_map(settings);
 }
@@ -89,7 +92,7 @@ free_map(t_settings *settings)
 	i = 0;
 	if (settings->map != NULL)
 	{
-		while (i < settings->map_height)
+		while (i < settings->map_size.y)
 		{
 			if (settings->map[i] != NULL)
 			{

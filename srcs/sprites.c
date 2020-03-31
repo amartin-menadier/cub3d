@@ -13,30 +13,30 @@
 #include "cub3d.h"
 
 	void
-draw_sprite_column(t_data *data, t_frame *F, t_img *text, int stripe)
+draw_sprite_column(t_data *data, t_frame *F, t_img *img, int stripe)
 {
-	t_vector	spr_img;
+	t_int		spr_img_pos;
 	t_settings	*S;
 	int			d;
 
-	spr_img.x = stripe;
-	spr_img.y = F->drawStartY;
+	spr_img_pos.x = stripe;
+	spr_img_pos.y = F->spr_draw_start.y;
 	S = &data->settings;
-	F->texX = (int)(256 * (stripe - (-F->spriteWidth / 2 + F->spriteScreenX))
-		* text->tw / F->spriteWidth) / 256;
-	if (F->transfY >= 0 && stripe >= 0 && stripe <= S->win_width
-		&& F->transfY <= F->Zbuffer[stripe])
+	F->text.x = (int)(256 * fabs(stripe - (-F->spr_size.x / 2 
+		+ F->spr_screen_x)) * img->size.x / F->spr_size.x) / 256;
+	if (F->spr_inv.y > 0 && stripe >= 0 && stripe < S->win_size.x
+		&& F->spr_inv.y < F->z_buffer[stripe])
 	{
-		while (spr_img.y < F->drawEndY)
+		while (spr_img_pos.y < F->spr_draw_end.y)
 		{
-			d = (spr_img.y) * 256 - S->win_height * 128 + F->spriteHeight * 128;
-			F->texY = ((d * text->th) / F->spriteHeight) / 256;
-			if ((text->colors[text->th * F->texY + F->texX] & 0x00FFFFFF) != 0)
-			{
-				put_pixel(&data->img, &spr_img,
-						text->colors[text->th * F->texY + F->texX]);
-			}
-			spr_img.y++;
+			d = (spr_img_pos.y) 
+				* 256 - S->win_size.y * 128 + F->spr_size.y * 128;
+			F->text.y = ((d * img->size.y) / F->spr_size.y) / 256;
+			if ((img->colors
+				[(img->size.y * F->text.y + F->text.x)] & 0x00FFFFFF) != 0)
+				put_pixel(&data->img, spr_img_pos,
+					img->colors[(img->size.y * F->text.y + F->text.x)]);
+			spr_img_pos.y++;
 		}
 	}
 }
@@ -44,44 +44,47 @@ draw_sprite_column(t_data *data, t_frame *F, t_img *text, int stripe)
 	void
 set_sprite_drawing_limits(t_settings *S, t_frame *F, int i)
 {
-	F->spriteX = S->spritex[i] - F->posX;
-	F->spriteY = S->spritey[i] - F->posY;
-	F->invDet = 1.0 / (F->planeX * F->dirY - F->dirX * F->planeY);
-	F->transfX = F->invDet * (F->dirY * F->spriteX - F->dirX * F->spriteY);
-	F->transfY = F->invDet * (F->planeX * F->spriteY - F->planeY * F->spriteX);
-	F->spriteScreenX = (int)((S->win_width / 2) * (1 + F->transfX / F->transfY));
-	F->spriteHeight = abs((int)(S->win_height / (F->transfY)));
-	F->drawStartY = -F->spriteHeight / 2 + S->win_height / 2;
-	if(F->drawStartY < 0) 
-		F->drawStartY = 0;
-	F->drawEndY = F->spriteHeight / 2 + S->win_height / 2;
-	if(F->drawEndY >= S->win_height)
-		F->drawEndY = S->win_height;
-	F->spriteWidth = abs((int)(S->win_height / (F->transfY)));
-	F->drawStartX = -F->spriteWidth / 2 + F->spriteScreenX;
-	if(F->drawStartX < 0) 
-		F->drawStartX = 0;
-	F->drawEndX = F->spriteWidth / 2 + F->spriteScreenX;
-	if(F->drawEndX >= S->win_width)
-		F->drawEndX = S->win_width;
+	double	inv;
+	t_coord	spr_diff;
+
+	spr_diff.x = S->spr_x[i] - F->pos.x;
+	spr_diff.y = S->spr_y[i] - F->pos.y;
+	inv = 1.0 / (F->plane.x * F->dir.y - F->dir.x * F->plane.y);
+	F->spr_inv.x = inv * (F->dir.y * spr_diff.x - F->dir.x * spr_diff.y);
+	F->spr_inv.y = inv * (F->plane.x * spr_diff.y - F->plane.y * spr_diff.x);
+	F->spr_screen_x = ((S->win_size.x / 2) * (1 + F->spr_inv.x / F->spr_inv.y));
+	F->spr_size.y = abs((int)(S->win_size.y / (F->spr_inv.y)));
+	F->spr_draw_start.y = -F->spr_size.y / 2 + S->win_size.y / 2;
+	if(F->spr_draw_start.y < 0) 
+		F->spr_draw_start.y = 0;
+	F->spr_draw_end.y = F->spr_size.y / 2 + S->win_size.y / 2;
+	if(F->spr_draw_end.y >= S->win_size.y)
+		F->spr_draw_end.y = S->win_size.y;
+	F->spr_size.x = abs((int)(S->win_size.y / (F->spr_inv.y)));
+	F->spr_draw_start.x = -F->spr_size.x / 2 + F->spr_screen_x - 1;
+	if(F->spr_draw_start.x < 0) 
+		F->spr_draw_start.x = 0;
+	F->spr_draw_end.x = F->spr_size.x / 2 + F->spr_screen_x + 1;
+	if(F->spr_draw_end.x > S->win_size.x)
+		F->spr_draw_end.x = S->win_size.x;
 }
 
 	void
 draw_sprites(t_data *data, t_settings *S, t_frame *F, t_img *text)
 {
-	int i;
+	int	i;
 	int	j;
-	int		stripe;
+	int	stripe;
 
 	i = 0;
 	j = 0;
-	while (i< S->numSprites || j < S->numSprites)
+	while (i < S->spr_count || j < S->spr_count)
 	{
-		if (j == F->spriteorder[i] && F->spritedist[i] > 0.1)
+		if (j == F->spr_order[i] && F->spr_dist[i] > 0.1)
 		{
 			set_sprite_drawing_limits(S, F, i);
-			stripe = F->drawStartX;
-			while (stripe < F->drawEndX)
+			stripe = F->spr_draw_start.x;
+			while (stripe < F->spr_draw_end.x)
 			{
 				draw_sprite_column(data, F, text, stripe);
 				stripe++;
@@ -93,46 +96,48 @@ draw_sprites(t_data *data, t_settings *S, t_frame *F, t_img *text)
 	}
 }
 
-void	init_sprite_order(t_settings *S, t_frame *F)
+	void
+init_sprite_order(t_settings *S, t_frame *F)
 {
 	int i;
 
 	i = 0;
-	while (i < S->numSprites && !F->sprites_sorted)
+	while (i < S->spr_count && !F->spr_sorted)
 	{
-		F->spriteorder[i] = i;
-		F->spritedist[i] = 
-			((F->posX - S->spritex[i]) * (F->posX - S->spritex[i])
-			+ (F->posY - S->spritey[i]) * (F->posY - S->spritey[i]));
+		F->spr_order[i] = i;
+		F->spr_dist[i] =
+			((F->pos.x - S->spr_x[i]) * (F->pos.x - S->spr_x[i])
+			+ (F->pos.y - S->spr_y[i]) * (F->pos.y - S->spr_y[i]));
 		i++;
 	}
 }
 
-void	sort_sprites(t_settings *settings, t_frame *frame)
+	void
+sort_sprites(t_settings *settings, t_frame *F)
 {
-	t_vector	at;
-	int		tmporder;
+	t_int	at;
+	int		tmp_order;
 
-	init_sprite_order(settings, frame);
+	init_sprite_order(settings, F);
 	at.x = 0;
-	while (at.x < settings->numSprites - 1)
+	while (at.x < settings->spr_count - 1)
 	{
 		at.z = 0;
 		at.y = at.x;
-		while (++at.y < settings->numSprites)
+		while (++at.y < settings->spr_count)
 		{
-			if ((frame->spritedist[at.x] < frame->spritedist[at.y] && 
-						frame->spriteorder[at.x] < frame->spriteorder[at.y]) || 
-					(frame->spritedist[at.x] > frame->spritedist[at.y] && 
-					 frame->spriteorder[at.x] > frame->spriteorder[at.y]))
+			if ((F->spr_dist[at.x] < F->spr_dist[at.y]
+				&& F->spr_order[at.x] < F->spr_order[at.y])
+				|| (F->spr_dist[at.x] > F->spr_dist[at.y]
+				&& F->spr_order[at.x] > F->spr_order[at.y]))
 			{
 				at.z++;
-				tmporder = frame->spriteorder[at.x];
-				frame->spriteorder[at.x] = frame->spriteorder[at.y];
-				frame->spriteorder[at.y] = tmporder;
+				tmp_order = F->spr_order[at.x];
+				F->spr_order[at.x] = F->spr_order[at.y];
+				F->spr_order[at.y] = tmp_order;
 			}
 		}
 		at.x = (at.z == 0) ? at.x + 1 : at.x;
 	}
-	frame->sprites_sorted++;
+	F->spr_sorted++;
 }

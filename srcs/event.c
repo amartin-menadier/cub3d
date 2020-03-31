@@ -15,39 +15,37 @@
 	void
 look_left(t_frame *frame)
 {
-	double	oldDirX;
-	double	oldPlaneX;
-	double	rotSpeed = 0.18;
-	double	*PlaneX;
-	double	*PlaneY;
+	double	old_dir_x;
+	double	old_plane_x;
+	double	rot_speed;
+	t_coord	*plane;
 
-	PlaneX = &frame->planeX;
-	PlaneY = &frame->planeY;
-	oldDirX = frame->dirX;
-	frame->dirX = oldDirX * cos(-rotSpeed) - frame->dirY * sin(-rotSpeed);
-	frame->dirY = oldDirX * sin(-rotSpeed) + frame->dirY * cos(-rotSpeed);
-	oldPlaneX = frame->planeX;
-	*PlaneX = oldPlaneX * cos(-rotSpeed) - frame->planeY * sin(-rotSpeed);
-	*PlaneY = oldPlaneX * sin(-rotSpeed) + frame->planeY * cos(-rotSpeed);
+	rot_speed = 0.18;
+	plane = &frame->plane;
+	old_dir_x = frame->dir.x;
+	frame->dir.x = old_dir_x * cos(-rot_speed) - frame->dir.y * sin(-rot_speed);
+	frame->dir.y = old_dir_x * sin(-rot_speed) + frame->dir.y * cos(-rot_speed);
+	old_plane_x = frame->plane.x;
+	plane->x = old_plane_x * cos(-rot_speed) - frame->plane.y * sin(-rot_speed);
+	plane->y = old_plane_x * sin(-rot_speed) + frame->plane.y * cos(-rot_speed);
 }
 
 	void
 look_right(t_frame *frame)
 {
-	double	oldDirX;
-	double	oldPlaneX;
-	double	rotSpeed = 0.18;
-	double	*PlaneX;
-	double	*PlaneY;
+	double	old_dir_x;
+	double	old_plane_x;
+	double	rot_speed;
+	t_coord	*plane;
 
-	PlaneX = &frame->planeX;
-	PlaneY = &frame->planeY;
-	oldDirX = frame->dirX;
-	frame->dirX = frame->dirX * cos(rotSpeed) - frame->dirY * sin(rotSpeed);
-	frame->dirY = oldDirX * sin(rotSpeed) + frame->dirY * cos(rotSpeed);
-	oldPlaneX = frame->planeX;
-	*PlaneX = frame->planeX * cos(rotSpeed) - frame->planeY * sin(rotSpeed);
-	*PlaneY = oldPlaneX * sin(rotSpeed) + frame->planeY * cos(rotSpeed);
+	rot_speed = 0.18;
+	plane = &frame->plane;
+	old_dir_x = frame->dir.x;
+	frame->dir.x = old_dir_x * cos(rot_speed) - frame->dir.y * sin(rot_speed);
+	frame->dir.y = old_dir_x * sin(rot_speed) + frame->dir.y * cos(rot_speed);
+	old_plane_x = frame->plane.x;
+	plane->x = old_plane_x * cos(rot_speed) - frame->plane.y * sin(rot_speed);
+	plane->y = old_plane_x * sin(rot_speed) + frame->plane.y * cos(rot_speed);
 }
 
 	int
@@ -69,7 +67,7 @@ press_key(int key, t_data *data)
 		move_right(&data->frame, data->settings.map);
 	if (key == KEY_Q)
 		move_left(&data->frame, data->settings.map);
-	data->frame.sprites_sorted = 0;
+	data->frame.spr_sorted = 0;
 	return(key);
 }
 

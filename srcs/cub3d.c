@@ -36,9 +36,9 @@ main(int argc, char **argv)
 
 	check_args_errors(&data, argc, argv);
 	parse_cub_file(&data);
-	init_data(&data);//peut-etre remplacer par init window et ini image;
+	init_data(&data);
 	hook_event(&data);
 	mlx_loop_hook(data.mlx, render_next_frame, &data);
-	mlx_loop(data.mlx);//permet a la fenetre de rester ouverte
+	mlx_loop(data.mlx);
 	return (0);
 }

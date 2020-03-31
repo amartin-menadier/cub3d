@@ -2,7 +2,7 @@ R     700      500
 NO   ./textures/roll.xpm         
      
 SO ./textures/bat.xpm    
-   WE ./textures/zombie.xpm
+   WE ./textures/redbrick.xpm
 EA ./textures/microbeB.xpm
 
 S ./textures/barrel.xpm

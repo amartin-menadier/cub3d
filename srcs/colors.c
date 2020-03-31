@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-	unsigned char*
-int_to_rgb(unsigned char *image, int color)
+	unsigned char
+*int_to_rgb(unsigned char *image, int color)
 {
 	int	blue;
 	int	green;
@@ -44,9 +44,9 @@ get_color(t_data *data, char *line, char *color)
 		close_program(data, "Wrong color format - check ", color);
 	}
 	else if (!ft_strncmp(color, "F ", 2))
-		data->settings.Floor_color = rgb;
+		data->settings.floor_color = rgb;
 	else if (!ft_strncmp(color, "C ", 2))
-		data->settings.Ceiling_color = rgb;
+		data->settings.ceiling_color = rgb;
 	free(tmp);
 	tmp = NULL;
 }

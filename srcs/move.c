@@ -15,59 +15,59 @@
 	void
 move_forward(t_frame *frame, char **map)
 {
-	double	moveSpeed = 0.33;
-	double	*posX;
-	double	*posY;
+	double	move_speed;
+	t_coord	pos;
 
-	posX = &frame->posX;
-	posY = &frame->posY;
-	if(map[(int)*posY][(int)(*posX + frame->dirX * moveSpeed)] != 49)
-		*posX += frame->dirX * moveSpeed;
-	if(map[(int)(*posY + frame->dirY * moveSpeed)][(int)*posX] != 49)
-		*posY += frame->dirY * moveSpeed;
+	move_speed = 0.33;
+	pos.x = frame->pos.x;
+	pos.y = frame->pos.y;
+	if(map[(int)pos.y][(int)(pos.x + frame->dir.x * move_speed)] != 49)
+		frame->pos.x += frame->dir.x * move_speed;
+	if(map[(int)(pos.y + frame->dir.y * move_speed)][(int)pos.x] != 49)
+		frame->pos.y += frame->dir.y * move_speed;
 }
 
 	void
 move_backward(t_frame *frame, char **map)
 {
-	double	moveSpeed = 0.33;
-	int		posX;
-	int		posY;
+	double	move_speed;
+	t_coord	pos;
 
-	posX = (int)frame->posX;
-	posY = (int)frame->posY;
-	if(map[posY][(int)(frame->posX - frame->dirX * moveSpeed)] != 49)
-		frame->posX -= frame->dirX * moveSpeed;
-	if(map[(int)(frame->posY - frame->dirY * moveSpeed)][posX] != 49)
-		frame->posY -= frame->dirY * moveSpeed;
+	move_speed = 0.33;
+	pos.x = frame->pos.x;
+	pos.y = frame->pos.y;
+	if(map[(int)pos.y][(int)(pos.x - frame->dir.x * move_speed)] != 49)
+		frame->pos.x -= frame->dir.x * move_speed;
+	if(map[(int)(pos.y - frame->dir.y * move_speed)][(int)pos.x] != 49)
+		frame->pos.y -= frame->dir.y * move_speed;
 }
 
 	void
 move_right(t_frame *frame, char **map)
 {
-	double	moveSpeed = 0.33;
-	int		posX;
-	int		posY;
+	double	move_speed;
+	t_coord	pos;
 
-	posX = (int)frame->posX;
-	posY = (int)frame->posY;
-	if(map[posY][(int)(frame->posX - frame->dirY * moveSpeed)] != 49)
-		frame->posX -= frame->dirY * moveSpeed;
-	if(map[(int)(frame->posY + frame->dirX * moveSpeed)][posX] != 49)
-		frame->posY += frame->dirX * moveSpeed;
+	move_speed = 0.33;
+	pos.x = frame->pos.x;
+	pos.y = frame->pos.y;
+	if(map[(int)pos.y][(int)(pos.x - frame->dir.y * move_speed)] != 49)
+		frame->pos.x -= frame->dir.y * move_speed;
+	if(map[(int)(pos.y + frame->dir.x * move_speed)][(int)pos.x] != 49)
+		frame->pos.y += frame->dir.x * move_speed;
 }
 
 	void
 move_left(t_frame *frame, char **map)
 {
-	double	moveSpeed = 0.33;
-	int		posX;
-	int		posY;
+	double	move_speed;
+	t_coord	pos;
 
-	posX = (int)frame->posX;
-	posY = (int)frame->posY;
-	if(map[posY][(int)(frame->posX + frame->dirY * moveSpeed)] != 49)
-		frame->posX += frame->dirY * moveSpeed;
-	if(map[(int)(frame->posY - frame->dirX * moveSpeed)][posX] != 49)
-		frame->posY -= frame->dirX * moveSpeed;
+	move_speed = 0.33;
+	pos.x = frame->pos.x;
+	pos.y = frame->pos.y;
+	if(map[(int)pos.y][(int)(pos.x + frame->dir.y * move_speed)] != 49)
+		frame->pos.x += frame->dir.y * move_speed;
+	if(map[(int)(pos.y - frame->dir.x * move_speed)][(int)pos.x] != 49)
+		frame->pos.y -= frame->dir.x * move_speed;
 }

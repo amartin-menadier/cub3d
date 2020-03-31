@@ -15,20 +15,20 @@
 	int
 settings_ok(t_data *data, t_settings *settings, char *line)
 {
-	if ((!ft_memcmp(line, "R ", 2) && settings->win_height) ||
+	if ((!ft_memcmp(line, "R ", 2) && settings->win_size.y) ||
 		(!ft_memcmp(line, "NO ", 3) && settings->NO_path) ||
 		(!ft_memcmp(line, "SO ", 3) && settings->SO_path) ||
 		(!ft_memcmp(line, "EA ", 3) && settings->EA_path) ||
 		(!ft_memcmp(line, "WE ", 3) && settings->WE_path) ||
-		(!ft_memcmp(line, "S ", 2) && settings->Sprite_path) ||
-		(!ft_memcmp(line, "F ", 2) && settings->Floor_color > -1) ||
-		(!ft_memcmp(line, "C ", 2) && settings->Ceiling_color > -1))
+		(!ft_memcmp(line, "S ", 2) && settings->S_path) ||
+		(!ft_memcmp(line, "F ", 2) && settings->floor_color > -1) ||
+		(!ft_memcmp(line, "C ", 2) && settings->ceiling_color > -1))
 			close_program(data, "One parameter is set twice\n", "");
-	if (settings->win_width == -1 || settings->win_height == -1 ||
+	if (settings->win_size.x == -1 || settings->win_size.y == -1 ||
 		settings->SO_path == NULL || settings->WE_path == NULL ||
 		settings->EA_path == NULL || settings->NO_path == NULL ||
-		settings->Sprite_path == NULL || settings->Floor_color == -1 ||
-		settings->Ceiling_color == -1)
+		settings->S_path == NULL || settings->floor_color == -1 ||
+		settings->ceiling_color == -1)
 		return (0);
 	else
 		return (1);
@@ -42,7 +42,7 @@ check_settings(t_data *data, t_settings *settings, char *line)
 	i = 0;
 	while (line[i] == ' ')
 		i++;
-	if (line[i] == '\0' && settings->map_height)
+	if (line[i] == '\0' && settings->map_size.y)
 		close_program(data, "Empty line in map", "");
 	else if (line[i] == '\0')
 		return (-1);
@@ -89,32 +89,31 @@ parse_line(t_data *data, char *line)
 	void
 get_sprites_data(t_data *data, t_settings *settings, char **map)
 {
-	int x;
-	int y;
-	int	i;
+	t_int	pos;
+	int		i;
 
-	y = 1;
+	pos.y = 1;
 	i = 0;
 	init_sprites(data, settings, &data->frame);
-	while (y < settings->map_height - 1 && i < settings->numSprites)
+	while (pos.y < settings->map_size.y - 1 && i < settings->spr_count)
 	{
-		x = 0;
-		while (x < (int)ft_strlen(map[y]) && i < settings->numSprites)
+		pos.x = 0;
+		while (pos.x < settings->map_size.x && i < settings->spr_count)
 		{
-			if (map[y][x] >= '2' && map[y][x] <= '9')
+			if (map[pos.y][pos.x] >= '2' && map[pos.y][pos.x] <= '9')
 				{
-					settings->spritex[i] = x + 0.5;
-					settings->spritey[i] = y + 0.5;
-					settings->spritetext[i] = map[y][x];
+					settings->spr_x[i] = pos.x + 0.5;
+					settings->spr_y[i] = pos.y + 0.5;
+					settings->spr_text[i] = map[pos.y][pos.x];
 					i++;
 				}
-			x++;
+			pos.x++;
 		}
-		y++;
+		pos.y++;
 	}
 }
 
-	int
+	void
 parse_cub_file(t_data *data)
 {
 	int		ret;
@@ -134,5 +133,5 @@ parse_cub_file(t_data *data)
 	get_sprites_data(data, &data->settings, data->settings.map);
 	if ((close(data->settings.fd)) < 0)
 		close_program(data, "Couldn't close .cub file", "");
-	return (data->settings.fd);
+	data->settings.done = 1;
 }

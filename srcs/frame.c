@@ -16,21 +16,21 @@
 render_next_frame(t_data *data)
 {
 	int		x;
-	t_img	*textimg;
+	t_img	*text_img;
 
 	x = 0;
-	while (x < data->settings.win_width)
+	while (x < data->settings.win_size.x)
 	{
 		set_ray(data, &data->frame, x);
 		perform_DDA(data, &data->frame);
-		data->frame.Zbuffer[x] = data->frame.perpWallDist;
+		data->frame.z_buffer[x] = data->frame.perp_wall_dist;
 		set_drawing_limits(data, &data->frame);
-		textimg = get_texture_img(&data->frame);
-		draw_column(data, &data->frame, textimg, x);
+		text_img = get_texture_img(&data->frame);
+		draw_column(data, &data->frame, text_img, x);
 		x++;
 	}
 	sort_sprites(&data->settings, &data->frame);
-	draw_sprites(data, &data->settings, &data->frame, &data->frame.Sprite_img);
+	draw_sprites(data, &data->settings, &data->frame, &data->frame.S_img);
 	if (data->save == 1)
 		create_bmp(data, &data->img, "start.bmp");
 	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
@@ -38,112 +38,112 @@ render_next_frame(t_data *data)
 }
 
 	void
-draw_column(t_data *data, t_frame *frame, t_img *textimg, int x)
+draw_column(t_data *data, t_frame *F, t_img *text_img, int x)
 {
-	double step;
-	double texPos;
-	t_vector	pos;
+	t_int	pos;
+	double	step;
+	double	texPos;
 
 	pos.x = x;
 	pos.y = 0;
-	while (pos.y < frame->drawStart)
+	while (pos.y < F->draw_start)
 	{
-		put_pixel(&data->img, &pos, data->settings.Ceiling_color);
+		put_pixel(&data->img, pos, data->settings.ceiling_color);
 		pos.y++;
 	}
-	step = 1.0 * textimg->th / frame->lineHeight;
-	texPos = (frame->drawStart - data->settings.win_height / 2 +
-			frame->lineHeight / 2) * step - 0.5;
-	while (pos.y < frame->drawEnd)
+	step = 1.0 * text_img->size.y / F->line_height;
+	texPos = (F->draw_start - data->settings.win_size.y / 2 +
+		F->line_height / 2) * step;
+	while (pos.y < F->draw_end)
 	{
-		frame->texY = (int)texPos & (textimg->th - 1);
+		F->text.y = (int)texPos & (text_img->size.y - 1);
 		texPos += step;
-		put_pixel(&data->img, &pos,
-				textimg->colors[textimg->th * frame->texY + frame->texX]);
+		put_pixel(&data->img, pos, text_img->colors
+			[(text_img->size.y * F->text.y + F->text.x)]);
 		pos.y++;
 	}
 	pos.y--;
-	while (pos.y++ < data->settings.win_height)
-		put_pixel(&data->img, &pos, data->settings.Floor_color);
+	while (pos.y++ < data->settings.win_size.y)
+		put_pixel(&data->img, pos, data->settings.floor_color);
 }
 
 	void
-set_drawing_limits(t_data *data, t_frame *frame)
+set_drawing_limits(t_data *data, t_frame *F)
 {
-	frame->lineHeight =
-		abs((int)(data->settings.win_height / (frame->perpWallDist)));
-	frame->drawStart = -frame->lineHeight / 2 + data->settings.win_height / 2;
-	if(frame->drawStart < 0)
-		frame->drawStart = 0;
-	frame->drawEnd = frame->lineHeight / 2 + data->settings.win_height / 2;
-	if(frame->drawEnd >= data->settings.win_height)
-		frame->drawEnd = data->settings.win_height;
-	if (frame->side == 0)//EA and WE
-		frame->wallX = frame->posY + frame->perpWallDist * frame->rayY;
+	F->line_height =
+		abs((int)(data->settings.win_size.y / (F->perp_wall_dist)));
+	F->draw_start = -F->line_height / 2 + data->settings.win_size.y / 2;
+	if(F->draw_start < 0)
+		F->draw_start = 0;
+	F->draw_end = F->line_height / 2 + data->settings.win_size.y / 2;
+	if(F->draw_end >= data->settings.win_size.y)
+		F->draw_end = data->settings.win_size.y;
+	if (F->side == 0)
+		F->wall_x = F->pos.y + F->perp_wall_dist * F->ray.y;
 	else
-		frame->wallX = frame->posX + frame->perpWallDist * frame->rayX;
-	frame->wallX -= floor((frame->wallX));
+		F->wall_x = F->pos.x + F->perp_wall_dist * F->ray.x;
+	F->wall_x -= floor((F->wall_x));
 }
 
 /*
- * DDA = Digital Differential Analyser
- */
+** DDA = Digital Differential Analyser
+*/
 
 	void
-perform_DDA(t_data *data, t_frame *frame)
+perform_DDA(t_data *data, t_frame *F)
 {
-	frame->hit = 0;
-	while (frame->hit == 0)
+	int	hit;
+
+	hit = 0;
+	while (hit == 0)
 	{
-		if(frame->sideDistX < frame->sideDistY)
+		if(F->side_dist.x < F->side_dist.y)
 		{
-			frame->sideDistX += frame->deltaDistX;
-			frame->mapX += frame->stepX;
-			frame->side = 0;
+			F->side_dist.x += F->delta_dist.x;
+			F->map.x += F->step.x;
+			F->side = 0;
 		}
 		else
 		{
-			frame->sideDistY += frame->deltaDistY;
-			frame->mapY += frame->stepY;
-			frame->side = 1;
+			F->side_dist.y += F->delta_dist.y;
+			F->map.y += F->step.y;
+			F->side = 1;
 		}
-		if(data->settings.map[(int)frame->mapY][(int)frame->mapX] == '1')
-			frame->hit = 1;
+		if(data->settings.map[(int)F->map.y][(int)F->map.x] == '1')
+			hit = 1;
 	}
-	if(frame->side == 0)
-		frame->perpWallDist = (frame->mapX - data->frame.posX +
-				(1 - frame->stepX)/2)/ frame->rayX ;
+	if(F->side == 0)
+		F->perp_wall_dist = (F->map.x - F->pos.x + (1 - F->step.x)/2)/ F->ray.x;
 	else
-		frame->perpWallDist = (frame->mapY - data->frame.posY +
-				(1 - frame->stepY)/2)/ frame->rayY;
+		F->perp_wall_dist = (F->map.y - F->pos.y + (1 - F->step.y)/2)/ F->ray.y;
 }
 
 	void
-set_ray(t_data *data, t_frame *frame, int x)
+set_ray(t_data *data, t_frame *F, int x)
 {
-	frame->mapX = (int)frame->posX;
-	frame->mapY = (int)frame->posY;
-	frame->cameraX = 2 * x /(double)data->settings.win_width - 1;
-	frame->rayX = frame->dirX + frame->planeX * frame->cameraX;
-	frame->rayY = frame->dirY + frame->planeY * frame->cameraX;
-	frame->deltaDistX = (frame->rayY == 0) ?
-		0 : ((frame->rayX == 0) ? 1 : fabs(1 / frame->rayX));
-	frame->deltaDistY = (frame->rayX == 0) ?
-		0 : ((frame->rayY == 0) ? 1 : fabs(1 / frame->rayY));
-	if (frame->rayX < 0)
-		frame->stepX = -1;
+	F->map.x = (int)F->pos.x;
+	F->map.y = (int)F->pos.y;
+	F->camera_x = 2 * x /(double)data->settings.win_size.x - 1;
+	F->ray.x = F->dir.x + F->plane.x * F->camera_x;
+	F->ray.y = F->dir.y + F->plane.y * F->camera_x;
+	F->delta_dist.x =
+		(F->ray.y == 0) ? 0 : ((F->ray.x == 0) ? 1 : fabs(1 / F->ray.x));
+	F->delta_dist.y =
+		(F->ray.x == 0) ? 0 : ((F->ray.y == 0) ? 1 : fabs(1 / F->ray.y));
+	if (F->ray.x < 0)
+		F->step.x = -1;
 	else
-		frame->stepX = 1;
-	if (data->frame.rayY < 0)
-		frame->stepY = -1;
+		F->step.x = 1;
+	if (F->ray.y < 0)
+		F->step.y = -1;
 	else
-		frame->stepY = 1;
-	if (frame->rayX < 0)
-		frame->sideDistX = (frame->posX - frame->mapX) * frame->deltaDistX;
+		F->step.y = 1;
+	if (F->ray.x < 0)
+		F->side_dist.x = (F->pos.x - F->map.x) * F->delta_dist.x;
 	else
-		frame->sideDistX = (frame->mapX + 1.0 - frame->posX) * frame->deltaDistX;
-	if (data->frame.rayY < 0)
-		frame->sideDistY = (frame->posY - frame->mapY) * frame->deltaDistY;
+		F->side_dist.x = (F->map.x + 1.0 - F->pos.x) * F->delta_dist.x;
+	if (F->ray.y < 0)
+		F->side_dist.y = (F->pos.y - F->map.y) * F->delta_dist.y;
 	else
-		frame->sideDistY = (frame->mapY + 1.0 - frame->posY) * frame->deltaDistY;
+		F->side_dist.y = (F->map.y + 1.0 - F->pos.y) * F->delta_dist.y;
 }

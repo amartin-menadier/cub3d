@@ -17,24 +17,24 @@ get_resolution(t_data *data, char *line, t_settings *settings)
 {
 	int	i;
 	i = 1;
-	settings->win_width = 0;
-	settings->win_height = 0;
+	settings->win_size.x = 0;
+	settings->win_size.y = 0;
 	while (line[i] == ' ')
 		i++;
 	while (ft_isdigit(line[i]))
-		settings->win_width = (settings->win_width * 10) + (line[i++] - '0');
+		settings->win_size.x = (settings->win_size.x * 10) + (line[i++] - '0');
 	while (line[i] == ' ')
 		i++;
 	while (ft_isdigit(line[i]))
-		settings->win_height = (settings->win_height * 10) + (line[i++] - '0');
+		settings->win_size.y = (settings->win_size.y * 10) + (line[i++] - '0');
 	while (line[i] == ' ')
 		i++;
 	if (line[i])
 		close_program(data, "Wrong resolution in .cub file\n", "");
-	if (settings->win_width < 50 || settings->win_height < 50)
+	if (settings->win_size.x < 50 || settings->win_size.y < 50)
 		close_program(data, "Resolution is too small\n", "");
-	if (settings->win_width > 2560)
-		settings->win_width = 2560;
-	if (settings->win_height > 1440)
-		settings->win_height = 1440;
+	if (settings->win_size.x > 2560)
+		settings->win_size.x = 2560;
+	if (settings->win_size.y > 1440)
+		settings->win_size.y = 1440;
 }
