@@ -1,0 +1,19 @@
+R     1000      800           
+NO   ./textures/roll.xpm         
+     
+SO ./textures/bat.xpm    
+   WE ./textures/redbrick.xpm
+EA ./textures/microbeB.xpm
+
+S2 ./textures/microbeB.xpm
+S3 ./textures/rollB.xpm
+F ./textures/wood.xpm
+C ./textures/purplestone.xpm
+
+111111
+100001
+132321
+133331
+120001
+1N0001
+111111
