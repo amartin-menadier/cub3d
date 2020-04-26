@@ -13,7 +13,7 @@
 #include "cub3d.h"
 
 	void
-draw_minimap_mask(t_data *data, t_minimap *map, t_img mask, int banner_end)
+draw_minimap_mask(t_data *data, t_minimap *map, t_img *mask, int banner_end)
 {
 	t_int	pxl;
 	int		diameter;
@@ -28,13 +28,13 @@ draw_minimap_mask(t_data *data, t_minimap *map, t_img mask, int banner_end)
 		while (pxl.y < diameter)
 		{
 			ctr_dist = (int)hypot((map->center.x - pxl.x), (map->center.y - pxl.y));
-			color = mask.colors[mask.size.x * (pxl.y % 16) + pxl.x % 32];
+			color = mask->colors[mask->size.x * (pxl.y % 16) + pxl.x % 32];
 			if (ctr_dist == diameter / 2 - 1)
 				color = WHITE;
 			if (ctr_dist == diameter / 2)
 				color = DARK_GREY;
 			if (ctr_dist <= diameter / 2)
-				put_pixel(&data->img, pxl, color);
+				put_pixel(&data->scr, pxl, color);
 				(void)banner_end;
 			pxl.y++;
 		}
@@ -48,10 +48,10 @@ draw_mask(t_data *data, t_settings *settings, t_minimap *map, t_life *life)
 	int		draw_end_y;
 	int		color;
 	t_int	pxl;
-	t_img	mask;
+	t_img	*mask;
 
-	mask.ptr = NULL;
-	create_img(data, "./textures/civ_mask.xpm", &mask);
+	ft_putstr_fd("\nFRAME50", 1);
+	mask = &data->piclib.mask;
 	draw_end_y = life->draw_start.y + life->draw_end.y + 3;
 	pxl.x = 0;
 	while (pxl.x < settings->win_size.x)
@@ -59,177 +59,417 @@ draw_mask(t_data *data, t_settings *settings, t_minimap *map, t_life *life)
 		pxl.y = 0;
 		while (pxl.y < draw_end_y)
 		{
-			color = mask.colors[mask.size.x * (pxl.y % 16) + pxl.x % 32];
+			color = mask->colors[mask->size.x * (pxl.y % 16) + pxl.x % 32];
 			if (pxl.y == draw_end_y - 2)
 				color = WHITE;
 			if (pxl.y == draw_end_y - 1)
 				color = DARK_GREY;
-			put_pixel(&data->img, pxl, color);
+			put_pixel(&data->scr, pxl, color);
 			pxl.y++;
 		}
 		pxl.x++;
 	}
 	draw_minimap_mask(data, map, mask, draw_end_y);
-	mlx_destroy_image(data->mlx, mask.ptr);
+//	mlx_destroy_image(data->mlx, mask.ptr);
+}
+
+	int
+get_orientation(t_dbl ray)
+{
+	int	orientation;
+
+	if (ray.y > 0 && fabs(ray.x) < fabs(ray.y))
+		orientation = NO;
+	else if (ray.x > 0 && fabs(ray.x) >= fabs(ray.y))
+		orientation = EA;
+	else if (ray.y < 0 && fabs(ray.x) < fabs(ray.y))
+		orientation = SO;
+	else if (ray.x < 0 && fabs(ray.x) >= fabs(ray.y))
+		orientation = WE;
+	else
+		return (-1);
+	return (orientation);
+}
+
+	t_img
+get_skybox_face(t_piclib *piclib, t_dbl ray)
+{
+	t_img	face;
+	int		orientation;
+
+	orientation = get_orientation(ray);
+	if (orientation == EA)
+		face = piclib->ea;
+	else if (orientation == SO)
+		face = piclib->so;
+	else if (orientation == WE)
+		face = piclib->we;
+	else if (orientation == NO)
+		face = piclib->no;
+	else
+		face.ptr = NULL;
+	return (face);
+}
+
+	int
+get_error_color(int x, int y, t_int size)
+{
+	if (x >= size.x && y >= size.y)
+		return (GREEN);
+	else if (x < 0 && y < 0)
+		return (WHITE);
+	else if (x >= size.x)
+		return (RED);
+	else if (y >= size.y)
+		return (DARK_GREY);
+	else if (x < 0)
+		return (ORANGE);
+	else if (y < 0)
+		return (GREY);
+	else
+		return (0);
+}
+
+	t_int
+get_skybox_pixel(t_int win_size, int scr_y, t_dbl ray, t_img face)
+{
+	t_int	face_pxl;
+	int		orientation;
+	t_dbl	ratio;
+	int		line_height;
+
+	orientation = get_orientation(ray);
+	if (orientation == NO)
+		ratio.x = (0.5 + ray.x / sqrt(2));
+	else if (orientation == EA)
+		ratio.x = (0.5 - ray.y / sqrt(2));
+	else if (orientation == SO)
+		ratio.x = (0.5 - ray.x / sqrt(2));
+	else if (orientation == WE)
+		ratio.x = (0.5 + ray.y / sqrt(2));
+	else
+		ratio.x = - 1 / face.size.x;
+	face_pxl.x = ratio.x * face.size.x;
+	if (face_pxl.x < 0 || face_pxl.x >= face.size.x)
+		face_pxl.x = -1;
+	line_height = set_drawing_limit(win_size, 1, 5);//try PWD 0.5 instead of 1
+//	step = 1.0 * face.size.y / line_height;
+//	face_pxl.y = step * ((double)((line_height - win_size.y) / 2) + scr.y);
+	ratio.y = 1.00 * ((line_height - win_size.y) / 2 + scr_y) / line_height;
+	face_pxl.y = ratio.y * face.size.y;
+	if (face_pxl.y < 0 || face_pxl.y >= face.size.y)
+		face_pxl.y = -1;
+	return(face_pxl);
+}
+
+	void
+draw_skybox_column(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
+{
+	t_img	face;
+	t_int	face_pxl;
+	int		color;
+	int		draw_end;
+
+	face = get_skybox_face(&data->piclib, ray);
+	draw_end = set_drawing_limit(data->settings.win_size, perp_wall_dist, 3);
+	while (scr.y < draw_end)
+	{
+		face_pxl = get_skybox_pixel(data->settings.win_size, scr.y, ray, face);
+		if (!(color = get_error_color(face_pxl.x, face_pxl.y, face.size)))
+			color = face.colors[face_pxl.y * face.size.x + face_pxl.x];
+		put_pixel(&data->scr, scr, color);
+		scr.y++;
+	}
+}
+
+	void
+ray_cast(t_data *data, t_int win_size, int skybox)
+{
+	t_int	scr;
+	t_dbl	ray;
+	double	perp_wall_dist;
+
+	scr.x = 0;
+	while (scr.x < data->settings.win_size.x)
+	{
+		ray = set_ray(data, &data->frame, scr);
+		perp_wall_dist = perform_DDA(data, data->frame.pos, ray, 0);
+		data->frame.z_buffer[scr.x] = perp_wall_dist;
+		scr.y = set_drawing_limit(win_size, perp_wall_dist, skybox);
+		if (!skybox)
+		{
+			draw_wall_column(data, scr, ray, perp_wall_dist);
+		}
+		else
+		{
+			draw_skybox_column(data, scr, ray, perp_wall_dist);
+		}
+		scr.x++;
+	}
+}
+
+	void
+draw_life_string(t_data *data, t_life life, t_int ctr)
+{
+	char	*value;
+
+	value = ft_itoa(life.value);
+	mlx_string_put(data->mlx, data->window, ctr.x, ctr.y, BLACK, value);
+	free(value);
 }
 
 	int
 render_next_frame(t_data *data)
 {
-	int		x;
-	t_img	*text_img;
-	char	*life_value;
-
 	if (data->life.value > 0 && data->frame.done == 0)
 	{
-		ft_putstr_fd("\nFRAME01", 1);
-	set_floor(data, &data->settings, &data->floor);
-	x = 0;
-	while (x < data->settings.win_size.x)
-	{
-		if (x == 0)ft_putstr_fd("\nFRAME02", 1);
-		set_ray(data, &data->frame, x);
-		if (x == 0)ft_putstr_fd("\nFRAME03", 1);
-		perform_DDA(data, &data->frame);
-		if (x == 0)ft_putstr_fd("\nFRAME04", 1);
-		data->frame.z_buffer[x] = data->frame.perp_wall_dist;
-		if (x == 0)ft_putstr_fd("\nFRAME05", 1);
-		set_drawing_limits(data, &data->frame);
-		if (x == 0)ft_putstr_fd("\nFRAME06", 1);
-		text_img = get_wall_texture(&data->frame);
-		if (x == 0)ft_putstr_fd("\nFRAME07", 1);
-		draw_column(data, &data->frame, text_img, x);
-		x++;
-	}
-		ft_putstr_fd("\nFRAME08", 1);
-	sort_sprites(&data->settings, &data->frame);
-		ft_putstr_fd("\nFRAME09", 1);
-	draw_sprites(data, &data->settings, &data->frame);
-		ft_putstr_fd("\nFRAME110", 1);
-	draw_mask(data, &data->settings, &data->map, &data->life);
-	draw_minimap(data, &data->settings, &data->map);
-		ft_putstr_fd("\nFRAME111", 1);
-	draw_life_bar(data, &data->settings, &data->life);
-	if (data->save == 1)
-		create_bmp(data, &data->img, "start.bmp");
-		ft_putstr_fd("\nFRAME112", 1);
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
-	life_value = ft_itoa(data->life.value);
-	mlx_string_put(data->mlx, data->window,
-		data->life.ctr.x, data->life.ctr.y, GREY, life_value);
-	free(life_value);
-	data->frame.done = 1;
+		set_floor(data, &data->settings, &data->floor);//skybox
+		ray_cast(data, data->settings.win_size, data->skybox);//skybox
+		sort_sprites(&data->settings, &data->frame);
+		draw_sprites(data, &data->settings, &data->frame);
+		draw_mask(data, &data->settings, &data->map, &data->life);
+		draw_minimap(data, &data->settings, &data->map);
+		draw_life_bar(data, &data->settings, &data->life);
+		mlx_put_image_to_window(data->mlx, data->window, data->scr.ptr, 0, 0);
+		draw_life_string(data, data->life, data->life.ctr);
+		if (data->save == 1)
+			create_bmp(data, &data->scr, "start.bmp");
+		data->frame.done = 1;
 	}
 	return (0);
 }
 
-	void
-draw_column(t_data *data, t_frame *F, t_img *text_img, int x)
+	int
+set_drawing_limit(t_int win_size, double perp_wall_dist, int mod)
 {
-	t_int	pos;
-	double	step;
-	double	texPos;
+	int		line_height;
+	int		draw_start;
+	int		draw_end;
 
-	pos.x = x;
-	pos.y = 0;
-	while (pos.y < F->draw_start)
-	{
-	//	put_pixel(&data->img, pos, data->settings.ceiling_color);
-		pos.y++;
-	}
-	step = 1.0 * text_img->size.y / F->line_height;
-	texPos = (F->draw_start - data->settings.win_size.y / 2 +
-			F->line_height / 2) * step;
-	while (pos.y < F->draw_end)
-	{
-		F->text.y = (int)texPos & (text_img->size.y - 1);
-		texPos += step;
-		put_pixel(&data->img, pos, text_img->colors
-				[(text_img->size.y * F->text.y + F->text.x)]);
-		pos.y++;
-	}
-	pos.y--;
-//	while (pos.y++ < data->settings.win_size.y)
-//		put_pixel(&data->img, pos, data->settings.floor_color);
+	line_height = fabs(win_size.y / perp_wall_dist);
+	if (mod % 2)
+		line_height = win_size.x;
+	draw_start = (win_size.y - line_height) / 2;
+	draw_end = win_size.y / 2 + line_height / 2;
+	if ((mod == 0 || mod == 1) && draw_start < 0)
+		return (0);
+	else if (mod == 0 || mod == 1)
+		return (draw_start);
+	else if ((mod == 2 || mod == 3) && draw_end > win_size.y)
+		return (win_size.y);
+	else if (mod == 2 || mod == 3)
+		return (draw_end);
+	else if (mod == 4 || mod == 5)
+		return (line_height);
+	else
+		return (-100000000);
+}
+
+
+	t_img
+get_wall_img(t_data *data, t_piclib piclib, t_dbl ray)
+{
+	t_img	wall;
+	int		side;
+
+	side = perform_DDA(data, data->frame.pos, ray, 1);
+	if (side == EA)
+		wall = piclib.ea;
+	else if (side == SO)
+		wall = piclib.so;
+	else if (side == WE)
+		wall = piclib.we;
+	else if (side == NO)
+		wall = piclib.no;
+	else
+		wall.ptr = NULL;
+		//verifier la pertinence de ce cas d'erreur suivant
+//	if (text_img->size.x != text_img->size.y)
+//		close_program(data, "wall texture shall be a square", "");
+	return (wall);
+}
+
+// 0 SO NO 1 EA WE
+
+	t_int
+get_wall_pixel(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
+{
+	t_int	wall_pxl;
+	t_img	wall;
+	t_dbl	ratio;
+	int		line_height;
+
+	wall = get_wall_img(data, data->piclib, ray);
+	if (!(((int)perform_DDA(data, data->frame.pos, ray, 1)) % 2))
+//	if (side == NO || side == SO)
+		ratio.x = perp_wall_dist * ray.y + data->frame.pos.y;
+	else
+		ratio.x = perp_wall_dist * ray.x + data->frame.pos.x;
+	ratio.x -= floor(ratio.x);
+	wall_pxl.x = ratio.x * wall.size.x;
+	if (wall_pxl.x < 0 || wall_pxl.x >= wall.size.x)
+		wall_pxl.x = -1;
+	line_height = set_drawing_limit(data->settings.win_size, perp_wall_dist, 4);
+	ratio.y = 1.00 * ((line_height - data->settings.win_size.y) / 2 + scr.y);
+	ratio.y /= line_height;
+	wall_pxl.y = ratio.y * wall.size.y;
+	if (wall_pxl.y < 0 || wall_pxl.y >= wall.size.y)
+		wall_pxl.y = -1;
+	return (wall_pxl);
 }
 
 	void
-set_drawing_limits(t_data *data, t_frame *F)
+draw_wall_column(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
 {
-	F->line_height =
-		abs((int)(data->settings.win_size.y / (F->perp_wall_dist)));
-	F->draw_start = -F->line_height / 2 + data->settings.win_size.y / 2;
-	if(F->draw_start < 0)
-		F->draw_start = 0;
-	F->draw_end = F->line_height / 2 + data->settings.win_size.y / 2;
-	if(F->draw_end >= data->settings.win_size.y)
-		F->draw_end = data->settings.win_size.y;
-	if (F->side == 0)
-		F->wall_x = F->pos.y + F->perp_wall_dist * F->ray.y;
-	else
-		F->wall_x = F->pos.x + F->perp_wall_dist * F->ray.x;
-	F->wall_x -= floor((F->wall_x));
+	t_img	wall;
+	t_int	wall_pxl;
+	int		draw_end;
+	int		color;
+
+	wall = get_wall_img(data, data->piclib, ray);
+	draw_end = set_drawing_limit(data->settings.win_size, perp_wall_dist, 2);
+	while (scr.y < draw_end)
+	{
+		wall_pxl = get_wall_pixel(data, scr, ray, perp_wall_dist);
+		if (!(color = get_error_color(wall_pxl.x, wall_pxl.y, wall.size)))
+			color = wall.colors[wall_pxl.y * wall.size.x + wall_pxl.x];
+		put_pixel(&data->scr, scr, color);
+		scr.y++;
+	}
 }
 
 /*
  ** DDA = Digital Differential Analyser
  */
 
-	void
-perform_DDA(t_data *data, t_frame *F)
+	t_dbl
+get_delta_dist(t_dbl ray)
 {
-	int	hit;
+	t_dbl	delta_dist;
 
-	hit = 0;
-	while (hit == 0)
+	if (ray.x == 0)
+		delta_dist.y = 0;
+	else if (ray.y == 0)
+		delta_dist.y = 1;
+	else
+		delta_dist.y = fabs(1 / ray.y);
+	if (ray.y == 0)
+		delta_dist.x = 0;
+	else if (ray.x == 0)
+		delta_dist.x = 1;
+	else
+		delta_dist.x = fabs (1 / ray.x);
+return (delta_dist);
+}
+
+
+	t_dbl
+get_side_dist(t_dbl delta_dist, t_dbl pos, t_dbl ray)
+{
+	t_dbl	cell;
+	t_dbl	side_dist;
+
+	cell.x = (int)pos.x;
+	cell.y = (int)pos.y;
+	if (ray.x < 0)
+		side_dist.x = (pos.x - cell.x) * delta_dist.x;
+	else
+		side_dist.x = (cell.x + 1.0 - pos.x) * delta_dist.x;
+	if (ray.y < 0)
+		side_dist.y = (pos.y - cell.y) * delta_dist.y;
+	else
+		side_dist.y = (cell.y + 1.0 - pos.y) * delta_dist.y;
+	return (side_dist);
+}
+
+	t_dbl
+get_DDA_step(t_dbl ray)
+{
+	t_dbl	step;
+
+	if (ray.x < 0)
+		step.x = -1;
+	else
+		step.x = 1;
+	if (ray.y < 0)
+		step.y = -1;
+	else
+		step.y = 1;
+	return (step);
+}
+
+	t_dbl
+get_hit_wall(t_data data, t_dbl ray, t_dbl step, int mod)
+{
+	t_dbl	cell;
+	t_dbl	delta_dist;
+	t_dbl	side_dist;
+	t_dbl	side;
+
+	delta_dist = get_delta_dist(ray);
+	side_dist = get_side_dist(delta_dist, data.frame.pos, ray);
+	cell.x = (int)data.frame.pos.x;
+	cell.y = (int)data.frame.pos.y;
+	while (data.settings.map[(int)cell.y][(int)cell.x] != WALL)
 	{
-		if(F->side_dist.x < F->side_dist.y)
+		if(side_dist.x < side_dist.y)
 		{
-			F->side_dist.x += F->delta_dist.x;
-			F->map.x += F->step.x;
-			F->side = 0;
+			side_dist.x += delta_dist.x;
+			cell.x += step.x;
+			side.x = (ray.x > 0 ? EA : WE);
 		}
 		else
 		{
-			F->side_dist.y += F->delta_dist.y;
-			F->map.y += F->step.y;
-			F->side = 1;
+			side_dist.y += delta_dist.y;
+			cell.y += step.y;
+			side.x = (ray.y > 0 ? NO : SO);
 		}
-		if(data->settings.map[(int)F->map.y][(int)F->map.x] == '1')
-			hit = 1;
 	}
-	if(F->side == 0)
-		F->perp_wall_dist = (F->map.x - F->pos.x + (1 - F->step.x)/2)/ F->ray.x;
-	else
-		F->perp_wall_dist = (F->map.y - F->pos.y + (1 - F->step.y)/2)/ F->ray.y;
+	return (mod == 0 ? cell : side);
 }
 
-	void
-set_ray(t_data *data, t_frame *F, int x)
+	double
+perform_DDA(t_data *data, t_dbl pos, t_dbl ray, int mod)
 {
-	F->map.x = (int)F->pos.x;
-	F->map.y = (int)F->pos.y;
-	F->camera_x = 2 * x /(double)data->settings.win_size.x - 1;
-	F->ray.x = F->dir.x + F->plane.x * F->camera_x;
-	F->ray.y = F->dir.y + F->plane.y * F->camera_x;
-	F->delta_dist.x =
-		(F->ray.y == 0) ? 0 : ((F->ray.x == 0) ? 1 : fabs(1 / F->ray.x));
-	F->delta_dist.y =
-		(F->ray.x == 0) ? 0 : ((F->ray.y == 0) ? 1 : fabs(1 / F->ray.y));
-	if (F->ray.x < 0)
-		F->step.x = -1;
+	t_dbl	step;
+	t_dbl	hit_wall;
+	double	perp_wall_dist;
+	t_dbl	side;
+
+	step = get_DDA_step(ray);
+	hit_wall = get_hit_wall(*data, ray, step, 0);
+	side = get_hit_wall(*data, ray, step, 1);
+	if(side.x == EA || side.x == WE)
+		perp_wall_dist = (hit_wall.x - pos.x + (1 - step.x) / 2) / ray.x;
 	else
-		F->step.x = 1;
-	if (F->ray.y < 0)
-		F->step.y = -1;
+		perp_wall_dist = (hit_wall.y - pos.y + (1 - step.y) / 2) / ray.y;
+//	data->frame.side = side.x;
+//	data->frame.perp_wall_dist = perp_wall_dist;
+	if (data->skybox)
+		perp_wall_dist = 1;
+	if (mod == 0)
+		return (perp_wall_dist);
 	else
-		F->step.y = 1;
-	if (F->ray.x < 0)
-		F->side_dist.x = (F->pos.x - F->map.x) * F->delta_dist.x;
-	else
-		F->side_dist.x = (F->map.x + 1.0 - F->pos.x) * F->delta_dist.x;
-	if (F->ray.y < 0)
-		F->side_dist.y = (F->pos.y - F->map.y) * F->delta_dist.y;
-	else
-		F->side_dist.y = (F->map.y + 1.0 - F->pos.y) * F->delta_dist.y;
+		return (side.x);
 }
+
+	t_dbl
+set_ray(t_data *data, t_frame *frame, t_int scr)
+{
+	double	camera_x;
+	t_dbl	ray;
+
+	camera_x = 2.0 * scr.x /data->settings.win_size.x - 1;
+	if (data->skybox)
+	{
+		ray.x = cos(frame->dir.angle - (PI / 4) * camera_x);
+		ray.y = sin(frame->dir.angle - (PI / 4) * camera_x);
+	}
+	else
+	{
+		ray.x = frame->dir.x + frame->plane.x * camera_x;
+		ray.y = frame->dir.y + frame->plane.y * camera_x;
+	}
+	return(ray);
+}
+

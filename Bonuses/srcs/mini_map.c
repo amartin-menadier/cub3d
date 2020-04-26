@@ -22,7 +22,7 @@ set_minimap_limits(double pos, double *case_min, double *case_max)
 }
 
 	void
-get_minimap_face(t_data *data, t_minimap *map)
+get_minimap_avatar(t_data *data, t_img *avatar)
 {
 	char *path;
 
@@ -32,7 +32,8 @@ get_minimap_face(t_data *data, t_minimap *map)
 		path = ft_strdup("./textures/grinmacing.xpm");
 	else
 		path = ft_strdup("./textures/crying.xpm");
-	create_img(data, path, &map->face);
+	ft_putstr_fd("\nMINIMAP19", 1);
+	create_img(data, path, avatar);
 	free(path);
 	path = NULL;
 }
@@ -44,11 +45,8 @@ draw_minimap(t_data *data, t_settings *settings, t_minimap *map)
 
 		ft_putstr_fd("\nMINIMAP01", 1);
 	set_minimap_limits(data->frame.pos.x, &map->case_min.x, &map->case_max.x);
-		ft_putstr_fd("\nMINIMAP02", 1);
 	set_minimap_limits(data->frame.pos.y, &map->case_min.y, &map->case_max.y);
-		ft_putstr_fd("\nMINIMAP03", 1);
-	get_minimap_face(data, map);
-		ft_putstr_fd("\nMINIMAP04", 1);
+	get_minimap_avatar(data, &data->piclib.avatar);
 	pxl.x = map->draw_start.x;
 		ft_putstr_fd("\nMINIMAP05", 1);
 	while (pxl.x < map->draw_end.x)
@@ -66,52 +64,62 @@ draw_minimap(t_data *data, t_settings *settings, t_minimap *map)
 	data->map.done = 1;
 }
 
-	t_coord
-rotate_minimap(t_data *data, t_coord pos)
+	t_dbl
+rotate_minimap(t_data *data, t_dbl pos)
 {
 	double	rot;
 	double	old_x;
-	t_coord	ctr;
+	t_dbl	ctr;
+/*	double	dir_y;
 
-	if (!(rot = acos(-data->frame.dir.y)))
+	dir_y = data->frame.dir.y;
+	/// (sqrt(2) / 2);
+	if (fabs(dir_y) > 1 && dir_y < 0)
+		dir_y = -1;
+	else if (fabs(dir_y) > 1 && dir_y > 0)
+		dir_y = 1;
+	if (!(rot = acos(-dir_y)))
 		rot = 0;
 	if (data->frame.dir.x > 0)
-		rot = PI + acos(data->frame.dir.y);
+		rot = PI + acos(dir_y);
 	rot = -rot;
+	*/
+	rot = -data->frame.plane.angle;
 	ctr.x = (double)data->frame.pos.x;
 	ctr.y = (double)data->frame.pos.y;
 	old_x = pos.x;
 	pos.x = (pos.x - ctr.x) * cos(rot) - (pos.y - ctr.y) * sin(rot) + ctr.x;
-	pos.y = (old_x - ctr.x) * sin(rot) + (pos.y - ctr.y) * cos(rot) + ctr.y;
+	pos.y = - (old_x - ctr.x) * sin(rot) - (pos.y - ctr.y) * cos(rot) + ctr.y;
 	return (pos);
 }
 
 	int
-draw_minimap_face(t_data *data, t_frame *frame, t_coord pos, int color)
+draw_minimap_avatar(t_data *data, t_frame *frame, t_dbl pos, int color)
 {
-	t_int		face_pxl;
+	t_int		avat_pxl;
 	t_minimap	*map;
+	t_img		*avatar;
 
 	map = &data->map;
+	avatar = &data->piclib.avatar;
 	if (fabs(pos.x - frame->pos.x) > 0.5 || fabs(pos.y - frame->pos.y) > 0.5)
 		return (color);
 	if ((hypot((pos.x - frame->pos.x), (pos.y - frame->pos.y))) > 0.5)
 		return (color);
 //	get_minimap_face(data, &data->map);
-	face_pxl.x = (int)((frame->pos.x - pos.x + 0.5) * data->map.face.size.x);
-	face_pxl.y = (int)((pos.y - frame->pos.y + 0.5) * data->map.face.size.y);
-	if (map->face.colors[(map->face.size.x * face_pxl.y + face_pxl.x)])
-		color = map->face.colors[(map->face.size.x * face_pxl.y + face_pxl.x)];
+	avat_pxl.x = (int)((frame->pos.x - pos.x + 0.5) * avatar->size.x);
+	avat_pxl.y = (int)((pos.y - frame->pos.y + 0.5) * avatar->size.y);
+	if (avatar->colors[(avatar->size.x * avat_pxl.y + avat_pxl.x)])
+		color = avatar->colors[(avatar->size.x * avat_pxl.y + avat_pxl.x)];
 	return (color);
 }
-
 
 	void
 draw_minimap_column(t_data *data, t_settings *settings, t_minimap *map, t_int pxl)
 {
 	double	ctr_dist;
 	char	value;
-	t_coord	pxl_pos;
+	t_dbl	pxl_pos;
 	int		color;
 	
 	ctr_dist = hypot(pxl.x - 1.0 * map->center.x, pxl.y - 1.0 * map->center.y);
@@ -130,93 +138,11 @@ draw_minimap_column(t_data *data, t_settings *settings, t_minimap *map, t_int px
 		value = settings->map[(int)pxl_pos.y][(int)pxl_pos.x];
 	if (value == ' ' || value == (char)NULL)
 		color = GREY;
-	if (value == '0' || value >= '2')
+	if (value == '0' || value >= '2' || data->skybox)
 		color = WHITE;
-	if (value == '1' || map->radius - ctr_dist <= 2)
+	if ((value == '1' && !data->skybox) || map->radius - ctr_dist <= 2)
 		color = BLACK;
-	color = draw_minimap_face(data, &data->frame, pxl_pos, color);
+	color = draw_minimap_avatar(data, &data->frame, pxl_pos, color);
 	if (color != GREY)
-		put_pixel(&data->img, pxl, color);
+		put_pixel(&data->scr, pxl, color);
 }
-
-/*
-
-   value = settings->map
-   if ()
-
-
-
-   double center_dist = hypot((text.x - radius), (text.y - radius));
-
-   t_coord	case_pos;
-   case_pos.x = map->case_min.x;
-   t_int	count;
-   int		color;
-
-
-   while (case_pos.x <= map->case_max.x)
-   {
-   case_pos.y = map->case_min.y;
-   while (case_pos.y <= map->case_max.y)
-   {
-   count.x = 0;
-   while (count.x < map->case_size)
-   {
-   pxl.x = map->draw_start.x + (case_pos.x - map->case_min.x) * map->case_size + count.x;
-   count.y = 0;
-   while (count.y < map->case_size)
-   {
-   pxl.y = map->draw_start.y + (case_pos.y - map->case_min.y) * map->case_size + count.y;
-//			else if (case_pos.y == (int)data->frame.pos.y && case_pos.x == (int)data->frame.pos.x)
-t_int oldpxl;
-oldpxl.x = pxl.x;
-oldpxl.y = pxl.y;
-t_coord case_dbl;
-case_dbl.x = 1.0 * case_pos.x + (double)((count.x + 1) / (map->case_size + 1));
-case_dbl.y = 1.0 * case_pos.y + (double)((count.y + 1) / (map->case_size + 1));
-t_coord pos;
-pos.x = data->frame.pos.x;
-pos.y = data->frame.pos.y;
-if (settings->map[(int)case_pos.y][(int)case_pos.x] == '1')
-color = BLACK;
-else if (case_dbl.x >= (pos.x) && case_dbl.x <= (pos.x)						&& case_dbl.y >= (pos.y) && case_dbl.y <= (pos.y))
-{
-color = WHITE;
-put_pixel(&data->img, pxl, color);
-pxl.x -= (int)((case_dbl.x - pos.x) * (double)map->case_size);
-pxl.y -= (int)((case_dbl.y - pos.y) * (double)map->case_size);
-double step = 1.0 * map->face.size.y / (map->case_size);
-t_coord text;
-text.x = (double)(count.x) *step;
-text.y = (double)(count.y) *step;
-double radius = (double)map->face.size.x / 2;
-double rotation = acos(-data->frame.dir.y);
-if (data->frame.dir.x > 0)
-rotation = PI + acos(data->frame.dir.y);
-double oldx = text.x;
-text.x = (text.x - radius) * cos(rotation) - (text.y - radius) * sin(rotation) + radius;
-text.y = (oldx - radius) * sin(rotation) + (text.y - radius) * cos(rotation) + radius;
-double center_dist = hypot((text.x - radius), (text.y - radius));
-if (center_dist > radius)
-color = WHITE;
-else
-color = map->face.colors[(map->face.size.x * (int)text.y + (int)text.x)];
-}
-else 
-color = WHITE;
-if (settings->map[(int)case_pos.y][(int)case_pos.x] != ' ')
-put_pixel(&data->img, pxl, color);
-pxl.x = oldpxl.x;
-pxl.y = oldpxl.y;
-count.y++;
-}
-count.x++;
-}
-case_pos.y++;
-}
-case_pos.x++;
-}
-
-data->map.done = 1;
-}
-*/

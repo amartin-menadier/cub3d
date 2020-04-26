@@ -123,13 +123,15 @@ check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
 	i = 0;
 	if (!(tmp = malloc(sizeof(char**) * (settings->map_size.y + 1))))
 		close_program(data, "Failed allocating memory for tmp map\n", "");
+//	tmp[0] = NULL;
 	while (i < settings->map_size.y + 1)
 	{
 		if (!(tmp[i] = malloc(sizeof(char*) * (settings->map_size.x + 1))))
 			close_program(data, "Failed allocating memory for tmp map\n", "");
-		if (i != (settings->map_size.y))
+		if (i != 0)
+		//(settings->map_size.y))
 			tmp[i] = ft_strcharcpy
-				(tmp[i], settings->map[i], settings->map_size.x, ' ');
+				(tmp[i], settings->map[i - 1], settings->map_size.x, ' ');
 		else
 			tmp[i] = ft_strcharcpy(tmp[i], line, settings->map_size.x, ' ');
 		i++;

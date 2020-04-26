@@ -25,16 +25,15 @@ put_pixel(t_img *img, t_int pos, int color)
 	void
 create_img(t_data *data, char *path, t_img *img)
 {
-		ft_putstr_fd("\nTEXTURE01", 1);
-	if (img->ptr != NULL)
-	{
-		mlx_destroy_image(data->mlx, img->ptr);
-		img->ptr = NULL;
-	}
+	ft_putstr_fd("\nIMG00", 1);
+	free_image(data, img, 0);
 	img->ptr = 
 		mlx_xpm_file_to_image(data->mlx, path, &img->size.x, &img->size.y);
 	if (img->ptr == NULL)
 		close_program(data, "Invalid or missing file at :\n   > ", path);
 	img->colors = (int*)mlx_get_data_addr(img->ptr, &img->bpp,
 			&img->line_length, &img->endian);
+	if (img->path != NULL)
+		free(img->path);
+	img->path = ft_strdup(path);
 }

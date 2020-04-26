@@ -13,46 +13,45 @@
 #include "cub3d.h"
 
 	void
+get_dir_and_plane(t_frame *frame)
+{
+	if (frame->dir.angle < (PI / 2))
+		frame->plane.angle = frame->dir.angle + 3 * PI / 2;
+	else
+		frame->plane.angle = frame->dir.angle - PI / 2;
+	frame->dir.x = cos(frame->dir.angle);
+	frame->dir.y = sin(frame->dir.angle);
+	frame->plane.x = cos(frame->plane.angle);
+	frame->plane.y = sin(frame->plane.angle);
+}
+
+
+	void
 look_left(t_frame *frame)
 {
-	double	old_dir_x;
-	double	old_plane_x;
-	t_coord	*plane;
-
-	plane = &frame->plane;
-	old_dir_x = frame->dir.x;
-	frame->dir.x = old_dir_x * cos(-ROT_SPEED) - frame->dir.y * sin(-ROT_SPEED);
-	frame->dir.y = old_dir_x * sin(-ROT_SPEED) + frame->dir.y * cos(-ROT_SPEED);
-	if (fabs(frame->dir.x) > 1)
-	{
-		if (frame->dir.x > 1)
-			frame->dir.x = 1;
-		else
-			frame->dir.x = -1;
-	}
-	if (fabs(frame->dir.y) > 1)
-	{
-		if (frame->dir.y > 1)
-			frame->dir.y = 1;
-		else
-			frame->dir.y = -1;
-	}
-	old_plane_x = frame->plane.x;
-	plane->x = old_plane_x * cos(-ROT_SPEED) - frame->plane.y * sin(-ROT_SPEED);
-	plane->y = old_plane_x * sin(-ROT_SPEED) + frame->plane.y * cos(-ROT_SPEED);
+	frame->dir.angle += ROT_SPEED;
+	if (frame->dir.angle >= (2 * PI))
+		frame->dir.angle -= (2 * PI);
+	get_dir_and_plane(frame);
 }
 
 	void
 look_right(t_frame *frame)
 {
+	frame->dir.angle -= ROT_SPEED;
+	if (frame->dir.angle < 0)
+		frame->dir.angle += (2 * PI);
+	get_dir_and_plane(frame);
+	/*
 	double	old_dir_x;
 	double	old_plane_x;
-	t_coord	*plane;
+//	double	angle;
+	t_dbl	*plane;
 
 	plane = &frame->plane;
 	old_dir_x = frame->dir.x;
-	frame->dir.x = old_dir_x * cos(ROT_SPEED) - frame->dir.y * sin(ROT_SPEED);
-	frame->dir.y = old_dir_x * sin(ROT_SPEED) + frame->dir.y * cos(ROT_SPEED);
+	frame->dir.x = old_dir_x * cos(-ROT_SPEED) + frame->dir.y * sin(-ROT_SPEED);
+	frame->dir.y = -old_dir_x * sin(-ROT_SPEED) + frame->dir.y * cos(-ROT_SPEED);
 	if (fabs(frame->dir.x) > 1)
 	{
 		if (frame->dir.x > 1)
@@ -68,8 +67,10 @@ look_right(t_frame *frame)
 			frame->dir.y = -1;
 	}
 	old_plane_x = frame->plane.x;
+//	plane->x = cos(acos(frame->dir.x) - PI / 2);
 	plane->x = old_plane_x * cos(ROT_SPEED) - frame->plane.y * sin(ROT_SPEED);
 	plane->y = old_plane_x * sin(ROT_SPEED) + frame->plane.y * cos(ROT_SPEED);
+*/
 }
 
 	int
@@ -78,7 +79,7 @@ press_key(int key, t_data *data)
 	if (data->life.value <= 0)
 		return (game_over_answer(data, key));
 	if (key == KEY_P)
-		create_bmp(data, &data->img, "./screenshots/screenshot");
+		create_bmp(data, &data->scr, "./screenshots/screenshot");
 	if (key == KEY_ESC)
 		close_program(data, "\nSee you next time ! ", "\\o/\n");
 	if (key == KEY_LEFT)

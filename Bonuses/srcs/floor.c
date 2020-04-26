@@ -38,18 +38,18 @@ set_floor(t_data *data, t_settings *settings, t_floor *flr)
 		{
 			flr->cell.x = (int)(flr->pos.x);
 			flr->cell.y = (int)(flr->pos.y);
-			flr->txt_pxl.x = (int)(flr->flr_img.size.x * (flr->pos.x - flr->cell.x)) & (flr->flr_img.size.x - 1);
-			flr->txt_pxl.y = (int)(flr->flr_img.size.y * (flr->pos.y - flr->cell.y)) & (flr->flr_img.size.y - 1);
+			flr->txt_pxl.x = (int)(data->piclib.flr.size.x * (flr->pos.x - flr->cell.x)) & (data->piclib.flr.size.x - 1);
+			flr->txt_pxl.y = (int)(data->piclib.flr.size.y * (flr->pos.y - flr->cell.y)) & (data->piclib.flr.size.y - 1);
 			flr->pos.x += flr->step.x;
 			flr->pos.y += flr->step.y;
 			int	color;
-			color = flr->flr_img.colors[flr->flr_img.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
+			color = data->piclib.flr.colors[data->piclib.flr.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
 			color = (color >> 1) & 8355711; // make a bit darker
-			put_pixel(&data->img, pxl, color);
-			color = flr->clg_img.colors[flr->clg_img.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
+			put_pixel(&data->scr, pxl, color);
+			color = data->piclib.sky.colors[data->piclib.sky.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
 			color = (color >> 1) & 8355711; // make a bit darker
 			pxl.y = settings->win_size.y - pxl.y - 1;
-			put_pixel(&data->img, pxl, color);
+			put_pixel(&data->scr, pxl, color);
 			pxl.y = settings->win_size.y - pxl.y - 1;
 			pxl.x++;
 		}

@@ -34,7 +34,7 @@ draw_sprite_column(t_data *data, t_frame *F, t_img *img, int stripe)
 			F->text.y = ((d * img->size.y) / F->spr_size.y) / 256;
 			if ((img->colors
 				[(img->size.y * F->text.y + F->text.x)] & 0x00FFFFFF) != 0)
-				put_pixel(&data->img, spr_img_pos,
+				put_pixel(&data->scr, spr_img_pos,
 					img->colors[(img->size.y * F->text.y + F->text.x)]);
 			spr_img_pos.y++;
 		}
@@ -45,7 +45,7 @@ draw_sprite_column(t_data *data, t_frame *F, t_img *img, int stripe)
 set_sprite_drawing_limits(t_settings *S, t_frame *F, int i)
 {
 	double	inv;
-	t_coord	spr_diff;
+	t_dbl	spr_diff;
 
 	spr_diff.x = S->spr_x[i] - F->pos.x;
 	spr_diff.y = S->spr_y[i] - F->pos.y;
@@ -103,7 +103,7 @@ draw_sprites(t_data *data, t_settings *S, t_frame *F)
 		{
 			set_sprite_drawing_limits(S, F, i);
 			stripe = F->spr_draw_start.x;
-			text = get_sprite_texture(&data->frame, S->spr_text[i]);
+			text = get_sprite_image(&data->piclib, S->spr_text[i]);
 			while (stripe < F->spr_draw_end.x)
 			{
 				if (!(sprite_player_same_case(S, F, i)))

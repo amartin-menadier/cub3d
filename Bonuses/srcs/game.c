@@ -19,11 +19,7 @@ game_over_answer(t_data *data, int key)
 	if (key == KEY_Y)
 	{
 		data->respawn++;
-		ft_putstr_fd("\n21", 1);
-		ft_putstr_fd("\n--", 1);
 		free_all(data);
-		ft_putstr_fd("\n22", 1);
-		ft_putstr_fd("\n--", 1);
 	if ((data->settings.fd = open(data->cub_path, O_RDONLY)) == -1)
 		close_program(data, "Couldn't open .cub file\n", "");
 		start_game(data);
@@ -38,20 +34,20 @@ void
 draw_game_over(t_data *data, t_int pxl, t_int draw_start)
 {
 	t_int		g_o_pxl;
-	t_coord		step;
+	t_dbl		step;
 	t_int		win;
 
 	//	ft_putstr_fd("\nGAME01", 1);
 	win.x = data->settings.win_size.x;
 	win.y = data->settings.win_size.y;
-	if ((step.x = ((double)data->game_over_img.size.x / (double)win.x)) < 1)
+	if ((step.x = ((double)data->piclib.game_over.size.x / (double)win.x)) < 1)
 		step.x = 1;
-	if ((step.y = ((double)data->game_over_img.size.y / (double)win.y)) < 1)
+	if ((step.y = ((double)data->piclib.game_over.size.y / (double)win.y)) < 1)
 		step.y = 1;
 	g_o_pxl.x = (int)((pxl.x - draw_start.x) * step.x);
 	g_o_pxl.y = (int)((pxl.y - draw_start.y) * step.y);
-	put_pixel(&data->img, pxl, data->game_over_img.colors
-				[(data->game_over_img.size.x * g_o_pxl.y + g_o_pxl.x)]);
+	put_pixel(&data->scr, pxl, data->piclib.game_over.colors
+				[(data->piclib.game_over.size.x * g_o_pxl.y + g_o_pxl.x)]);
 }
 
 	void
@@ -63,12 +59,12 @@ game_over(t_data *data)
 	t_int	draw_end;
 
 		ft_putstr_fd("\nGAME02", 1);
-	create_img(data, "./textures/gameover.xpm", &data->game_over_img);
+	create_img(data, "./textures/gameover.xpm", &data->piclib.game_over);
 	win.x = data->settings.win_size.x;
 	win.y = data->settings.win_size.y;
-	if ((draw_start.x = (win.x - data->game_over_img.size.x) / 2) <= 0)
+	if ((draw_start.x = (win.x - data->piclib.game_over.size.x) / 2) <= 0)
 		draw_start.x = 0;
-	if ((draw_start.y = (win.y - data->game_over_img.size.y) / 2) <= 0)
+	if ((draw_start.y = (win.y - data->piclib.game_over.size.y) / 2) <= 0)
 		draw_start.y = 0;
 	draw_end.x = win.x - draw_start.x;
 	draw_end.y = win.y - draw_start.y;
@@ -80,13 +76,13 @@ game_over(t_data *data)
 		{
 			if ((pxl.x < draw_start.x || pxl.x > draw_end.x) 
 					|| (pxl.y < draw_start.y || pxl.y > draw_end.y))
-				put_pixel(&data->img, pxl, BLACK);
+				put_pixel(&data->scr, pxl, BLACK);
 			else
 				draw_game_over(data, pxl, draw_start);
 			pxl.y++;
 		}
 		pxl.x++;
 	}
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
+	mlx_put_image_to_window(data->mlx, data->window, data->scr.ptr, 0, 0);
 	mlx_string_put(data->mlx, data->window, (win.x / 2) - 119, 9 * win.y / 10, WHITE, "DO YOU WANT TO TRY AGAIN ? (Y / N)");
 }

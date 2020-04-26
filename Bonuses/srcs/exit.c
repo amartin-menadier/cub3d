@@ -38,8 +38,8 @@ close_program(t_data *data, char *error_msg, char *str)
 		mlx_destroy_window(data->mlx, data->window);
 	}
 	*/
-	mlx_destroy_image(data->mlx, data->img.ptr);
-		data->img.ptr = NULL;
+	mlx_destroy_image(data->mlx, data->scr.ptr);
+		data->scr.ptr = NULL;
 		ft_putstr_fd("\nEXIT13", 1);
 		ft_putstr_fd("\n--", 1);
 
@@ -51,44 +51,67 @@ close_program(t_data *data, char *error_msg, char *str)
 }
 
 	void
+free_image(t_data *data, t_img *img, int mod)
+{
+	ft_putstr_fd("\nEXIT100  ", 1);
+	ft_putstr_fd("\n--", 1);
+//	if (img->colors != NULL)
+//		free(img->colors);
+//	img->colors = NULL;
+	ft_putstr_fd("\n--", 1);
+	if (mod)
+	{
+	if (img->path != NULL)
+		free(img->path);
+	img->path = NULL;
+	}
+	if (img->ptr != NULL)
+		mlx_destroy_image(data->mlx, img->ptr);
+	img->ptr = NULL;
+		/* a voir si c'est pertinent
+		if (data->respawn > 0)
+			mlx_destroy_image(data->mlx, data->game_over_img.ptr);
+		if (data->respawn > 0)
+			data->game_over_img.ptr = NULL;
+			*/
+	
+}
+
+	void
+free_piclib(t_data *data, t_piclib *lib)
+{
+		ft_putstr_fd("\nEXIT20", 1);
+	free_image(data, &lib->ea, 1);
+	free_image(data, &lib->so, 1);
+	free_image(data, &lib->we, 1);
+	free_image(data, &lib->no, 1);
+	free_image(data, &lib->flr, 1);
+	free_image(data, &lib->sky, 1);
+	free_image(data, &lib->s2, 1);
+	free_image(data, &lib->s3, 1);
+	free_image(data, &lib->avatar, 1);
+	free_image(data, &lib->skybox, 1);
+	free_image(data, &lib->game_over, 1);
+	free_image(data, &lib->mask, 1);
+}
+
+	void
 free_all(t_data *data)
 {
 		ft_putstr_fd("\nEXIT10", 1);
 	free_settings(&data->settings);
+	free_piclib(data, &data->piclib);
 	if(data->settings.done)
 	{
-		ft_putstr_fd("\nEXIT11", 1);
 		free_frame(data, &data->frame);
-		ft_putstr_fd("\nEXIT12", 1);
 		free_sprites(&data->settings, &data->frame);
-		ft_putstr_fd("\nEXIT13", 1);
-		mlx_destroy_image(data->mlx, data->map.face.ptr);
-		data->map.face.ptr = NULL;
-		ft_putstr_fd("\nEXIT14", 1);
-		if (data->respawn > 0)
-			mlx_destroy_image(data->mlx, data->game_over_img.ptr);
-		ft_putstr_fd("\nEXIT14", 1);
-		if (data->respawn > 0)
-			data->game_over_img.ptr = NULL;
 	}
 }
 
 	void
 free_frame(t_data *data, t_frame *frame)
 {
-		ft_putstr_fd("\nEXIT20", 1);
-	mlx_destroy_image(data->mlx, data->frame.NO_img.ptr);
-		data->frame.NO_img.ptr = NULL;
-	mlx_destroy_image(data->mlx, data->frame.SO_img.ptr);
-		data->frame.SO_img.ptr = NULL;
-	mlx_destroy_image(data->mlx, data->frame.EA_img.ptr);
-		data->frame.EA_img.ptr = NULL;
-	mlx_destroy_image(data->mlx, data->frame.WE_img.ptr);
-		data->frame.WE_img.ptr = NULL;
-	mlx_destroy_image(data->mlx, data->frame.S2_img.ptr);
-		data->frame.S2_img.ptr = NULL;
-	mlx_destroy_image(data->mlx, data->frame.S3_img.ptr);
-		data->frame.S3_img.ptr = NULL;
+	(void)data;
 	if (frame->z_buffer != NULL)
 		free(frame->z_buffer);
 	frame->z_buffer = NULL; 
@@ -119,24 +142,6 @@ free_sprites(t_settings *settings, t_frame *frame)
 free_settings(t_settings *settings)
 {
 		ft_putstr_fd("\nEXIT40", 1);
-	if (settings->NO_path != NULL)
-		free(settings->NO_path);
-	if (settings->SO_path != NULL)
-		free(settings->SO_path);
-	if (settings->WE_path != NULL)
-		free(settings->WE_path);
-	if (settings->EA_path != NULL)
-		free(settings->EA_path);
-	if (settings->S2_path != NULL)
-		free(settings->S2_path);
-	if (settings->S3_path != NULL)
-		free(settings->S3_path);
-	settings->NO_path = NULL;
-	settings->SO_path = NULL;
-	settings->WE_path = NULL;
-	settings->EA_path = NULL;
-	settings->S2_path = NULL;
-	settings->S3_path = NULL;
 	free_map(settings);
 }
 
@@ -145,7 +150,6 @@ free_map(t_settings *settings)
 {
 	int i;
 
-		ft_putstr_fd("\nEXIT50", 1);
 	i = 0;
 	if (settings->map != NULL)
 	{

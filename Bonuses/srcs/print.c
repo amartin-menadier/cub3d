@@ -45,16 +45,16 @@ void	print_minimap_data(t_data *data)
 
 void	print_image(t_data *data)
 {
-	printf("\n         bpp = >%d<", data->img.bpp);
-	printf("\n line length = >%d<", data->img.line_length);
-	printf("\n      endian = >%d<", data->img.endian);
-	printf("\nimage height = >%.d<", data->img.size.y);
-	printf("\n image width = >%.d<", data->img.size.x);
-	printf("\n colors[     0] = >%d<", data->img.colors[0]);
-	printf("\n colors[ 50000] = >%d<", data->img.colors[50000]);
-	printf("\n colors[100000] = >%d<", data->img.colors[100000]);
-	printf("\n colors[150000] = >%d<", data->img.colors[150000]);
-	printf("\n colors[200000] = >%d<", data->img.colors[200000]);
+	printf("\n         bpp = >%d<", data->scr.bpp);
+	printf("\n line length = >%d<", data->scr.line_length);
+	printf("\n      endian = >%d<", data->scr.endian);
+	printf("\nimage height = >%.d<", data->scr.size.y);
+	printf("\n image width = >%.d<", data->scr.size.x);
+	printf("\n colors[     0] = >%d<", data->scr.colors[0]);
+	printf("\n colors[ 50000] = >%d<", data->scr.colors[50000]);
+	printf("\n colors[100000] = >%d<", data->scr.colors[100000]);
+	printf("\n colors[150000] = >%d<", data->scr.colors[150000]);
+	printf("\n colors[200000] = >%d<", data->scr.colors[200000]);
 	printf("\n-------------------");
 }
 
@@ -63,11 +63,11 @@ void	print_settings(t_data *data)//outil de verification a supprimer
 	printf("\n-- SETTINGS --");
 	printf("\nwin_size.x = %.d", data->settings.win_size.x);
 	printf("\nwin_size.y = %.d", data->settings.win_size.y);
-	printf("\nNO_text_path = %s", data->settings.NO_path);
-	printf("\nSO_text_path = %s", data->settings.SO_path);
-	printf("\nWE_text_path = %s", data->settings.WE_path);
-	printf("\nEA_text_path = %s", data->settings.EA_path);
-	printf("\nSprite2_text_path = %s", data->settings.S2_path);
+//	printf("\nNO_text_path = %s", data->settings.NO_path);
+//	printf("\nSO_text_path = %s", data->settings.SO_path);
+//	printf("\nWE_text_path = %s", data->settings.WE_path);
+//	printf("\nEA_text_path = %s", data->settings.EA_path);
+//	printf("\nSprite2_text_path = %s", data->settings.S2_path);
 //	printf("\nFloor color = %d", data->settings.floor_color);
 //	printf("\nCeiling color = %d", data->settings.ceiling_color);
 	printf("\nMap_width = %.d", data->settings.map_size.x);
@@ -101,10 +101,10 @@ void	print_situation(t_data* data)
 {
 	printf("\n\n  -- CURRENT SITUATION --\n--------------------");
 	printf("\nplayer is located at (%.1f;%.1f)", data->frame.pos.x, data->frame.pos.y);
-	printf("\ndir.x = %.2f", data->frame.dir.x);
-	printf("\ndir.y = %.2f", data->frame.dir.y);
-	printf("\ncamera plane.x = %.2f", data->frame.plane.x);
-	printf("\ncamera plane.y = %.2f", data->frame.plane.y);
+	printf("\ndir.x = %.15f", data->frame.dir.x);
+	printf("\ndir.y = %.15f", data->frame.dir.y);
+	printf("\ncamera plane.x = %.15f", data->frame.plane.x);
+	printf("\ncamera plane.y = %.15f", data->frame.plane.y);
 }
 
 void	print_z_buffer(t_data *data)
@@ -123,31 +123,55 @@ void	print_z_buffer(t_data *data)
 
 void	print_ray(t_data* data)
 {
+(void)data;
+/*
+	t_dbl	ray;
+
+	ray.x = data->frame.ray.x;
+	ray.y = data->frame.ray.y;
 	printf("\n-- RAY --");
-	printf("\ncameraX = %.2f", data->frame.camera_x);
-	printf("\nray.x = %.2f", data->frame.ray.x);
-	printf("\nray.y = %.2f", data->frame.ray.y);
-	printf("\nstep.x = %.d", data->frame.step.x);
-	printf("\nstep.y = %.d", data->frame.step.y);
-	printf("\ndelta_dist.x = %.2f", data->frame.delta_dist.x);
-	printf("\ndelta_dist.y = %.2f", data->frame.delta_dist.y);
-	printf("\nside_dist.x = %.2f", data->frame.side_dist.x);
-	printf("\nside_dist.y = %.2f", data->frame.side_dist.y);
-	printf("\n(map.x;map.y) = (%.2f, %.2f)", data->frame.map.x, data->frame.map.y);
-	printf("\n(map.x;map.y) value = %c (char)", data->settings.map[(int)data->frame.map.y][(int)data->frame.map.x]);
-	printf("\nside = %d", data->frame.side);
-	printf("\nperp_wall_dist = %.2f", data->frame.perp_wall_dist);
-	printf("\nline_height = %d", data->frame.line_height);
-	printf("\ndraw_start = %d", data->frame.draw_start);
-	printf("\ndraw_end = %d", data->frame.draw_end);
+//	printf("\ncameraX = %.15f", data->frame.camera_x);
+	if (data->frame.ray.x >= 0)
+		printf("\nray.x = +%.15f", data->frame.ray.x);
+	else
+		printf("\nray.x = %.15f", data->frame.ray.x);
+	if (data->frame.ray.y >= 0)
+		printf("\nray.y = +%.15f", data->frame.ray.y);
+	else
+		printf("\nray.y = %.15f", data->frame.ray.y);
+	if (fabs(ray.x) - fabs(ray.y) < 0 && ray.y > 0)
+		printf("\nray to the NORTH");
+	else if (fabs(ray.x) - fabs(ray.y) > 0 && ray.x > 0)
+		printf("\nray to the EAST");
+	else if (fabs(ray.x) - fabs(ray.y) < 0 && ray.y > 0)
+		printf("\nray to the SOUTH");
+	else if (fabs(ray.x) - fabs(ray.y) > 0 && ray.x < 0)
+		printf("\nray to the WEST");
+	else
+		printf("\nray between two cardinal directions");
+//	printf("\nstep.x = %.d", data->frame.step.x);
+//	printf("\nstep.y = %.d", data->frame.step.y);
+//	printf("\ndelta_dist.x = %.2f", data->frame.delta_dist.x);
+//	printf("\ndelta_dist.y = %.2f", data->frame.delta_dist.y);
+//	printf("\nside_dist.x = %.2f", data->frame.side_dist.x);
+//	printf("\nside_dist.y = %.2f", data->frame.side_dist.y);
+//	printf("\n(map.x;map.y) = (%.2f, %.2f)", data->frame.map.x, data->frame.map.y);
+//	printf("\n(map.x;map.y) value = %c (char)", data->settings.map[(int)data->frame.map.y][(int)data->frame.map.x]);
+//	printf("\nside = %d", data->frame.side);
+//	printf("\nperp_wall_dist = %.2f", data->frame.perp_wall_dist);
+//	printf("\nline_height = %d", data->frame.line_height);
+//	printf("\ndraw_start = %d", data->frame.draw_start);
+//	printf("\ndraw_end = %d", data->frame.draw_end);
+*/
+	printf("\n----");
 }
 void	print_current_sprite_data(t_data *data)
 {
 	t_frame *F;
 
 	F = &data->frame;
-	printf("\nF->text.x = %d", F->text.x);
-	printf("\nF->text.y = %d", F->text.y);
+//	printf("\nF->text.x = %d", F->text.x);
+//	printf("\nF->text.y = %d", F->text.y);
 	printf("\nF->spr_inv.x = %.2f", F->spr_inv.x);
 	printf("\nF->spr_inv.y = %.2f", F->spr_inv.y);
 	printf("\nF->spr_size.x = %d", F->spr_size.x);
@@ -243,8 +267,8 @@ void	print_map(t_data *data)
 			}
 //			else if (i == (int)data->frame.first_map.y && j == (int)data->frame.first_map.x)
 //				printf("r%c", data->settings.map[i][j]);
-			else if (i == (int)data->frame.map.y && j == (int)data->frame.map.x)
-				printf("R%c", data->settings.map[i][j]);
+//			else if (i == (int)data->frame.map.y && j == (int)data->frame.map.x)
+//				printf("R%c", data->settings.map[i][j]);
 			else if (data->settings.map[i][j] == '0') 
 				printf("  ");
 			else if (data->settings.map[i][j] == '1') 

@@ -46,6 +46,12 @@ draw_life_bar(t_data *data, t_settings *settings, t_life *life)
 	t_int	pxl;
 
 	(void)settings;
+	if (life->value >= 80)
+		life->color = GREEN;
+	else if (life->value >= 33)
+		life->color = ORANGE;
+	else
+		life->color = RED;
 	pxl.x = life->draw_start.x;
 	while (pxl.x <= life->draw_end.x)
 	{
@@ -54,10 +60,10 @@ draw_life_bar(t_data *data, t_settings *settings, t_life *life)
 		{
 			if (pxl.x == life->draw_start.x || pxl.x == life->draw_end.x 
 				|| pxl.y == life->draw_start.y || pxl.y == life->draw_end.y)
-				put_pixel(&data->img, pxl, 0);
+				put_pixel(&data->scr, pxl, BLACK);
 			else if (((pxl.x - life->draw_start.x) * 100) / (life->size.x - 2)
 				<= life->value)
-				put_pixel(&data->img, pxl, life->color);
+				put_pixel(&data->scr, pxl, life->color);
 			pxl.y++;
 		}
 		pxl.x++;
@@ -84,10 +90,4 @@ set_life_bar_limits(t_data *data, t_settings *settings, t_life *life)
 	if (life->value < 10)
 		life->ctr.x += 3;
 	life->ctr.y = life->draw_end.y / 2 + life->draw_start.y / 2 + 5;
-if (life->value >= 80)
-		life->color = GREEN;
-	else if (life->value >= 33)
-		life->color = ORANGE;
-	else
-		life->color = RED;
 }

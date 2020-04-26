@@ -10,11 +10,12 @@
 # include <math.h>
 # include "../libft/libft.h"
 
-typedef struct	s_coord{
+typedef struct	s_dbl{
 	double		x;
 	double		y;
 	double		z;
-}				t_coord;
+	double		angle;
+}				t_dbl;
 
 typedef struct	s_int{
 	int			x;
@@ -24,24 +25,18 @@ typedef struct	s_int{
 
 typedef struct  s_img{
 	void		*ptr;
+	char		*path;
 	int			*colors;
 	int			bpp;
 	int			line_length;
 	int			endian;
 	t_int		size;
+	int			name;
 }               t_img;
 
 typedef struct 	s_settings{
 	int			fd;
 	t_int		win_size;
-	char		*NO_path;
-	char		*SO_path;
-	char		*EA_path;
-	char		*WE_path;
-	char		*flr_path;
-	char		*clg_path;
-	char		*S2_path;
-	char		*S3_path;
 	char		**map;
 	t_int		map_size;
 	char		player_orientation;
@@ -53,33 +48,31 @@ typedef struct 	s_settings{
 	int			done;
 }               t_settings;
 
+typedef	struct	s_piclib
+{
+	t_img		ea;
+	t_img		so;
+	t_img		we;
+	t_img		no;
+	t_img		flr;
+	t_img		sky;
+	t_img		s2;
+	t_img		s3;
+	t_img		skybox;
+	t_img		avatar;
+	t_img		game_over;
+	t_img		mask;
+}				t_piclib;
+
 typedef struct 	s_frame{
-	t_coord		pos;
-	t_coord		dir;
-	t_coord		ray;
-	t_coord		plane;
-	double		camera_x;
-	t_coord		map;
-	t_coord		side_dist;
-	t_coord		delta_dist;
-	double		perp_wall_dist;
-	t_int		step;
-	int			side;
-	int			line_height;
-	int			draw_start;
-	int			draw_end;
-	double		wall_x;
-	t_img		NO_img;
-	t_img		SO_img;
-	t_img		EA_img;
-	t_img		WE_img;
-	t_img		S2_img;
-	t_img		S3_img;
-	t_int		text;
+	t_dbl		pos;
+	t_dbl		dir;
+	t_dbl		plane;
+	t_int		text; //dans sprite
 	double		*z_buffer;
 	int			*spr_order;
 	double		*spr_dist;
-	t_coord		spr_inv;
+	t_dbl		spr_inv;
 	double		spr_screen_x;
 	t_int		spr_size;
 	t_int		spr_draw_start;
@@ -89,8 +82,8 @@ typedef struct 	s_frame{
 }		t_frame;
 
 typedef struct	s_minimap{
-	t_coord		case_min;
-	t_coord		case_max;
+	t_dbl		case_min;
+	t_dbl		case_max;
 	int			size;
 	double		radius;
 	t_int		center;
@@ -99,7 +92,6 @@ typedef struct	s_minimap{
 	int			margin;
 	t_int		draw_start;
 	t_int		draw_end;
-	t_img		face;
 	int			done;
 }				t_minimap;
 
@@ -113,16 +105,14 @@ typedef struct	s_life{
 }				t_life;
 
 typedef struct	s_floor{
-	t_img		flr_img;
-	t_img		clg_img;
-	t_coord		ray;
-	t_coord		ray0;
-	t_coord		ray1;
+	t_dbl		ray;
+	t_dbl		ray0;
+	t_dbl		ray1;
 	int			pxl_height;
 	float		cam_height;
 	float		depth;
-	t_coord		step;
-	t_coord		pos;
+	t_dbl		step;
+	t_dbl		pos;
 	t_int		cell;
 	t_int		txt_pxl;
 }				t_floor;
@@ -132,13 +122,14 @@ typedef struct 	s_data{
 	int			save;
 	void		*mlx;
 	void		*window;
-	t_img		img;
+	t_img		scr;
 	t_settings	settings;
 	t_frame		frame;
 	t_minimap	map;
 	t_life		life;
 	t_floor		floor;
-	t_img		game_over_img;
+	t_piclib	piclib;
+	int			skybox;
 	int			respawn;
 }               t_data;
 
@@ -194,6 +185,8 @@ hook_event(t_data *data);
 	int
 close_program(t_data *data, char *error_msg, char *str);
 	void
+free_image(t_data *data, t_img *img, int mod);
+	void
 free_all(t_data *data);
 	void
 free_frame(t_data *data, t_frame *frame);
@@ -209,14 +202,14 @@ free_map(t_settings *settings);
 */
 	int
 render_next_frame(t_data *data);
+	double
+perform_DDA(t_data *data, t_dbl pos, t_dbl ray, int mod);
+	t_dbl
+set_ray(t_data *data, t_frame *frame, t_int scr);
+	int
+set_drawing_limit(t_int win_size, double perp_wall_dist, int mod);
 	void
-perform_DDA(t_data *data, t_frame *frame);
-	void
-set_ray(t_data *data, t_frame *frame, int x);
-	void
-set_drawing_limits(t_data *data, t_frame *frame);
-	void
-draw_column(t_data *data, t_frame *frame, t_img *textimg, int x);
+draw_wall_column(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist);
 
 /*
 ** img.c
@@ -229,6 +222,10 @@ create_img(t_data *data, char *path, t_img *img);
 /*
 ** init.c
 */
+	void
+init_image(t_img *img, int name);
+	void
+init_piclib(t_piclib *piclib);
 	void
 init_settings(t_settings *settings);
 	void
@@ -272,11 +269,11 @@ move_left(t_frame *frame, char **map);
 ** parsing.c
 */
 	int
-settings_ok(t_data *data, t_settings *settings, char *line);
+settings_ok(t_data *data, t_settings *settings, t_piclib *lib, char *line);
 	int
-check_settings(t_data *data, t_settings *settings, char *line);
+check_settings(t_data *data, t_settings *settings, t_piclib *lib, char *line);
 	void
-parse_line(t_data *data, char *line);
+parse_line(t_data *data, t_settings *settings, t_piclib *lib, char *line);
 	void
 get_sprites_data(t_data *data, t_settings *settings, char **map);
 	void
@@ -306,11 +303,11 @@ sort_sprites(t_settings *settings, t_frame *frame);
 ** textures.c
 */
 	t_img
-*get_sprite_texture(t_frame *frame, char text_number);
-	t_img
-*get_wall_texture(t_frame *frame);
+*get_sprite_image(t_piclib *lib, char text_number);
+//	t_img
+//*get_wall_image(t_data *data, t_frame *frame);
 	void
-get_texture_path(t_data *data, char *line, char *texture);
+get_image_path(t_data *data, t_piclib *lib, char *line, char *texture);
 
 /*
 ** BONUSES
@@ -340,7 +337,7 @@ set_life_bar_limits(t_data *data, t_settings *settings, t_life *life);
 	void
 set_minimap_limits(double pos, double *case_min, double *case_max);
 	void
-get_minimap_face(t_data *data, t_minimap *map);
+get_minimap_avatar(t_data *data, t_img *avatar);
 	void
 draw_minimap_column(t_data *data, t_settings *settings, t_minimap *map, t_int pxl);
 	void
@@ -368,12 +365,27 @@ void	print_current_sprite_data(t_data *data);
 
 /*
 ** SOME GAME VARIABLES
+** ROT_SPEED = 0.39 = PI/8 soit un 1 seizieme de tour de cercle
 */
 #define MINIMAP_SIZE 9.000000
-//#define ROT_SPEED 0.5235987755983
-#define ROT_SPEED 0.4235987755983
+//#define ROT_SPEED 0.78539816339745
+#define ROT_SPEED 0.39269908169872
+//#define ROT_SPEED 0.3
 #define MOVE_SPEED 0.51
 #define PLAYER_SIZE 1.00
+#define EA 0
+#define SO 1
+#define WE 2
+#define NO 3
+#define FLR 4
+#define SKY 5
+#define S2 20
+#define S3 30
+#define AVATAR 420
+#define SKYBOX 100
+#define GAME_OVER 666
+#define MASK 200
+#define WALL 49
 
 /*
 ** IRRATIONAL NUMBERS
@@ -383,13 +395,14 @@ void	print_current_sprite_data(t_data *data);
 /*
 ** COLORS
 */
-# define GREEN 65280
-# define ORANGE 16746496
-# define RED 16711680
-# define GREY 7895673
+# define BLACK 0x000000
+# define WHITE 0xffffff
+# define RED 0xff0000
+# define GREEN 0x00ff00
+# define BLUE 0x0000ff
+# define ORANGE 0xff8800
+# define GREY 0x9e9e9e
 # define DARK_GREY 0x2e2e2e
-# define BLACK 0
-# define WHITE 16777215
 
 /*
 ** KEY VALUES

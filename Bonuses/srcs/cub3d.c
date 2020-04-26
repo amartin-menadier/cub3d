@@ -33,25 +33,14 @@ check_args_errors(t_data *data, int argc, char **argv)
 	int
 start_game(t_data *data)
 {
-		ft_putstr_fd("\nCUB1", 1);
-		ft_putstr_fd("\n--", 1);
-		ft_putstr_fd("\nCUB2", 1);
-		ft_putstr_fd("\n--", 1);
+	init_piclib(&data->piclib);
 	parse_cub_file(data);
 	data->mlx = mlx_init();
 	init_data(data);
-		ft_putstr_fd("\nCUB3", 1);
-		ft_putstr_fd("\n--", 1);
 	hook_event(data);
-		ft_putstr_fd("\nCUB4", 1);
-		ft_putstr_fd("\n--", 1);
 	mlx_loop_hook(data->mlx, render_next_frame, data);
-		ft_putstr_fd("\nCUB5", 1);
-		ft_putstr_fd("\n--", 1);
-			mlx_loop(data->mlx);
-		ft_putstr_fd("\nCUB6", 1);
-		ft_putstr_fd("\n--", 1);
-		return (0);
+	mlx_loop(data->mlx);
+	return (0);
 }
 
 	int
@@ -60,13 +49,7 @@ main(int argc, char **argv)
 	t_data data;
 
 	check_args_errors(&data, argc, argv);
-		ft_putstr_fd("\nCUB01", 1);
-		ft_putstr_fd("\n--", 1);
-//	mlx_loop_hook(data.mlx, start_game, &data);
 	start_game(&data);
-		ft_putstr_fd("\nCUB02", 1);
-		ft_putstr_fd("\n--", 1);
-	//	if (data.mlx)
-			mlx_loop(data.mlx);
+	mlx_loop(data.mlx);
 	return (0);
 }
