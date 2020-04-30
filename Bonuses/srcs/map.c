@@ -12,13 +12,28 @@
 
 #include "cub3d.h"
 
+	double
+get_first_angle(char c)
+{
+	double	angle;
+	
+	if (c == 'E')
+		angle = 0;
+	if (c == 'N')
+		angle = PI / 2;
+	if (c == 'W')
+		angle = PI;
+	if (c == 'S')
+		angle = 3 * PI / 2;
+	return (angle);
+}
 
 	int
-is_map(t_data *data, t_settings *settings, int x, int y)
+is_map(t_data *data, t_set *set, int x, int y)
 {
-	char c;
+	char	c;
 
-	c = settings->map[y][x];
+	c = set->map[y][x];
 	if (c == ' ')
 		return (1);
 	if (c == '1')
@@ -29,81 +44,65 @@ is_map(t_data *data, t_settings *settings, int x, int y)
 		return (3);
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 	{
-		if (settings->player_orientation == (char)NULL)
+		if (set->angle < 0)
 		{
-			settings->player_orientation = c;
-			settings->starting_pos.x = x;
-			settings->starting_pos.y = y;
+			set->pos.x = 1.0 * x + 0.5;
+			set->pos.y = 1.0 * y + 0.5;
+			set->angle = get_first_angle(c);
+			set->map[y][x] = '0';
 		}
-		else if (x != settings->starting_pos.x || y != settings->starting_pos.y)
-		{
-			printf("\n--");
-			printf("\n--");
-			printf("\n--");
-			printf("\n--");
-			ft_putnbr_fd(x, 1);
-			printf("\n--");
-			ft_putnbr_fd(y, 1);
-			printf("\n--");
-			ft_putnbr_fd(settings->starting_pos.x, 1);
-			printf("\n--");
-			ft_putnbr_fd(settings->starting_pos.y, 1);
-			printf("\n--");
+		else if (x != (int)set->pos.x || y != (int)set->pos.y)
 			close_program(data, "More than one player set", "");
-			}
 		return (4);
 	}
 	return (0);
 }
 
 	int
-check_map_errors(t_data *data, t_settings *settings)
+check_map_errors(t_data *data, t_set *set)
 {
 	int x;
 	int y;
 
-//		if (settings->player_orientation != (char)NULL)
-//		settings->map[settings->starting_pos.y]
-//		[settings->starting_pos.x] = settings->player_orientation;
 	y = 0;
-	while (y < settings->map_size.y)
+	while (y < set->map_size.y)
 	{
 		x = 0;
-		while (x < (int)ft_strlen(settings->map[y]))
+		while (x < (int)ft_strlen(set->map[y]))
 		{
-			if ((y == 0 || y == (settings->map_size.y - 1))
-				&& is_map(data, settings, x, y) > 2)
+			if ((y == 0 || y == (set->map_size.y - 1))
+				&& is_map(data, set, x, y) > 2)
 				close_program(data, "Map not closed at top or bottom", "");
-			if (!is_map(data, settings, x, y))
+			if (!is_map(data, set, x, y))
 				close_program(data, "Wrong object in map", "");
-			if (is_map(data, settings, x, y) >= 3)
-				check_square_neighbors(data, settings, x, y);
+			if (is_map(data, set, x, y) >= 3)
+				check_cell_neighbors(data, set, x, y);
 			x++;
 		}
 		y++;
 	}
-	if (settings->player_orientation == (char)NULL)
+	if (set->angle == -1)
 		close_program(data, "No map or no player set :'(", "");
 	return(0);
 }
 
 	void
-check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
+check_cell_neighbors(t_data *data, t_set *set, int x, int y)
 {
 	int i;
 	int j;
 
-	if (settings->map[y][x] >= '2' && settings->map[y][x] <= '9')
-		settings->spr_count++;
+	if (set->map[y][x] >= '2' && set->map[y][x] <= '9')
+		set->spr_count++;
 	i = x - 1;
 	while (i <= x + 1)
 	{
 		j = y - 1;
 		while (j <= y + 1)
 		{
-			if (settings->map[j][i] == '\0' || settings->map[j][i] == ' ')
+			if (set->map[j][i] == '\0' || set->map[j][i] == ' ')
 				close_program(data, "Map not closed", "");
-			if (!is_map(data, settings, i, j))
+			if (!is_map(data, set, i, j))
 				close_program(data, "Wrong object in map", "");
 			j++;
 		}
@@ -116,50 +115,50 @@ check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
 */
 
 	char
-**get_tmp_map(t_data *data, t_settings *settings, char **tmp, char *line)
+**get_tmp_map(t_data *data, t_set *set, char **tmp, char *line)
 {
 	int i;
 
 	i = 0;
-	if (!(tmp = malloc(sizeof(char**) * (settings->map_size.y + 1))))
+	if (!(tmp = malloc(sizeof(char**) * (set->map_size.y + 1))))
 		close_program(data, "Failed allocating memory for tmp map\n", "");
 //	tmp[0] = NULL;
-	while (i < settings->map_size.y + 1)
+	while (i < set->map_size.y + 1)
 	{
-		if (!(tmp[i] = malloc(sizeof(char*) * (settings->map_size.x + 1))))
+		if (!(tmp[i] = malloc(sizeof(char*) * (set->map_size.x + 1))))
 			close_program(data, "Failed allocating memory for tmp map\n", "");
 		if (i != 0)
-		//(settings->map_size.y))
+		//(set->map_size.y))
 			tmp[i] = ft_strcharcpy
-				(tmp[i], settings->map[i - 1], settings->map_size.x, ' ');
+				(tmp[i], set->map[i - 1], set->map_size.x, ' ');
 		else
-			tmp[i] = ft_strcharcpy(tmp[i], line, settings->map_size.x, ' ');
+			tmp[i] = ft_strcharcpy(tmp[i], line, set->map_size.x, ' ');
 		i++;
 	}
 	return (tmp);
 }
 
 	void
-get_map(t_data *data, char *line, int i, t_settings *settings)
+get_map(t_data *data, char *line, int i, t_set *set)
 {
 	char	**tmp;
 
-	if (settings->map_size.x < (int)ft_strlen(line))
-		settings->map_size.x = ft_strlen(line);
+	if (set->map_size.x < (int)ft_strlen(line))
+		set->map_size.x = ft_strlen(line);
 	i = 0;
 	tmp = NULL;
-	tmp = get_tmp_map(data, settings, tmp, line);
-	free_map(settings);
-	settings->map_size.y = settings->map_size.y + 1;
+	tmp = get_tmp_map(data, set, tmp, line);
+	free_map(set->map, set->map_size.y);
+	set->map_size.y = set->map_size.y + 1;
 	i = 0;
-	if (!(settings->map = malloc(sizeof(char**) * settings->map_size.y)))
+	if (!(set->map = malloc(sizeof(char**) * set->map_size.y)))
 		close_program(data, "Failed allocating memory for map\n", "");
-	while (i < settings->map_size.y)
+	while (i < set->map_size.y)
 	{
-		if (!(settings->map[i] = malloc(sizeof(char*) * settings->map_size.x)))
+		if (!(set->map[i] = malloc(sizeof(char*) * set->map_size.x)))
 			close_program(data, "Failed allocating memory for map\n", "");
-		settings->map[i] =
-			ft_strcharcpy(settings->map[i], tmp[i], settings->map_size.x, ' ');
+		set->map[i] =
+			ft_strcharcpy(set->map[i], tmp[i], set->map_size.x, ' ');
 		free(tmp[i]);
 		tmp[i] = NULL;
 		i++;

@@ -52,5 +52,7 @@ int			ft_atoi(const char *str)
 		n += (s[i] - '0');
 		i++;
 	}
+	free(s);
+	s = NULL;
 	return (n * sign);
 }

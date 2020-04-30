@@ -13,9 +13,9 @@
 #include "cub3d.h"
 
 	int
-settings_ok(t_data *data, t_settings *settings, t_piclib *lib, char *line)
+set_ok(t_data *data, t_set *set, t_piclib *lib, char *line)
 {
-	if ((!ft_memcmp(line, "R ", 2) && settings->win_size.y)
+	if ((!ft_memcmp(line, "R ", 2) && set->win_size.y)
 		|| (!ft_memcmp(line, "EA ", 3) && lib->ea.path)
 		|| (!ft_memcmp(line, "SO ", 3) && lib->so.path)
 		|| (!ft_memcmp(line, "WE ", 3) && lib->we.path)
@@ -25,7 +25,7 @@ settings_ok(t_data *data, t_settings *settings, t_piclib *lib, char *line)
 		|| (!ft_memcmp(line, "S2 ", 3) && lib->s2.path)
 		|| (!ft_memcmp(line, "S3 ", 3) && lib->s3.path))
 			close_program(data, "One parameter is set twice\n", "");
-	if (settings->win_size.x == -1 || settings->win_size.y == -1
+	if (set->win_size.x == -1 || set->win_size.y == -1
 		|| lib->ea.path == NULL || lib->so.path == NULL
 		|| lib->we.path == NULL || lib->no.path == NULL
 		|| lib->flr.path == NULL || lib->sky.path == NULL
@@ -36,22 +36,22 @@ settings_ok(t_data *data, t_settings *settings, t_piclib *lib, char *line)
 }
 
 	int
-check_settings(t_data *data, t_settings *settings, t_piclib *lib, char *line)
+check_set(t_data *data, t_set *set, t_piclib *lib, char *line)
 {
 	int i;
 
 	i = 0;
 	while (line[i] == ' ')
 		i++;
-	if (line[i] == '\0' && settings->map_size.y)
+	if (line[i] == '\0' && set->map_size.y)
 		close_program(data, "Empty line in map", "");
 	else if (line[i] == '\0')
 		return (-1);
-	if (line[i] == '1' && !settings_ok(data, settings, lib,  &line[i]))
+	if (line[i] == '1' && !set_ok(data, set, lib,  &line[i]))
 		close_program(data, "Parameter missing before map\n", "");
-	else if (line[i] != '1' && settings_ok(data, settings, lib,  &line[i]))
+	else if (line[i] != '1' && set_ok(data, set, lib,  &line[i]))
 		close_program(data, "Map not closed or invalid element\n", "");
-	else if (line[i] != '1' && !settings_ok(data, settings, lib,  &line[i])
+	else if (line[i] != '1' && !set_ok(data, set, lib,  &line[i])
 		&& !(!ft_memcmp(&line[i], "R ", 2)
 		|| !ft_memcmp(&line[i], "SO ", 3) || !ft_memcmp(&line[i], "WE ", 3)
 		|| !ft_memcmp(&line[i], "EA ", 3) || !ft_memcmp(&line[i], "NO ", 3)
@@ -62,14 +62,14 @@ check_settings(t_data *data, t_settings *settings, t_piclib *lib, char *line)
 }
 
 	void
-parse_line(t_data *data, t_settings *settings, t_piclib *lib, char *line)
+parse_line(t_data *data, t_set *set, t_piclib *lib, char *line)
 {
 	int i;
 
-	if ((i = check_settings(data, settings, lib, line)) == -1)
+	if ((i = check_set(data, set, lib, line)) == -1)
 		return;
 	if (line[i] == 'R' && line[i + 1] == ' ')
-		get_resolution(data, &line[i], &data->settings);
+		get_resolution(data, &line[i], &data->set);
 	if (line[i] == 'S' && line[i + 1] == 'O')
 		get_image_path(data, lib, &line[i], "SO");
 	if (line[i] == 'W' && line[i + 1] == 'E')
@@ -87,35 +87,37 @@ parse_line(t_data *data, t_settings *settings, t_piclib *lib, char *line)
 	if (line[i] == 'S' && line[i + 1] == '3')
 		get_image_path(data, lib, &line[i], "S3");
 	if (line[i] == '1')
-		get_map(data, line, i, settings);
+		get_map(data, line, i, set);
 }
 
 	void
-get_sprites_data(t_data *data, t_settings *settings, char **map)
+get_sprites_data(t_data *data, t_set *set, char **map)
 {
 	t_int	pos;
 	int		i;
 
+	if (set->spr != NULL)
+		free(set->spr);
+	set->spr = NULL;
+	if (!(set->spr = malloc(sizeof(double *) * 2 * set->spr_count)))
+		close_program(data, "Couldn't allocate mem for spr", "");
 	pos.y = 1;
 	i = 0;
-	init_sprites(data, settings, &data->frame);
-	while (pos.y < settings->map_size.y - 1 && i < settings->spr_count)
+	while (pos.y < set->map_size.y - 1 && i < set->spr_count)
 	{
 		pos.x = 0;
-		while (pos.x < settings->map_size.x && i < settings->spr_count)
+		while (pos.x < set->map_size.x && i < set->spr_count)
 		{
 			if (map[pos.y][pos.x] >= '2' && map[pos.y][pos.x] <= '9')
 				{
-					settings->spr_x[i] = pos.x + 0.5;
-					settings->spr_y[i] = pos.y + 0.5;
-					settings->spr_text[i] = map[pos.y][pos.x];
+					set->spr[i].x = pos.x + 0.5;
+					set->spr[i].y = pos.y + 0.5;
 					i++;
 				}
 			pos.x++;
 		}
 		pos.y++;
 	}
-	data->frame.spr_sorted = 0;
 }
 
 	void
@@ -123,21 +125,26 @@ parse_cub_file(t_data *data)
 {
 	int		ret;
 	char	*line;
+	int		fd;
 	// eventuellement enlever le fd de la structure
 
 	line = NULL;
-	init_settings(&data->settings);
-	while ((ret = get_next_line(data->settings.fd, &line)) > 0)
+	if ((fd = open(data->cub_path, O_RDONLY)) == -1)
+		close_program(data, "Couldn't open .cub file\n", "");
+	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		parse_line(data, &data->settings, &data->piclib, line);
+		parse_line(data, &data->set, &data->piclib, line);
 		free(line);
 		line = NULL;
 	}
 	free(line);
 	line = NULL;
-	check_map_errors(data, &data->settings);
-	get_sprites_data(data, &data->settings, data->settings.map);
-	if ((close(data->settings.fd)) < 0)
+	check_map_errors(data, &data->set);
+	get_sprites_data(data, &data->set, data->set.map);
+	printf("\n----");
+	printf("\nPARS8 spr[%d] = (%f;%f)", 2, data->set.spr[2].x, data->set.spr[2].y);
+	printf("\n----");
+	if ((close(fd)) < 0)
 		close_program(data, "Couldn't close .cub file", "");
-	data->settings.done = 1;
+//	data->set.done = 1;
 }

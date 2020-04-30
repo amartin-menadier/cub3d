@@ -13,28 +13,28 @@
 #include "cub3d.h"
 
 	void
-get_resolution(t_data *data, char *line, t_settings *settings)
+get_resolution(t_data *data, char *line, t_set *set)
 {
 	int	i;
 	i = 1;
-	settings->win_size.x = 0;
-	settings->win_size.y = 0;
+	set->win_size.x = 0;
+	set->win_size.y = 0;
 	while (line[i] == ' ')
 		i++;
 	while (ft_isdigit(line[i]))
-		settings->win_size.x = (settings->win_size.x * 10) + (line[i++] - '0');
+		set->win_size.x = (set->win_size.x * 10) + (line[i++] - '0');
 	while (line[i] == ' ')
 		i++;
 	while (ft_isdigit(line[i]))
-		settings->win_size.y = (settings->win_size.y * 10) + (line[i++] - '0');
+		set->win_size.y = (set->win_size.y * 10) + (line[i++] - '0');
 	while (line[i] == ' ')
 		i++;
 	if (line[i])
 		close_program(data, "Wrong resolution in .cub file\n", "");
-	if (settings->win_size.x < 50 || settings->win_size.y < 50)
+	if (set->win_size.x < 50 || set->win_size.y < 50)
 		close_program(data, "Resolution is too small\n", "");
-	if (settings->win_size.x > 2560)
-		settings->win_size.x = 2560;
-	if (settings->win_size.y > 1440)
-		settings->win_size.y = 1440;
+	if (set->win_size.x > 2560)
+		set->win_size.x = 2560;
+	if (set->win_size.y > 1440)
+		set->win_size.y = 1440;
 }

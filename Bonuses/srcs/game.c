@@ -15,31 +15,31 @@
 	int
 game_over_answer(t_data *data, int key)
 {
-		ft_putstr_fd("\nGAME00", 1);
+	char *path;
+
 	if (key == KEY_Y)
 	{
-		data->respawn++;
+		path = ft_strdup(data->cub_path);
 		free_all(data);
-	if ((data->settings.fd = open(data->cub_path, O_RDONLY)) == -1)
-		close_program(data, "Couldn't open .cub file\n", "");
+		data->cub_path = ft_strdup(path);
+		free(path);
+		path = NULL;
 		start_game(data);
-	//	return (key);
 	}
 	if (key == KEY_N || key == KEY_ESC)
 		close_program(data, "\nSee you next time !", "\\o/\n");
 	return (-1);
 }
 
-void
+	void
 draw_game_over(t_data *data, t_int pxl, t_int draw_start)
 {
 	t_int		g_o_pxl;
 	t_dbl		step;
 	t_int		win;
 
-	//	ft_putstr_fd("\nGAME01", 1);
-	win.x = data->settings.win_size.x;
-	win.y = data->settings.win_size.y;
+	win.x = data->set.win_size.x;
+	win.y = data->set.win_size.y;
 	if ((step.x = ((double)data->piclib.game_over.size.x / (double)win.x)) < 1)
 		step.x = 1;
 	if ((step.y = ((double)data->piclib.game_over.size.y / (double)win.y)) < 1)
@@ -58,10 +58,9 @@ game_over(t_data *data)
 	t_int	draw_start;
 	t_int	draw_end;
 
-		ft_putstr_fd("\nGAME02", 1);
 	create_img(data, "./textures/gameover.xpm", &data->piclib.game_over);
-	win.x = data->settings.win_size.x;
-	win.y = data->settings.win_size.y;
+	win.x = data->set.win_size.x;
+	win.y = data->set.win_size.y;
 	if ((draw_start.x = (win.x - data->piclib.game_over.size.x) / 2) <= 0)
 		draw_start.x = 0;
 	if ((draw_start.y = (win.y - data->piclib.game_over.size.y) / 2) <= 0)

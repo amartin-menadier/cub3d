@@ -1,7 +1,24 @@
 #include "cub3d.h"
 
 	unsigned char
-*create_bmp_info_header(t_img *img)
+*int_to_rgb(unsigned char *copy, int color)
+{
+	int	blue;
+	int	green;
+	int	red;
+
+	blue = color % 256;
+	green = ((color - blue) / 256) % 256;
+	red = ((color - blue) / (256 * 256)) - green / 256;
+	copy[0] = (unsigned char)blue;
+	copy[1] = (unsigned char)green;
+	copy[2] = (unsigned char)red;
+	copy[3] = (unsigned char)0;
+	return (copy);
+}
+
+	unsigned char
+*create_bmp_info_header(t_img *scr)
 {
 	static unsigned char	info_header[40];
 	int						i;
@@ -10,21 +27,21 @@
 	while (i < 40)
 		info_header[i++] = 0;
 	info_header[ 0] = (unsigned char)(40);
-	info_header[ 4] = (unsigned char)(img->size.x);
-	info_header[ 5] = (unsigned char)(img->size.x >> 8);
-	info_header[ 6] = (unsigned char)(img->size.x >> 16);
-	info_header[ 7] = (unsigned char)(img->size.x >> 24);
-	info_header[ 8] = (unsigned char)(-img->size.y    );
-	info_header[ 9] = (unsigned char)(-img->size.y >> 8);
-	info_header[10] = (unsigned char)(-img->size.y >> 16);
-	info_header[11] = (unsigned char)(-img->size.y >> 24);
+	info_header[ 4] = (unsigned char)(scr->size.x);
+	info_header[ 5] = (unsigned char)(scr->size.x >> 8);
+	info_header[ 6] = (unsigned char)(scr->size.x >> 16);
+	info_header[ 7] = (unsigned char)(scr->size.x >> 24);
+	info_header[ 8] = (unsigned char)(-scr->size.y    );
+	info_header[ 9] = (unsigned char)(-scr->size.y >> 8);
+	info_header[10] = (unsigned char)(-scr->size.y >> 16);
+	info_header[11] = (unsigned char)(-scr->size.y >> 24);
 	info_header[12] = (unsigned char)(1);
-	info_header[14] = (unsigned char)(img->bpp);
+	info_header[14] = (unsigned char)(scr->bpp);
 	return (info_header);
 }
 
 	unsigned char
-*create_bmp_file_header(t_img *img, int padding_size)
+*create_bmp_file_header(t_img *scr, int padding_size)
 {
 	int						file_size;
 	static unsigned char	file_header[14];
@@ -34,7 +51,7 @@
 	while (i < 14)
 		file_header[i++] = 0;
 	file_size = 14 + 40
-		+ ((img->bpp / 8) * img->size.x + padding_size) * img->size.y;
+		+ ((scr->bpp / 8) * scr->size.x + padding_size) * scr->size.y;
 	file_header[ 0] = (unsigned char)('B');
 	file_header[ 1] = (unsigned char)('M');
 	file_header[ 2] = (unsigned char)(file_size    );
@@ -46,23 +63,23 @@
 }
 
 	void
-fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
+fill_bmp(t_data *data, unsigned char *copy, t_img *scr, int bmp_fd)
 {
 	unsigned char padding[3] = {0, 0, 0};
 	unsigned char* file_header;
 	unsigned char* info_header;
 	int i;
 
-	i = (4 - (img->size.x * img->bpp / 8) % 4) % 4;
-	file_header = create_bmp_file_header(img, i);
-	info_header = create_bmp_info_header(img);
+	i = (4 - (scr->size.x * scr->bpp / 8) % 4) % 4;
+	file_header = create_bmp_file_header(scr, i);
+	info_header = create_bmp_info_header(scr);
 	write(bmp_fd, file_header, 14);
 	write(bmp_fd, info_header, 40);
 	i = 0;
-	while (i < img->size.y)
+	while (i < scr->size.y)
 	{
-		write(bmp_fd, image+(i * 4 * img->size.x), 4 *img->size.x);
-		write(bmp_fd, padding, (4 - (img->size.x * img->bpp / 8) % 4) % 4);
+		write(bmp_fd, copy+(i * 4 * scr->size.x), 4 *scr->size.x);
+		write(bmp_fd, padding, (4 - (scr->size.x * scr->bpp / 8) % 4) % 4);
 		i++;
 	}
 	if (close(bmp_fd) < 0)
@@ -91,22 +108,22 @@ fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
 }
 
 	void 
-create_bmp(t_data *data, t_img *img, char *path)
+create_bmp(t_data *data, t_img *scr, char *path)
 {
-	unsigned char	image[img->size.y][img->size.x][img->bpp / 8];
+	unsigned char	copy[scr->size.y][scr->size.x][scr->bpp / 8];
 	t_int			pos;
 	int				color;
 	int				bmp_fd;
 
 	path = get_screenshot_path(data, path);
 	pos.x = 0;
-	while (pos.x < img->size.y)
+	while (pos.x < scr->size.y)
 	{
 		pos.y = 0;
-		while (pos.y < img->size.x)
+		while (pos.y < scr->size.x)
 		{
-			color  = img->colors[(pos.x * img->size.x + pos.y)];
-			int_to_rgb(image[pos.x][pos.y], color);
+			color  = scr->colors[(pos.x * scr->size.x + pos.y)];
+			int_to_rgb(copy[pos.x][pos.y], color);
 			pos.y++;
 		}
 		pos.x++;
@@ -114,7 +131,7 @@ create_bmp(t_data *data, t_img *img, char *path)
 	if ((bmp_fd = open(path, O_RDWR | O_CREAT | O_TRUNC,
 					S_IRWXU | S_IRWXG | S_IRWXO)) < 0)
 		close_program(data, "Couldn't create screenshot at ", path);
-	fill_bmp(data, (unsigned char *)image, img, bmp_fd);
+	fill_bmp(data, (unsigned char *)copy, scr, bmp_fd);
 	free(path);
 	path = NULL;
 }

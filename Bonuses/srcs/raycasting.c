@@ -12,6 +12,65 @@
 
 #include "cub3d.h"
 
+	void
+draw_minimap_mask(t_data *data, t_minimap *map, t_img *mask, int banner_end)
+{
+	t_int	pxl;
+	int		diameter;
+	int		ctr_dist;
+	int		color;
+
+	diameter = map->draw_end.x + map->margin * 2; // + margin ?
+	pxl.x = 0;
+	while (pxl.x < diameter)
+	{
+		pxl.y = 0;
+		while (pxl.y < diameter)
+		{
+			ctr_dist = (int)hypot((map->center.x - pxl.x), (map->center.y - pxl.y));
+			color = mask->colors[mask->size.x * (pxl.y % 16) + pxl.x % 32];
+			if (ctr_dist == diameter / 2 - 1)
+				color = WHITE;
+			if (ctr_dist == diameter / 2)
+				color = DARK_GREY;
+			if (ctr_dist <= diameter / 2)
+				put_pixel(&data->scr, pxl, color);
+				(void)banner_end;
+			pxl.y++;
+		}
+		pxl.x++;
+	}
+}
+
+	void
+draw_mask(t_data *data, t_set *set, t_minimap *map, t_life *life)
+{
+	int		draw_end_y;
+	int		color;
+	t_int	pxl;
+	t_img	*mask;
+
+	mask = &data->piclib.mask;
+	draw_end_y = life->draw_start.y + life->draw_end.y + 3;
+	pxl.x = 0;
+	while (pxl.x < set->win_size.x)
+	{
+		pxl.y = 0;
+		while (pxl.y < draw_end_y)
+		{
+			color = mask->colors[mask->size.x * (pxl.y % 16) + pxl.x % 32];
+			if (pxl.y == draw_end_y - 2)
+				color = WHITE;
+			if (pxl.y == draw_end_y - 1)
+				color = DARK_GREY;
+			put_pixel(&data->scr, pxl, color);
+			pxl.y++;
+		}
+		pxl.x++;
+	}
+	draw_minimap_mask(data, map, mask, draw_end_y);
+}
+
 	int
 get_orientation(t_dbl ray)
 {
@@ -120,14 +179,11 @@ draw_skybox_column(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
 }
 
 	void
-draw_life_string(t_data *data)
+draw_life_string(t_data *data, t_life life, t_int ctr)
 {
 	char	*value;
-	t_int	ctr;
 
-	ctr.x = lifebar_data(data, CENTER_X);
-	ctr.y = lifebar_data(data, CENTER_Y);
-	value = ft_itoa(data->set.life);
+	value = ft_itoa(life.value);
 	mlx_string_put(data->mlx, data->window, ctr.x, ctr.y, BLACK, value);
 	free(value);
 }
@@ -182,38 +238,32 @@ get_wall_img(t_data *data, t_piclib piclib, t_dbl ray)
 }
 
 // 0 SO NO 1 EA WE
-	int
-get_wall_x(t_data *data, t_img wall, t_dbl ray, double perp_wall_dist)
-{
-	int		wall_pxl_x;
-	double	step;
 
-	if (!(((int)perform_DDA(data, data->set.pos, ray, 1)) % 2))
-		step = perp_wall_dist * ray.y + data->set.pos.y;
-	else
-		step = perp_wall_dist * ray.x + data->set.pos.x;
-	step -= floor(step);
-	wall_pxl_x = step * wall.size.x;
-	if (wall_pxl_x < 0 || wall_pxl_x >= wall.size.x)
-		wall_pxl_x = -1;
-	return (wall_pxl_x);
-}
-
-	int
-get_wall_y(t_data *data, t_img wall, t_int scr, double perp_wall_dist)
+	t_int
+get_wall_pixel(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
 {
-	int		wall_pxl_y;
-	double	step;
+	t_int	wall_pxl;
+	t_img	wall;
+	t_dbl	ratio;
 	int		line_height;
 
-
+	wall = get_wall_img(data, data->piclib, ray);
+	if (!(((int)perform_DDA(data, data->set.pos, ray, 1)) % 2))
+//	if (side == NO || side == SO)
+		ratio.x = perp_wall_dist * ray.y + data->set.pos.y;
+	else
+		ratio.x = perp_wall_dist * ray.x + data->set.pos.x;
+	ratio.x -= floor(ratio.x);
+	wall_pxl.x = ratio.x * wall.size.x;
+	if (wall_pxl.x < 0 || wall_pxl.x >= wall.size.x)
+		wall_pxl.x = -1;
 	line_height = set_drawing_limit(data->set.win_size, perp_wall_dist, 4);
-	step = 1.00 * ((line_height - data->set.win_size.y) / 2 + scr.y);
-	step /= line_height;
-	wall_pxl_y = step * wall.size.y;
-	if (wall_pxl_y < 0 || wall_pxl_y >= wall.size.y)
-		wall_pxl_y = -1;
-	return (wall_pxl_y);
+	ratio.y = 1.00 * ((line_height - data->set.win_size.y) / 2 + scr.y);
+	ratio.y /= line_height;
+	wall_pxl.y = ratio.y * wall.size.y;
+	if (wall_pxl.y < 0 || wall_pxl.y >= wall.size.y)
+		wall_pxl.y = -1;
+	return (wall_pxl);
 }
 
 	void
@@ -226,10 +276,9 @@ draw_wall_column(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
 
 	wall = get_wall_img(data, data->piclib, ray);
 	draw_end = set_drawing_limit(data->set.win_size, perp_wall_dist, 2);
-	wall_pxl.x = get_wall_x(data, wall, ray, perp_wall_dist);
 	while (scr.y < draw_end)
 	{
-		wall_pxl.y = get_wall_y(data, wall, scr, perp_wall_dist);
+		wall_pxl = get_wall_pixel(data, scr, ray, perp_wall_dist);
 		if (!(color = get_error_color(wall_pxl.x, wall_pxl.y, wall.size)))
 			color = wall.colors[wall_pxl.y * wall.size.x + wall_pxl.x];
 		put_pixel(&data->scr, scr, color);
@@ -364,13 +413,12 @@ set_ray(t_data *data, t_set *set, t_int scr)
 	{
 //		ray.x = cos(set->angle - (PI / 4) * camera_x);
 //		ray.y = sin(set->angle - (PI / 4) * camera_x);
-	//	ray = coord_from_angle(set->angle - (PI / 4) * camera_x, NULL);
-		ray = rotate_point(set->angle - (PI / 4) * camera_x, NULL, NULL);
+		ray = coord_from_angle(set->angle - (PI / 4) * camera_x, NULL);
 	}
 	else
 	{
-		plane = rotate_point(set->angle - PI / 2, NULL, NULL);
-		ray = rotate_point(set->angle , NULL, NULL);
+		plane = coord_from_angle(set->angle - PI / 2, NULL);
+		ray = coord_from_angle(set->angle , NULL);
 		ray.x += plane.x * camera_x;
 		ray.y += plane.y * camera_x;
 //		ray.x = set->dir.x + set->plan.x * camera_x;
@@ -408,14 +456,17 @@ ray_cast(t_data *data, t_int win_size, int skybox)
 	int
 render_next_frame(t_data *data)
 {
-	if (data->set.life > 0 && data->set.frame_done == 0)
+	if (data->life.value > 0 && data->set.frame_done == 0)
 	{
 		set_floor(data, &data->set, &data->floor);//skybox
 		ray_cast(data, data->set.win_size, data->skybox);
 		draw_sprites(data, data->piclib, &data->set);
-		draw_interface(data, &data->piclib, &data->set);
+	get_minimap_data(data, &data->set, &data->map);
+		draw_mask(data, &data->set, &data->map, &data->life);
+		draw_minimap(data, &data->set, &data->map);
+		draw_life_bar(data, &data->set, &data->life);
 		mlx_put_image_to_window(data->mlx, data->window, data->scr.ptr, 0, 0);
-		draw_life_string(data);
+		draw_life_string(data, data->life, data->life.ctr);
 		if (data->save == 1)
 			create_bmp(data, &data->scr, "start.bmp");
 		data->set.frame_done = 1;

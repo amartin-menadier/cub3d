@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   textures.c                                            :+:      :+:    :+:   */
+/*   img.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/06 14:06:30 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 11:52:48 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/19 14:34:24 by amartin-          #+#    #+#             */
+/*   Updated: 2020/03/20 12:15:52 by amartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 	t_img
-*get_sprite_image(t_piclib *lib, char text_number)
+get_sprite_image(char **map, t_dbl spr, t_piclib piclib)
 {
-	if (text_number == '2')
-		return (&lib->s2);
+	char	value;
+
+	value = map[(int)spr.y][(int)spr.x];
+	if (value == '2')
+		return (piclib.s2);
 	else
-		return (&lib->s3);
+		return (piclib.s3);
 }
 
 	void
@@ -47,6 +50,33 @@ get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 		piclib->s2.path = ft_strdup(tmp);
 	if (!ft_strncmp(texture, "S3", 2))
 		piclib->s3.path = ft_strdup(tmp);
+	free(tmp);
+	tmp = NULL;
+}
+	void
+put_pixel(t_img *img, t_int pos, int color)
+{
+	char	*dst;
+
+	dst = (char *)img->colors 
+		+ (pos.y * img->line_length + pos.x * (img->bpp / 8));
+	*(int*)dst = color;
+}
+
+	void
+create_img(t_data *data, char *path, t_img *img)
+{
+	char *tmp;
+
+	tmp = ft_strdup(path);
+	free_image(data, img);
+	img->ptr = 
+		mlx_xpm_file_to_image(data->mlx, tmp, &img->size.x, &img->size.y);
+	if (img->ptr == NULL)
+		close_program(data, "create_img/Invalid or missing file at : ", tmp);
+	img->colors = (int*)mlx_get_data_addr(img->ptr, &img->bpp,
+			&img->line_length, &img->endian);
+	img->path = ft_strdup(tmp);
 	free(tmp);
 	tmp = NULL;
 }
