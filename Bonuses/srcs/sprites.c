@@ -13,100 +13,6 @@
 #include "cub3d.h"
 
 	void
-sprite_hit(t_data *data)
-{
-	t_int	pos;
-	char	case_value;
-	
-	pos.x = (int)data->set.pos.x;
-	pos.y = (int)data->set.pos.y;
-	case_value = data->set.map[pos.y][pos.x];
-	if (case_value == '3' && data->set.life == 100)
-		return;
-	if (case_value == '2')
-		data->set.life -= 19;
-	if (data->set.life <= 0)
-		game_over(data);
-	if (case_value == '3')
-		data->set.life += 20;
-	if (data->set.life > 100)
-		data->set.life = 100;
-	data->set.map[pos.y][pos.x] = '0';
-	data->set.spr_count--;
-	free(data->set.spr);
-	data->set.spr = NULL;
-	get_sprites_data(data, &data->set, data->set.map);
-}
-
-	void
-set_sprite_drawing_limits(t_set *set, int i)
-{
-	double	inv;
-	t_dbl	spr_diff;
-	t_dbl	dir;
-	t_dbl	plane;
-//	t_dbl	spr_inv;
-
-	t_set	*S;
-	S = set;
-
-	dir = rotate_point(set->angle, NULL, NULL);
-	plane = rotate_point(set->angle - PI / 2, NULL, NULL);
-
-	spr_diff.x = S->spr[i].x - S->pos.x;
-	spr_diff.y = S->spr[i].y - S->pos.y;
-	inv = 1.0 / (plane.x * dir.y - dir.x * plane.y);
-//	S->spr_inv.x = inv * (S->dir.y * spr_diff.x - S->dir.x * spr_diff.y);
-//	S->spr_inv.y = inv * (S->plane.x * spr_diff.y - S->plane.y * spr_diff.x);
-
-S->spr_inv.x = inv * (dir.y * spr_diff.x - dir.x * spr_diff.y);
-	S->spr_inv.y = inv * (plane.x * spr_diff.y - plane.y * spr_diff.x);
-	S->spr_screen_x = ((S->win_size.x / 2) * (1 + S->spr_inv.x / S->spr_inv.y));
-	S->spr_size.y = abs((int)(S->win_size.y / (S->spr_inv.y)));
-	
-	S->spr_draw_start.y = -S->spr_size.y / 2 + S->win_size.y / 2;
-	if(S->spr_draw_start.y < 0) 
-		S->spr_draw_start.y = 0;
-	S->spr_draw_end.y = S->spr_size.y / 2 + S->win_size.y / 2;
-	if(S->spr_draw_end.y >= S->win_size.y)
-		S->spr_draw_end.y = S->win_size.y;
-	S->spr_size.x = abs((int)(S->win_size.x / (2 * S->spr_inv.y)));
-//	S->spr_size.x = abs((int)(S->win_size.y / (S->spr_inv.y)));
-	S->spr_draw_start.x = -S->spr_size.x / 2 + S->spr_screen_x;
-	if(S->spr_draw_start.x < 0) 
-		S->spr_draw_start.x = 0;
-	S->spr_draw_end.x = S->spr_size.x / 2 + S->spr_screen_x;
-	if(S->spr_draw_end.x > S->win_size.x)
-		S->spr_draw_end.x = S->win_size.x;
-}
-
-	int
-sprite_player_same_case(t_set *set, int i)
-{
-	t_int	spr;
-	t_int	player;
-
-	spr.x = (int)set->spr[i].x;
-	spr.y = (int)set->spr[i].y;
-	player.x = (int)set->pos.x;
-	player.y = (int)set->pos.y;
-
-	if (spr.x == player.x && spr.y == player.y)
-		return (1);
-	else
-		return (0);
-}
-
-	double
-dist(t_dbl pos, t_dbl obj)
-{
-	double	dist;
-
-	dist = hypot((pos.x - obj.x), (pos.y - obj.y));
-	return (dist);
-}
-
-	void
 sort_sprites(t_dbl pos, t_dbl *spr, int spr_count)
 {
 	int		i;
@@ -134,35 +40,81 @@ sort_sprites(t_dbl pos, t_dbl *spr, int spr_count)
 	}
 }
 
-	void
-draw_sprite_column(t_data *data, t_img spr, t_int scr)
+	t_dbl
+transform_sprite(double angle, t_dbl dist)
 {
-	t_int		spr_pxl;
+	t_dbl	transform;
+	t_dbl	dir;
+	t_dbl	plane;
+	double	inv_det;
 
-	t_set *S;
-	S = &data->set;
+	dir = rotate_point(angle, NULL, NULL);
+	plane = rotate_point(angle - PI / 2, NULL, NULL);
+	inv_det = 1.0 / (plane.x * dir.y - dir.x * plane.y);
+	transform.x = inv_det * (dir.y * dist.x - dir.x * dist.y);
+	transform.y = inv_det * (plane.x * dist.y - plane.y * dist.x);
+	return (transform);
+}
 
-	scr.y = S->spr_draw_start.y;
-	spr_pxl.x = (int)(256 * fabs(scr.x - (-S->spr_size.x / 2 
-					+ S->spr_screen_x)) * spr.size.x / S->spr_size.x) / 256;
+	double
+sprite_data(t_set *set, t_dbl transform, int mod)
+{
+	double	center_x;
+	t_int	size_on_scr;
+	t_int	win;
+	int		ret;
 
-	if (S->spr_inv.y > 0 && scr.x >= 0 && scr.x < S->win_size.x
-			&& S->spr_inv.y < S->z_buffer[scr.x])
+	win = set->win_size;
+	ret = 0;
+	center_x = ((set->win_size.x / 2) * (1 + transform.x / transform.y));
+	size_on_scr.y = abs((int)(win.y / (transform.y)));
+	size_on_scr.x = abs((int)(win.x / (2 * transform.y)));
+	if (mod == CENTER_X)
+		return (center_x);
+	if (mod == WIDTH)
+		return (size_on_scr.x);
+	if (mod == HEIGHT)
+		return (size_on_scr.y);
+	if (mod == DRAW_START_X)
+		return ((ret = center_x - size_on_scr.x / 2) < 0 ? 0 : ret);
+	if (mod == DRAW_END_X)
+		return ((ret = size_on_scr.x / 2 + center_x) >= win.x ? win.x : ret);
+	if (mod == DRAW_START_Y)
+		return ((ret = win.y / 2 - size_on_scr.y / 2) < 0 ? 0 : ret);
+	if (mod == DRAW_END_Y)
+		return ((ret = win.y / 2 + size_on_scr.y / 2) >= win.y ? win.y : ret);
+	return (-9999);
+}
+
+/*
+ * transform.y stands for depth
+ */
+	void
+draw_one_sprite(t_data *data, t_img img, t_dbl transform, t_int draw_end)
+{
+	t_int	scr;
+	t_int	spr_pxl;
+	int		color;
+	t_int	size_on_scr;
+	double	center_x;
+
+	size_on_scr.x = (int)sprite_data(&data->set, transform, WIDTH);
+	size_on_scr.y = (int)sprite_data(&data->set, transform, HEIGHT);
+	scr.x = (int)sprite_data(&data->set, transform, DRAW_START_X);
+	center_x = sprite_data(&data->set, transform, CENTER_X);
+	while (scr.x < draw_end.x)
 	{
-		while (scr.y < S->spr_draw_end.y)
+		scr.y = (int)sprite_data(&data->set, transform, DRAW_START_Y);
+		spr_pxl.x = get_sprite_x(img, scr.x, size_on_scr.x, center_x);
+		while (scr.y < draw_end.y && transform.y < data->set.z_buffer[scr.x])
 		{
-int		d;
-int		color;
-			d = (scr.y) * 256 - S->win_size.y * 128 + S->spr_size.y * 128;
-
-			spr_pxl.y = ((d * spr.size.y) / S->spr_size.y) / 256;
-//			spr_pxl.y = get_sprite_pixel();
-			if (!(color = get_error_color(spr_pxl.x, spr_pxl.y, spr.size)))
-				color = spr.colors[spr_pxl.y * spr.size.x + spr_pxl.x];
+			spr_pxl.y = get_sprite_y(data, img, scr.y, size_on_scr.y);
+			color = get_img_color(img, spr_pxl.x, spr_pxl.y, img.size);
 			if (color != BLACK)
 				put_pixel(&data->scr, scr, color);
 			scr.y++;
 		}
+		scr.x++;
 	}
 }
 
@@ -170,22 +122,27 @@ int		color;
 draw_sprites(t_data *data, t_piclib lib, t_set *set)
 {
 	int		i;
-	t_int	scr;
 	t_img	img;
+	t_dbl	dist;
+	t_dbl	transform;
+	t_int	draw_end;
 
 	sort_sprites(set->pos, set->spr, set->spr_count);
 	i = 0;
 	while (i < set->spr_count)
 	{
-		set_sprite_drawing_limits(set, i);
-		scr.x = set->spr_draw_start.x;
-		img = get_sprite_image(set->map, set->spr[i], lib);
-		while (scr.x < set->spr_draw_end.x)
+		if (!(sprite_player_same_cell(set, i)))
 		{
-			if (!(sprite_player_same_case(set, i)))
-				draw_sprite_column(data, img, scr);
-			scr.x++;
+			img = get_sprite_image(set->map, set->spr[i], lib);
+			dist.x = set->spr[i].x - set->pos.x;
+			dist.y = set->spr[i].y - set->pos.y;
+			transform = transform_sprite(set->angle, dist);
+			draw_end.x = (int)sprite_data(&data->set, transform, DRAW_END_X);
+			draw_end.y = (int)sprite_data(&data->set, transform, DRAW_END_Y);
+			if (transform.y > 0)
+				draw_one_sprite(data, img, transform, draw_end);
 		}
 		i++;
 	}
+
 }

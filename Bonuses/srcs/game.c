@@ -17,7 +17,7 @@ game_over_answer(t_data *data, int key)
 {
 	char *path;
 
-	if (key == KEY_Y)
+	if (key == Y)
 	{
 		path = ft_strdup(data->cub_path);
 		free_all(data);
@@ -26,7 +26,7 @@ game_over_answer(t_data *data, int key)
 		path = NULL;
 		start_game(data);
 	}
-	if (key == KEY_N || key == KEY_ESC)
+	if (key == N || key == ESC)
 		close_program(data, "\nSee you next time !", "\\o/\n");
 	return (-1);
 }

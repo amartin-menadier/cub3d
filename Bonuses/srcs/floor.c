@@ -12,100 +12,77 @@
 
 #include "cub3d.h"
 
-//FLOOR CASTING
+	void
+put_floor_and_sky_pixels(t_data *data, t_img img, t_int scr, t_dbl ray_pos)
+{
+	t_int	cell;
+	t_int	img_pxl;
+	int		color;
+
+	cell.x = (int)(ray_pos.x);
+	cell.y = (int)(ray_pos.y);
+	img_pxl.x = (int)(img.size.x * (ray_pos.x - cell.x)) & (img.size.x - 1);
+	img_pxl.y = (int)(img.size.y * (ray_pos.y - cell.y)) & (img.size.y - 1);
+	color = get_img_color(img, img_pxl.x, img_pxl.y, img.size);
+	put_pixel(&data->scr, scr, color);
+	img = data->piclib.sky;
+	color = get_img_color(img, img_pxl.x, img_pxl.y, img.size);
+	scr.y = data->set.win_size.y - scr.y - 1;
+	put_pixel(&data->scr, scr, color);
+	scr.y = data->set.win_size.y - scr.y - 1;
+}
+
+	double
+get_floor_or_sky_depth(int win_size_y, int scr_y)
+{
+	float	cam_height;
+	float	pxl_height;
+	double	depth;
+
+	cam_height = 0.5 * win_size_y;
+	pxl_height = scr_y - win_size_y / 2;
+	depth = cam_height / pxl_height;
+	return (depth);
+}
 
 	void
-set_floor(t_data *data, t_set *set, t_floor *flr)
+draw_floor_and_sky_lign(t_data *data, t_int scr, t_dbl ray0, t_dbl ray1)
 {
-	t_int	pxl;
+	double	depth;
+	t_dbl	ray_pos;
+	t_dbl	step;
 
-	pxl.y = 0;
-	while (pxl.y < set->win_size.y)
+	depth = get_floor_or_sky_depth(data->set.win_size.y, scr.y);
+	step.x = depth * (ray1.x - ray0.x) / data->set.win_size.x;
+	step.y = depth * (ray1.y - ray0.y) / data->set.win_size.x;
+	ray_pos.x = data->set.pos.x + depth * ray0.x;
+	ray_pos.y = data->set.pos.y + depth * ray0.y;
+	scr.x = 0;
+	while (scr.x < data->set.win_size.x)
 	{
-//		flr->ray0.x = data->set.dir.x - data->set.plane.x;
-//		flr->ray0.y = data->set.dir.y - data->set.plane.y;
-//		flr->ray1.x = data->set.dir.x + data->set.plane.x;
-//		flr->ray1.y = data->set.dir.y + data->set.plane.y;
-		flr->ray0.x = cos(set->angle) - cos(set->angle - PI / 2);
-		flr->ray0.y = sin(set->angle) - sin(set->angle - PI / 2);
-		flr->ray1.x = cos(set->angle) + cos(set->angle - PI / 2);
-		flr->ray1.y = sin(set->angle) + sin(set->angle - PI / 2);
-	
-		flr->pxl_height = pxl.y - set->win_size.y / 2;
-		flr->cam_height = 0.5 * set->win_size.y;
-		flr->depth = flr->cam_height / flr->pxl_height;
-		flr->step.x = flr->depth * (flr->ray1.x - flr->ray0.x) / set->win_size.x;
-		flr->step.y = flr->depth * (flr->ray1.y - flr->ray0.y) / set->win_size.x;
-		flr->pos.x = data->set.pos.x + flr->depth * flr->ray0.x;
-		flr->pos.y = data->set.pos.y + flr->depth * flr->ray0.y;
-		pxl.x = 0;
-		while (pxl.x < set->win_size.x)
-		{
-			flr->cell.x = (int)(flr->pos.x);
-			flr->cell.y = (int)(flr->pos.y);
-			flr->txt_pxl.x = (int)(data->piclib.flr.size.x * (flr->pos.x - flr->cell.x)) & (data->piclib.flr.size.x - 1);
-			flr->txt_pxl.y = (int)(data->piclib.flr.size.y * (flr->pos.y - flr->cell.y)) & (data->piclib.flr.size.y - 1);
-			flr->pos.x += flr->step.x;
-			flr->pos.y += flr->step.y;
-			int	color;
-			color = data->piclib.flr.colors[data->piclib.flr.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
-			color = (color >> 1) & 8355711; // make a bit darker
-			put_pixel(&data->scr, pxl, color);
-			color = data->piclib.sky.colors[data->piclib.sky.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
-			color = (color >> 1) & 8355711; // make a bit darker
-			pxl.y = set->win_size.y - pxl.y - 1;
-			put_pixel(&data->scr, pxl, color);
-			pxl.y = set->win_size.y - pxl.y - 1;
-			pxl.x++;
-		}
-		pxl.y++;
+		put_floor_and_sky_pixels(data, data->piclib.flr, scr, ray_pos);
+		ray_pos.x += step.x;
+		ray_pos.y += step.y;
+		scr.x++;
 	}
 }
-/*
-	void
-set_floor(t_data *data, t_set *set, t_floor *flr)
-{
-	t_int	pxl;
 
-	pxl.y = 0;
-	while (pxl.y < set->win_size.y)
+	void
+draw_floor_and_sky(t_data *data, double angle, t_int win_size)
+{
+	t_int	scr;
+	t_dbl	ray0;
+	t_dbl	ray1;
+
+	ray0.x = cos(angle) - cos(angle - PI / 2);
+	ray0.y = sin(angle) - sin(angle - PI / 2);
+	ray1.x = cos(angle) + cos(angle - PI / 2);
+	ray1.y = sin(angle) + sin(angle - PI / 2);
+	scr.y = 0;
+	while (scr.y < win_size.y)
 	{
-//		flr->ray0.x = data->set.dir.x - data->set.plane.x;
-//		flr->ray0.y = data->set.dir.y - data->set.plane.y;
-//		flr->ray1.x = data->set.dir.x + data->set.plane.x;
-//		flr->ray1.y = data->set.dir.y + data->set.plane.y;
-		flr->ray0.x = cos(set->angle) - cos(set->angle - PI / 2);
-		flr->ray0.y = sin(set->angle) - sin(set->angle - PI / 2);
-		flr->ray1.x = cos(set->angle) + cos(set->angle - PI / 2);
-		flr->ray1.y = sin(set->angle) + sin(set->angle - PI / 2);
-	
-		flr->pxl_height = pxl.y - set->win_size.y / 2;
-		flr->cam_height = 0.5 * set->win_size.y;
-		flr->depth = flr->cam_height / flr->pxl_height;
-		flr->step.x = flr->depth * (flr->ray1.x - flr->ray0.x) / set->win_size.x;
-		flr->step.y = flr->depth * (flr->ray1.y - flr->ray0.y) / set->win_size.x;
-		flr->pos.x = data->set.pos.x + flr->depth * flr->ray0.x;
-		flr->pos.y = data->set.pos.y + flr->depth * flr->ray0.y;
-		pxl.x = 0;
-		while (pxl.x < set->win_size.x)
-		{
-			flr->cell.x = (int)(flr->pos.x);
-			flr->cell.y = (int)(flr->pos.y);
-			flr->txt_pxl.x = (int)(data->piclib.flr.size.x * (flr->pos.x - flr->cell.x)) & (data->piclib.flr.size.x - 1);
-			flr->txt_pxl.y = (int)(data->piclib.flr.size.y * (flr->pos.y - flr->cell.y)) & (data->piclib.flr.size.y - 1);
-			flr->pos.x += flr->step.x;
-			flr->pos.y += flr->step.y;
-			int	color;
-			color = data->piclib.flr.colors[data->piclib.flr.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
-			color = (color >> 1) & 8355711; // make a bit darker
-			put_pixel(&data->scr, pxl, color);
-			color = data->piclib.sky.colors[data->piclib.sky.size.x * flr->txt_pxl.y + flr->txt_pxl.x];
-			color = (color >> 1) & 8355711; // make a bit darker
-			pxl.y = set->win_size.y - pxl.y - 1;
-			put_pixel(&data->scr, pxl, color);
-			pxl.y = set->win_size.y - pxl.y - 1;
-			pxl.x++;
-		}
-		pxl.y++;
+		draw_floor_and_sky_lign(data, scr, ray0, ray1);
+		scr.y++;
 	}
+
 }

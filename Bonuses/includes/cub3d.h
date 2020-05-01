@@ -42,13 +42,6 @@ typedef struct 	s_set{
 	double		*z_buffer;
 	int			life;
 	int			frame_done;
-
-	t_dbl		dir;
-	t_dbl		spr_inv;
-	double		spr_screen_x;
-	t_int		spr_size;
-	t_int		spr_draw_start;
-	t_int		spr_draw_end;
 }               t_set;
 
 typedef struct	s_piclib{
@@ -66,19 +59,6 @@ typedef struct	s_piclib{
 	t_img		mask;
 }				t_piclib;
 
-typedef struct	s_floor{
-	t_dbl		ray;
-	t_dbl		ray0;
-	t_dbl		ray1;
-	int			pxl_height;
-	float		cam_height;
-	float		depth;
-	t_dbl		step;
-	t_dbl		pos;
-	t_int		cell;
-	t_int		txt_pxl;
-}				t_floor;
-
 typedef struct 	s_data{
 	char*		cub_path;
 	int			save;
@@ -88,13 +68,17 @@ typedef struct 	s_data{
 	t_img		scr;
 	t_set		set;
 	t_piclib	piclib;
-
-	t_floor		floor;
 }               t_data;
 
+	t_dbl
+transform_sprite(double angle, t_dbl dist);
+	double
+sprite_data(t_set *set, t_dbl transform, int mod);
 /*
 ** cub3d.c
 */
+	void
+close_program(t_data *data, char *error_msg, char *str);
 	int
 start_game(t_data *data);
 	int
@@ -106,21 +90,24 @@ main(int argc, char **argv);
 	void
 create_bmp(t_data *data, t_img *img, char *path);
 
+
+/*
+** color_tools.c
+*/
+	int
+get_img_color(t_img img, int pxl_x, int pxl_y, t_int size);
+	unsigned char
+*int_to_rgb(unsigned char *copy, int color);
+
 /*
 ** event.c
 */
-	int
-press_key(int key, t_data *data);
-	int
-red_cross(t_data *data);
 	void
 hook_event(t_data *data);
 
 /*
 ** free.c
 */
-	void
-close_program(t_data *data, char *error_msg, char *str);
 	void
 free_image(t_data *data, t_img *img);
 	void
@@ -137,8 +124,6 @@ free_set(t_set *set);
 render_next_frame(t_data *data);
 	double
 perform_DDA(t_data *data, t_dbl pos, t_dbl ray, int mod);
-	int
-get_error_color(int x, int y, t_int size);
 	int
 set_drawing_limit(t_int win_size, double perp_wall_dist, int mod);
 
@@ -191,13 +176,7 @@ get_map(t_data *data, char *line, int i, t_set *set);
  ** move.c
 */
 	void
-move_forward(t_set *set, char **map);
-	void
-move_backward(t_set *set, char **map);
-	void
-move_right(t_set *set, char **map);
-	void
-move_left(t_set *set, char **map);
+move(t_set *set, char **map, int key);
 
 /*
 ** parsing.c
@@ -219,19 +198,33 @@ get_resolution(t_data *data, char *line, t_set *set);
 	void
 get_dir_and_plane(t_set *set);
 
+
 /*
-** sprites.c
+** skybox.c
+*/
+	void
+create_skybox(t_data *data, t_piclib *piclib, t_img *skybox);
+
+/*
+** sprites.c and sprite_utils.c
 */
 	void
 draw_sprites(t_data *data, t_piclib lib, t_set *set);
+	int
+sprite_player_same_cell(t_set *set, int i);
+	int
+get_sprite_x(t_img img, int scr_x, int width_on_screen, double center_x);
+	int
+get_sprite_y(t_data *data, t_img img, int scr_y, int height_on_scr);
 /*
 ** textures.c
 */
 
 /*
- * trigonometry.c
+ * math_utils.c
 */
-
+	double
+dist(t_dbl pos, t_dbl obj);
 	t_dbl
 rotate_point(double angle, t_dbl *ctr, t_dbl *old);
 
@@ -273,7 +266,8 @@ get_avatar_color(t_data *data, t_img avatar, t_dbl minimap_pos, int color);
 ** floor.c
 */
 	void
-set_floor(t_data *data, t_set *set, t_floor *flr);
+draw_floor_and_sky(t_data *data,
+double angle, t_int win_size);
 
 /*
 ** print.c (not evaluated)
@@ -325,8 +319,11 @@ void	print_current_sprite_data(t_data *data);
 #define CENTER_X 371
 #define CENTER_Y 372
 #define LENGTH 40
-#define HEIGHT 41
-#define DEPTH 42
+#define WIDTH 41
+#define HEIGHT 42
+#define DEPTH 43
+#define SIZE 44
+#define SCREEN_X 50
 
 /*
 ** PI
@@ -348,14 +345,18 @@ void	print_current_sprite_data(t_data *data);
 /*
 ** KEY VALUES
 */
-# define KEY_D 2
-# define KEY_N 45
-# define KEY_P 35
-# define KEY_Q 0
-# define KEY_S 1
-# define KEY_Y 16
-# define KEY_Z 13
-# define KEY_ESC 53
-# define KEY_LEFT 123
-# define KEY_RIGHT 124
+# define Z 13
+# define Q 0
+# define S 1
+# define D 2
+# define MOVE(x) (x == Z || x == Q || x == S || x == D)
+# define N 45
+# define P 35
+# define Y 16
+# define ESC 53
+# define LEFT 123
+# define RIGHT 124
+# define UP -99999
+# define DOWN -9999
+# define LOOK(x) (x == LEFT || x == RIGHT || x == UP || x == DOWN)
 #endif

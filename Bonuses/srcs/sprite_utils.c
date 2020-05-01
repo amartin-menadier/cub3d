@@ -12,30 +12,44 @@
 
 #include "cub3d.h"
 
-	t_dbl
-rotate_point(double angle, t_dbl *ctr_ptr, t_dbl *old_ptr)
+	int
+sprite_player_same_cell(t_set *set, int i)
 {
-	t_dbl	new;
-	t_dbl	ctr;
-	t_dbl	old;
+	t_int	spr;
+	t_int	player;
 
-	if (ctr_ptr == NULL)
-	{
-		ctr.x = 0;
-		ctr.y = 0;
-	}
+	spr.x = (int)set->spr[i].x;
+	spr.y = (int)set->spr[i].y;
+	player.x = (int)set->pos.x;
+	player.y = (int)set->pos.y;
+
+	if (spr.x == player.x && spr.y == player.y)
+		return (1);
 	else
-		ctr = *ctr_ptr;
-	if (old_ptr == NULL)
-	{
-		old.x = 1;
-		old.y = 0;
-	}
-	else
-		old = *old_ptr;
-	new.x = ctr.x;
-	new.x += (cos(angle) * (old.x - ctr.x) - sin(angle) * (old.y - ctr.y));
-	new.y = ctr.y;
-	new.y += (sin(angle) * (old.x - ctr.x) + cos(angle) * (old.y - ctr.y));
-	return (new);
+		return (0);
+}
+
+	int
+get_sprite_y(t_data *data, t_img img, int scr_y, int height_on_scr)
+{
+	int		spr_pxl_y;
+	int		spr_height;
+	int		step;
+	
+	spr_height= img.size.y;
+	step = scr_y - data->set.win_size.y / 2 + height_on_scr / 2;
+	spr_pxl_y = ((step * spr_height) / height_on_scr);
+	return (spr_pxl_y);
+}
+
+	int
+get_sprite_x(t_img img, int scr_x, int width_on_scr, double center_x)
+{
+	int		spr_pxl_x;
+	int		spr_width;
+
+	spr_width = img.size.x;
+	spr_pxl_x = (int)(256 * fabs(scr_x - (- width_on_scr / 2 
+					+ center_x)) * spr_width / width_on_scr) / 256;
+	return (spr_pxl_x);
 }

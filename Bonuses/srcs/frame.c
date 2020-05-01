@@ -50,25 +50,6 @@ get_skybox_face(t_piclib *piclib, t_dbl ray)
 	return (face);
 }
 
-	int
-get_error_color(int x, int y, t_int size)
-{
-	if (x >= size.x && y >= size.y)
-		return (GREEN);
-	else if (x < 0 && y < 0)
-		return (WHITE);
-	else if (x >= size.x)
-		return (RED);
-	else if (y >= size.y)
-		return (DARK_GREY);
-	else if (x < 0)
-		return (ORANGE);
-	else if (y < 0)
-		return (GREY);
-	else
-		return (0);
-}
-
 	t_int
 get_skybox_pixel(t_int win_size, int scr_y, t_dbl ray, t_img face)
 {
@@ -112,8 +93,7 @@ draw_skybox_column(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
 	while (scr.y < draw_end)
 	{
 		face_pxl = get_skybox_pixel(data->set.win_size, scr.y, ray, face);
-		if (!(color = get_error_color(face_pxl.x, face_pxl.y, face.size)))
-			color = face.colors[face_pxl.y * face.size.x + face_pxl.x];
+		color = get_img_color(face, face_pxl.x, face_pxl.y, face.size);
 		put_pixel(&data->scr, scr, color);
 		scr.y++;
 	}
@@ -230,8 +210,7 @@ draw_wall_column(t_data *data, t_int scr, t_dbl ray, double perp_wall_dist)
 	while (scr.y < draw_end)
 	{
 		wall_pxl.y = get_wall_y(data, wall, scr, perp_wall_dist);
-		if (!(color = get_error_color(wall_pxl.x, wall_pxl.y, wall.size)))
-			color = wall.colors[wall_pxl.y * wall.size.x + wall_pxl.x];
+		color = get_img_color(wall, wall_pxl.x, wall_pxl.y, wall.size);
 		put_pixel(&data->scr, scr, color);
 		scr.y++;
 	}
@@ -410,7 +389,7 @@ render_next_frame(t_data *data)
 {
 	if (data->set.life > 0 && data->set.frame_done == 0)
 	{
-		set_floor(data, &data->set, &data->floor);//skybox
+		draw_floor_and_sky(data, data->set.angle, data->set.win_size);
 		ray_cast(data, data->set.win_size, data->skybox);
 		draw_sprites(data, data->piclib, &data->set);
 		draw_interface(data, &data->piclib, &data->set);

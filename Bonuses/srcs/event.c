@@ -13,35 +13,38 @@
 #include "cub3d.h"
 
 	void
-get_dir_and_plane(t_set *set)
+sprite_hit(t_data *data)
 {
-	double	plane_angle;
-
-	if (set->angle < (PI / 2))
-		plane_angle = set->angle + 3 * PI / 2;
-	else
-		plane_angle = set->angle - PI / 2;
-	set->dir.x = cos(set->angle);
-	set->dir.y = sin(set->angle);
+	t_int	pos;
+	char	case_value;
+	
+	pos.x = (int)data->set.pos.x;
+	pos.y = (int)data->set.pos.y;
+	case_value = data->set.map[pos.y][pos.x];
+	if (case_value == '3' && data->set.life == 100)
+		return;
+	if (case_value == '2')
+		data->set.life -= 19;
+	if (data->set.life <= 0)
+		game_over(data);
+	if (case_value == '3')
+		data->set.life += 20;
+	if (data->set.life > 100)
+		data->set.life = 100;
+	data->set.map[pos.y][pos.x] = '0';
+	data->set.spr_count--;
+	free(data->set.spr);
+	data->set.spr = NULL;
+	get_sprites_data(data, &data->set, data->set.map);
 }
 
-
 	void
-look_left(t_set *set)
+look(double *angle, int key)
 {
-	set->angle += ROT_SPEED;
-	if (set->angle >= (2 * PI))
-		set->angle -= (2 * PI);
-	get_dir_and_plane(set);
-}
-
-	void
-look_right(t_set *set)
-{
-	set->angle -= ROT_SPEED;
-	if (set->angle < 0)
-		set->angle += (2 * PI);
-	get_dir_and_plane(set);
+	if (key == LEFT)
+		*angle += ROT_SPEED;
+	if (key == RIGHT)
+		*angle -= ROT_SPEED;
 }
 
 	int
@@ -49,23 +52,15 @@ press_key(int key, t_data *data)
 {
 	if (data->set.life <= 0)
 		return (game_over_answer(data, key));
-	if (key == KEY_P)
+	if (key == P)
 		create_bmp(data, &data->scr, "./screenshots/screenshot");
-	if (key == KEY_ESC)
+	if (key == ESC)
 		close_program(data, "\nSee you next time ! ", "\\o/\n");
-	if (key == KEY_LEFT)
-		look_left(&data->set);
-	if (key == KEY_RIGHT)
-		look_right(&data->set);
-	if (key == KEY_Z)
-		move_forward(&data->set, data->set.map);
-	if (key == KEY_S)
-		move_backward(&data->set, data->set.map);
-	if (key == KEY_D)
-		move_right(&data->set, data->set.map);
-	if (key == KEY_Q)
-		move_left(&data->set, data->set.map);
-	if(data->set.map[(int)data->set.pos.y][(int)data->set.pos.x] > '1')
+	if (LOOK(key))
+		look(&data->set.angle, key);
+	if (MOVE(key))
+		move(&data->set, data->set.map, key);
+	if(data->set.map[(int)data->set.pos.y][(int)data->set.pos.x] > WALL)
 		sprite_hit(data);
 	data->set.frame_done = 0;
 	return(key);

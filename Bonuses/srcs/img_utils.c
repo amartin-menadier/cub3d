@@ -53,6 +53,7 @@ get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 	free(tmp);
 	tmp = NULL;
 }
+
 	void
 put_pixel(t_img *img, t_int pos, int color)
 {

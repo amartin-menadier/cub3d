@@ -1,23 +1,6 @@
 #include "cub3d.h"
 
 	unsigned char
-*int_to_rgb(unsigned char *copy, int color)
-{
-	int	blue;
-	int	green;
-	int	red;
-
-	blue = color % 256;
-	green = ((color - blue) / 256) % 256;
-	red = ((color - blue) / (256 * 256)) - green / 256;
-	copy[0] = (unsigned char)blue;
-	copy[1] = (unsigned char)green;
-	copy[2] = (unsigned char)red;
-	copy[3] = (unsigned char)0;
-	return (copy);
-}
-
-	unsigned char
 *create_bmp_info_header(t_img *scr)
 {
 	static unsigned char	info_header[40];

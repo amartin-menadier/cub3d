@@ -221,7 +221,7 @@ void	print_sprite_list(t_data *data)
 	printf("\n");
 }
 
-
+/*
 void	print_map(t_data *data)
 {
 	int i = - 1;
@@ -283,4 +283,4 @@ void	print_map(t_data *data)
 		printf("<");
 	}
 	printf("\n");
-}
+}*/
