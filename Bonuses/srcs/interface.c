@@ -70,65 +70,6 @@ draw_mask(t_data *data, t_img mask)
 }
 
 	void
-draw_lifebar(t_data *data, int length, int color)
-{
-	t_int	pxl;
-	t_int	draw_start;
-	t_int	draw_end;
-
-	draw_start.x = lifebar_data(data, DRAW_START_X);
-	draw_start.y = lifebar_data(data, DRAW_START_Y);
-	draw_end.x = lifebar_data(data, DRAW_END_X);
-	draw_end.y = lifebar_data(data, DRAW_END_Y);
-	pxl.x = draw_start.x;
-	while (pxl.x <= draw_end.x)
-	{
-		pxl.y = draw_start.y;
-		while (pxl.y <= draw_end.y)
-		{
-			if (pxl.x == draw_start.x || pxl.x == draw_end.x
-				|| pxl.y == draw_start.y || pxl.y == draw_end.y)
-				put_pixel(&data->scr, pxl, BLACK);
-			else if (((pxl.x - draw_start.x) * 100) / (length - 2)
-				<= data->set.life)
-				put_pixel(&data->scr, pxl, color);
-			pxl.y++;
-		}
-		pxl.x++;
-	}
-}
-
-	int
-lifebar_data(t_data *data, int mod)
-{
-	t_int	size;
-
-	size.x = data->set.win_size.x / 3.3;
-	size.y = fmax(minimap_data(data, SIZE_IN_PXL) / MINIMAP_CELLS, 3);
-	if (mod == LENGTH)
-		return (size.x);
-	else if (mod == DRAW_START_X)
-		return (fmax(data->set.win_size.x / 2 - size.x / 2,
-				minimap_data(data, DRAW_END) + minimap_data(data, MARGIN)));
-	else if (mod == DRAW_START_Y)
-		return (minimap_data(data, DRAW_START));
-	else if (mod == DRAW_END_X)
-		return (lifebar_data(data, DRAW_START_X) + size.x);
-	else if (mod == DRAW_END_Y)
-		return (lifebar_data(data, DRAW_START_Y) + size.y);
-	else if (mod == CENTER_X && data->set.life == 100)
-		return ((data->set.win_size.x - 21) / 2);
-	else if (mod == CENTER_X && data->set.life < 10)
-		return ((data->set.win_size.x - 21) / 2 + 7);
-	else if (mod == CENTER_X)
-		return ((data->set.win_size.x - 21) / 2 + 4);
-	else if (mod == CENTER_Y)
-		return (minimap_data(data, DRAW_START) / 2
-				+ lifebar_data(data, DRAW_END_Y) / 2 + 5);
-	return (-9999);
-}
-
-	void
 draw_interface(t_data *data, t_piclib *piclib, t_set *set)
 {
 	int		lifebar_color;

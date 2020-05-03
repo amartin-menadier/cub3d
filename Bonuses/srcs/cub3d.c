@@ -54,7 +54,7 @@ start_game(t_data *data)
 	int
 main(int argc, char **argv)
 {
-	t_data data;
+	t_data	data;
 
 	check_args_errors(&data, argc, argv);
 	start_game(&data);
