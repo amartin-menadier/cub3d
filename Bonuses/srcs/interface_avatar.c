@@ -19,9 +19,9 @@ get_minimap_avatar(t_data *data)
 	char *path;
 
 	avatar = &data->piclib.avatar;
-	if (data->set.life >= 80)
+	if (data->life >= 80)
 		path = ft_strdup("./textures/intellolcut.xpm");
-	else if (data->set.life >= 33)
+	else if (data->life >= 33)
 		path = ft_strdup("./textures/grinmacing.xpm");
 	else
 		path = ft_strdup("./textures/crying.xpm");
@@ -31,19 +31,19 @@ get_minimap_avatar(t_data *data)
 }
 
 	int
-get_avatar_color(t_data *data, t_img avatar, t_dbl minimap_pos, int color)
+get_avatar_color(t_data *data, t_img *avatar, t_dbl minimap_cam, int color)
 {
 	t_int	avat_pxl;
 	t_dbl	dist_from_player;
 
-	dist_from_player.x = minimap_pos.x - data->set.pos.x;
-	dist_from_player.y = minimap_pos.y - data->set.pos.y;
+	dist_from_player.x = minimap_cam.x - data->cam.x;
+	dist_from_player.z = minimap_cam.z - data->cam.z;
 	if (dist_from_player.x < -0.5 || dist_from_player.x >= 0.5
-			|| dist_from_player.y < -0.5 || dist_from_player.y >= 0.5
-			|| hypot(dist_from_player.x, dist_from_player.y) > 0.5)
+			|| dist_from_player.z < -0.5 || dist_from_player.z >= 0.5
+			|| hypot(dist_from_player.x, dist_from_player.z) > 0.5)
 		return (color);
-	avat_pxl.x = (int)((dist_from_player.x + 0.5) * avatar.size.x);
-	avat_pxl.y = (int)((dist_from_player.y + 0.5) * avatar.size.y);
-	color = avatar.colors[(avatar.size.x * avat_pxl.y + avat_pxl.x)];
+	avat_pxl.x = (int)((dist_from_player.x + 0.5) * avatar->size.x);
+	avat_pxl.y = (int)((dist_from_player.z + 0.5) * avatar->size.y);
+	color = img_color(avatar->colors, avat_pxl.x, avat_pxl.y, avatar->size);
 	return (color);
 }

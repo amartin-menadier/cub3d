@@ -44,8 +44,7 @@ check_args_errors(t_data *data, int argc, char **argv)
 start_game(t_data *data)
 {
 	init_all(data);
-	set_game(data, &data->set);
-	hook_event(data);
+	set_game(data);
 	mlx_loop_hook(data->mlx, render_next_frame, data);
 	mlx_loop(data->mlx);
 	return (0);
@@ -58,6 +57,6 @@ main(int argc, char **argv)
 
 	check_args_errors(&data, argc, argv);
 	start_game(&data);
-	mlx_loop(data.mlx);
+//	mlx_loop(data.mlx);
 	return (0);
 }

@@ -13,15 +13,15 @@
 #include "cub3d.h"
 
 	t_img
-get_sprite_image(char **map, t_dbl spr, t_piclib piclib)
+*get_sprite_image(char **map, t_dbl spr, t_piclib *piclib)
 {
 	char	value;
 
-	value = map[(int)spr.y][(int)spr.x];
+	value = map[(int)spr.z][(int)spr.x];
 	if (value == '2')
-		return (piclib.s2);
+		return (&piclib->s2);
 	else
-		return (piclib.s3);
+		return (&piclib->s3);
 }
 
 	void

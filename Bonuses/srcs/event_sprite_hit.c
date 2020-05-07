@@ -12,39 +12,29 @@
 
 #include "cub3d.h"
 
-	int
-img_color(int *colors, int pxl_x, int pxl_y, t_int size)
+	void
+sprite_hit(t_data *data)
 {
-	if (pxl_x >= size.x && pxl_y >= size.y)
-		return (GREY);
-	else if (pxl_x < 0 && pxl_y < 0)
-		return (WHITE);
-	else if (pxl_x >= size.x)
-		return (RED);
-	else if (pxl_y >= size.y)
-		return (DARK_GREY);
-	else if (pxl_x < 0)
-		return (ORANGE);
-	else if (pxl_y < 0)
-		return (GREEN);
-	else
-		return (colors[size.x * pxl_y + pxl_x]);
-}
-
-	unsigned char
-*int_to_rgb(unsigned char *copy, int color)
-{
-	int	blue;
-	int	green;
-	int	red;
-
-	blue = color % 256;
-	green = ((color - blue) / 256) % 256;
-	red = ((color - blue) / (256 * 256)) - green / 256;
-	copy[0] = (unsigned char)blue;
-	copy[1] = (unsigned char)green;
-	copy[2] = (unsigned char)red;
-	copy[3] = (unsigned char)0;
-	return (copy);
+	t_int	cam;
+	char	case_value;
+	
+	cam.x = (int)data->cam.x;
+	cam.z = (int)data->cam.z;
+	case_value = data->map[cam.z][cam.x];
+	if (case_value == HEAL_SPR && data->life == 100)
+		return;
+	if (case_value == DAMAGE_SPR)
+		data->life -= 19;
+	if (data->life <= 0)
+		game_over(data, data->win.size, &data->piclib.game_over);
+	if (case_value == HEAL_SPR)
+		data->life += 20;
+	if (data->life > 100)
+		data->life = 100;
+	data->map[cam.z][cam.x] = EMPTY;
+	data->spr_count--;
+	free(data->spr);
+	data->spr = NULL;
+	get_sprites_in_map(data, data->map);
 }
 

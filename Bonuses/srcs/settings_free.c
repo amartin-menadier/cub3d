@@ -41,7 +41,7 @@ free_piclib(t_data *data, t_piclib *lib)
 }
 
 	void
-free_map(char **map, int ligns_to_free)
+free_map(t_data *data, char **map, int ligns_to_free)
 {
 	int	i;
 
@@ -60,18 +60,23 @@ free_map(char **map, int ligns_to_free)
 		free(map);
 		map = NULL;
 	}
+	if (data)
+	{
+		data->map_size.x = 0;
+		data->map_size.z = 0;
+	}
 }
 
 	void
-free_set(t_set *set)
+free_data(t_data *data)
 {
-	free_map(set->map, set->map_size.y);
-	if (set->spr != NULL)
-		free(set->spr);
-	set->spr = NULL;
-	if (set->z_buffer != NULL)
-		free(set->z_buffer);
-	set->z_buffer = NULL; 
+	free_map(data, data->map, data->map_size.z);
+	if (data->spr != NULL)
+		free(data->spr);
+	data->spr = NULL;
+	if (data->z_buffer != NULL)
+		free(data->z_buffer);
+	data->z_buffer = NULL; 
 }
 
 	void
@@ -80,9 +85,9 @@ free_all(t_data *data)
 	free(data->cub_path);
 	data->cub_path = NULL;
 	data->save = 0;
-	free_set(&data->set);
+	free_data(data);
 	free_piclib(data, &data->piclib);
-	mlx_destroy_image(data->mlx, data->scr.ptr);
-	data->scr.ptr = NULL;
+	mlx_destroy_image(data->mlx, data->win.ptr);
+	data->win.ptr = NULL;
 	mlx_destroy_window(data->mlx, data->window);
 }

@@ -39,32 +39,37 @@ init_piclib(t_piclib *piclib)
 }
 
 	void
-init_set(t_set *set)
+init_data(t_data *data)
 {
-	set->win_size.x = 0;
-	set->win_size.y = 0;
-	set->pos.x = 0;
-	set->pos.y = 0;
-	set->angle = -1;
-	set->map = NULL;
-	set->map_size.x = 1;
-	set->map_size.y = 0;
-	set->spr_count = 0;
-	set->spr = NULL;
-	set->z_buffer = NULL;
-	set->frame_done = 0;
+	data->win.size.x = 0;
+	data->win.size.y = 0;
+	data->cam.x = 0;
+	data->cam.y = - 1;
+	data->cam.z = 0;
+	data->angle.x = -1;
+	data->angle.y = 0;
+	data->map = NULL;
+	data->map_size.x = 1;
+	data->map_size.y = 1;
+	data->map_size.z = 0;
+	data->spr_count = 0;
+	data->spr = NULL;
+	data->z_buffer = NULL;
+	data->time = clock();// a free ?
+	data->current_event = 0;
+	data->frame_done = 0;
 }
 
 	void
 init_all(t_data *data)
 {
-	data->set.life = 100;
+	data->life = 100;
 	data->skybox = 1;
-	if(ft_memcmp(&data->cub_path[ft_strlen(data->cub_path) - 10], "skybox", 6))
+	if (ft_memcmp(&data->cub_path[ft_strlen(data->cub_path) - 10], "skybox", 6))
 		data->skybox = 0;
 	data->mlx = NULL;
 	data->window = NULL;
-	init_image(&data->scr, 0);
-	init_set(&data->set);
+	init_image(&data->win, 0);
+	init_data(data);
 	init_piclib(&data->piclib);
 }

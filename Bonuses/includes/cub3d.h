@@ -8,16 +8,19 @@
 # include <fcntl.h>
 # include <mlx.h>
 # include <math.h>
+# include <time.h>
 # include "../libft/libft.h"
 
 typedef struct	s_dbl{
 	double		x;
 	double		y;
+	double		z;
 }				t_dbl;
 
 typedef struct	s_int{
 	int			x;
 	int			y;
+	int			z;
 }				t_int;
 
 typedef struct  s_img{
@@ -30,19 +33,6 @@ typedef struct  s_img{
 	t_int		size;
 	int			name;
 }               t_img;
-
-typedef struct 	s_set{
-	t_int		win_size;
-	char		**map;
-	t_int		map_size;
-	int			spr_count;
-	t_dbl		*spr;
-	t_dbl		pos;
-	double		angle;
-	double		*z_buffer;
-	int			life;
-	int			frame_done;
-}               t_set;
 
 typedef struct	s_piclib{
 	t_img		ea;
@@ -61,19 +51,26 @@ typedef struct	s_piclib{
 
 typedef struct 	s_data{
 	char*		cub_path;
-	int			save;
-	int			skybox;
 	void		*mlx;
 	void		*window;
-	t_img		scr;
-	t_set		set;
 	t_piclib	piclib;
+	t_img		win;
+	char		**map;
+	t_int		map_size;
+	char		skymap[3][3];
+	double		*z_buffer;
+	t_dbl		*spr;
+	int			spr_count;
+	t_dbl		cam;
+	t_dbl		angle;
+	clock_t		time;
+	int			current_event;
+	int			life;
+	int			save;
+	int			skybox;
+	int			frame_done;
 }               t_data;
 
-	t_dbl
-transform_sprite(double angle, t_dbl dist);
-	double
-sprite_data(t_set *set, t_dbl transform, int mod);
 /*
 ** cub3d.c
 */
@@ -81,207 +78,126 @@ sprite_data(t_set *set, t_dbl transform, int mod);
 close_program(t_data *data, char *error_msg, char *str);
 	int
 start_game(t_data *data);
-	int
-main(int argc, char **argv);
 
 /*
-** bmp.c
-*/
-	void
-create_bmp(t_data *data, t_img *img, char *path);
-
-
-/*
-** color_tools.c
-*/
-	int
-get_img_color(t_img img, int pxl_x, int pxl_y, t_int size);
-	unsigned char
-*int_to_rgb(unsigned char *copy, int color);
-
-/*
-** event.c
+** event.c and family files
 */
 	void
 hook_event(t_data *data);
+	void
+look(t_dbl *angle, int key);
+	void
+move(t_data *data, char **map, t_dbl *pos, int key);
+	void
+jump(t_data *data, clock_t time_diff);
+	void
+kneel(t_data *data, int way);
+	void
+sprite_hit(t_data *data);
+	void
+game_over(t_data *data, t_int win_size, t_img *img);
+	int
+game_over_answer(t_data *data, int key);
 
 /*
-** free.c
-*/
-	void
-free_image(t_data *data, t_img *img);
-	void
-free_all(t_data *data);
-	void
-free_map(char **map, int ligns_to_free);
-	void
-free_set(t_set *set);
-
-/*
-** frame.c
+** frame.c and family files
 */
 	int
 render_next_frame(t_data *data);
+	int
+set_drawing_limit(t_data *data, double perp_wall_dist, int mod);
 	double
 perform_DDA(t_data *data, t_dbl pos, t_dbl ray, int mod);
-	int
-set_drawing_limit(t_int win_size, double perp_wall_dist, int mod);
+	void
+draw_wall_column(t_data *data, t_int *pxl, t_dbl ray, double perp_wall_dist);
+	void
+draw_skybox_column(t_data *data, t_int *pxl, t_dbl ray, double perp_wall_dist);
+	void
+draw_floor_and_sky(t_data *data, t_dbl angle, t_int win_size);
+	void
+draw_sprites(t_data *data, t_piclib *lib);
 
 /*
-** img.c
-*/
-	t_img
-get_sprite_image(char **map, t_dbl spr, t_piclib lib);
-	void
-get_image_path(t_data *data, t_piclib *lib, char *line, char *texture);
-	void
-put_pixel(t_img *img, t_int pos, int color);
-	void
-create_img(t_data *data, char *path, t_img *img);
-
-
-
-/*
-** init.c
+** interface.c and family files
 */
 	void
-init_image(t_img *img, int name);
+draw_interface(t_data *data, t_piclib *piclib);
 	void
-init_piclib(t_piclib *piclib);
+draw_life_string(t_data *data);
 	void
-init_set(t_set *set);
+draw_minimap(t_data *data, t_int center, double radius);
 	void
-set_game(t_data *data, t_set *set);
-	void
-init_all(t_data *data);
-
-/*
-** interface.c
-*/
-	void
-draw_interface(t_data *data, t_piclib*piclib, t_set *set);
-
-/*
-** map.c
-*/
-
-	int
-check_map_errors(t_data *data, t_set *set);
-	void
-check_cell_neighbors(t_data *data, t_set *set, int i, int j);
-	void
-get_map(t_data *data, char *line, int i, t_set *set);
-
-/*
- ** move.c
-*/
-	void
-move(t_set *set, char **map, int key);
-
-/*
-** parsing.c
-*/
-	void
-get_sprites_data(t_data *data, t_set *set, char **map);
-	void
-parse_cub_file(t_data *data);
-
-/*
-** resolution.c
-*/
-	void
-get_resolution(t_data *data, char *line, t_set *set);
-
-/*
- * set_game.c
- */
-	void
-get_dir_and_plane(t_set *set);
-
-
-/*
-** skybox.c
-*/
-	void
-create_skybox(t_data *data, t_piclib *piclib, t_img *skybox);
-
-/*
-** sprites.c and sprite_utils.c
-*/
-	void
-draw_sprites(t_data *data, t_piclib lib, t_set *set);
-	int
-sprite_player_same_cell(t_set *set, int i);
-	int
-get_sprite_x(t_img img, int scr_x, int width_on_screen, double center_x);
-	int
-get_sprite_y(t_data *data, t_img img, int scr_y, int height_on_scr);
-/*
-** textures.c
-*/
-
-/*
- * math_utils.c
-*/
-	double
-dist(t_dbl pos, t_dbl obj);
-	t_dbl
-rotate_point(double angle, t_dbl *ctr, t_dbl *old);
-
-/*
-** BONUSES
-*/
-
-/*
-** game.c
-*/
-	int
-game_over_answer(t_data *data, int key);
-	void
-game_over(t_data *data);
-
-/*
-** life_bar.c
-*/
-	void
-sprite_hit(t_data *data);
+draw_lifebar(t_data *data, int length, int color);
 	int
 lifebar_data(t_data *data, int mod);
-
-/*
-** minimap.c
-*/
 	void
 get_minimap_avatar(t_data *data);
 	double
 minimap_data(t_data *data, int mod);
 	void
-draw_minimap(t_data *data, t_int center, double radius);
-	void
 get_minimap_avatar(t_data *data);
 	int
-get_avatar_color(t_data *data, t_img avatar, t_dbl minimap_pos, int color);
+get_avatar_color(t_data *data, t_img *avatar, t_dbl minimap_pos, int color);
 
 /*
-** floor.c
+** settings.c and family files
 */
 	void
-draw_floor_and_sky(t_data *data,
-double angle, t_int win_size);
+free_all(t_data *data);
+	void
+free_data(t_data *data);
+	void
+free_map(t_data *data, char **map, int ligns_to_free);
+	void
+free_image(t_data *data, t_img *img);
+	t_dbl
+get_first_angle(char c);
+	void
+parse_cub_file(t_data *data);
+	void
+init_all(t_data *data);
+	void
+set_game(t_data *data);
+	void
+get_sprites_in_map(t_data *data, char **map);
+	double
+sprite_data(t_data *data, t_dbl transform, t_int win, int mod);
+	void
+sort_sprites(t_dbl pos, t_dbl *spr, int spr_count);
+	int
+sprite_player_same_cell(t_data *data, int i);
+	t_img
+*get_sprite_image(char **map, t_dbl spr, t_piclib *lib);
+	void
+create_skybox(t_data *data, t_piclib *piclib, t_img *skybox);
+	void
+check_cell_neighbors(t_data *data, int i, int j);
+	void
+get_resolution(t_data *data, char *line);
+	int
+check_map_errors(t_data *data);
+	void
+get_map(t_data *data, char *line, int i);
 
 /*
-** print.c (not evaluated)
+** tools.c and family files
 */
-void	print_life_bar_data(t_data *data);
-void	print_minimap_data(t_data *data);
-void	print_set(t_data *data);
-void	print_situation(t_data *data);
-void	print_ray(t_data *data);
-void	print_sprite_list(t_data *data);
-void	print_z_buffer(t_data *data);
-void	print_map(t_data *data);
-void	print_image(t_data *data);
-void	print_current_sprite_data(t_data *data);
+	void
+create_bmp(t_data *data, t_img *img, char *path);
+	void
+put_pixel(t_img *img, t_int pos, int color);
+	void
+create_img(t_data *data, char *path, t_img *img);
+	int
+img_color(int *colors, int pxl_x, int pxl_y, t_int size);
+	t_dbl
+rotate_point(double angle, t_dbl *ctr, t_dbl *old);
+	void
+get_image_path(t_data *data, t_piclib *lib, char *line, char *texture);
+	double
+dist(t_dbl obj1, t_dbl obj2);
+	unsigned char
+*int_to_rgb(unsigned char *copy, int color);
 
 /*
 ** SOME GAME VARIABLES AND MODS
@@ -290,8 +206,16 @@ void	print_current_sprite_data(t_data *data);
 #define MINIMAP_CELLS 9.000000
 #define ROT_SPEED 0.39269908169872
 #define MOVE_SPEED 0.51
+#define LOOK_SPEED 50
+//#define JUMP_SPEED 40
 #define PLAYER_SIZE 1.00
+#define EMPTY 48
 #define WALL 49
+#define DAMAGE_SPR 50
+#define HEAL_SPR 51
+#define JUMP 49
+#define KNEEL 9
+#define UNKNEEL 90
 #define EA 0
 #define SO 1
 #define WE 2
@@ -341,7 +265,7 @@ void	print_current_sprite_data(t_data *data);
 # define ORANGE 0xff8800
 # define GREY 0x9e9e9e
 # define DARK_GREY 0x2e2e2e
-
+//# define ERROR(x) (x == )
 /*
 ** KEY VALUES
 */
@@ -349,14 +273,16 @@ void	print_current_sprite_data(t_data *data);
 # define Q 0
 # define S 1
 # define D 2
-# define MOVE(x) (x == Z || x == Q || x == S || x == D)
+# define V 9
+# define SPACE 49
+# define MOVE(x) (x == Z || x == Q || x == S || x == D || x == SPACE || x == V)
 # define N 45
 # define P 35
 # define Y 16
 # define ESC 53
 # define LEFT 123
 # define RIGHT 124
-# define UP -99999
-# define DOWN -9999
-# define LOOK(x) (x == LEFT || x == RIGHT || x == UP || x == DOWN)
+# define DOWN 125
+# define UP 126
+# define LOOK(x) (x == LEFT || x == RIGHT || x == DOWN || x == UP)
 #endif

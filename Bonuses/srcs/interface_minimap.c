@@ -21,7 +21,7 @@ minimap_data(t_data *data, int mod)
 	int		margin;
 
 	ret = 0;
-	size_in_pxl = fmin(data->set.win_size.y / 3, data->set.win_size.x / 4);
+	size_in_pxl = fmin(data->win.size.y / 3, data->win.size.x / 4);
 	cell_size = size_in_pxl / MINIMAP_CELLS;
 	size_in_pxl = cell_size * MINIMAP_CELLS;
 	margin = fmax(cell_size / 8, 1);
@@ -41,7 +41,7 @@ minimap_data(t_data *data, int mod)
 }
 
 	t_dbl
-get_minimap_cell(t_data *data, t_int scr, t_dbl pos)
+get_minimap_cell(t_data *data, t_int pxl, t_dbl *cam)
 {
 	t_dbl	cell;
 	double	first_cell;
@@ -49,78 +49,78 @@ get_minimap_cell(t_data *data, t_int scr, t_dbl pos)
 	t_dbl	*cell_ptr;
 
 	cell_ptr = &cell;
-	first_cell = pos.x - (MINIMAP_CELLS) / 2.0;
-	step = minimap_data(data, DRAW_END) - scr.x;
+	first_cell = cam->x - (MINIMAP_CELLS) / 2.0;
+	step = minimap_data(data, DRAW_END) - pxl.x;
 	cell.x = first_cell + step / minimap_data(data, CELL_SIZE);
-	first_cell = pos.y - (MINIMAP_CELLS) / 2.0;
-	step = (scr.y - minimap_data(data, DRAW_START));
-	cell.y = first_cell + step / minimap_data(data, CELL_SIZE);
-	if (fabs(cell.x - pos.x) > 0.5
-			|| fabs(cell.y - pos.y) > 0.5
-			|| hypot((cell.x - pos.x), (cell.y - pos.y)) > 0.5)
-		cell = rotate_point(data->set.angle + PI / 2, &data->set.pos, cell_ptr);
+	first_cell = cam->z - (MINIMAP_CELLS) / 2.0;
+	step = (pxl.y - minimap_data(data, DRAW_START));
+	cell.z = first_cell + step / minimap_data(data, CELL_SIZE);
+	if (fabs(cell.x - cam->x) > 0.5
+			|| fabs(cell.z - cam->z) > 0.5
+			|| hypot((cell.x - cam->x), (cell.z - cam->z)) > 0.5)
+		cell = rotate_point(data->angle.x + PI / 2, cam, cell_ptr);
 	return (cell);
 }
 
 	int
-get_minimap_color(t_data *data, t_int scr, double perimeter_dist)
+get_minimap_color(t_data *data, t_int pxl, double perimeter_dist)
 {
 	int		color;
 	char	value;
 	t_dbl	cell;
 
-	cell = get_minimap_cell(data, scr, data->set.pos);
-	if (cell.x >= data->set.map_size.x
-			|| cell.y >= data->set.map_size.y
-			|| cell.x < 0 || cell.y < 0)
+	cell = get_minimap_cell(data, pxl, &data->cam);
+	if (cell.x >= data->map_size.x
+			|| cell.z >= data->map_size.z
+			|| cell.x < 0 || cell.z < 0)
 		value = (char)NULL;
 	else
-		value = data->set.map[(int)cell.y][(int)cell.x];
+		value = data->map[(int)cell.z][(int)cell.x];
 	if (value == ' ' || value == (char)NULL)
 		color = GREY;
 	if (value == '0' || value >= '2' || data->skybox)
 		color = WHITE;
 	if ((value == '1' && !data->skybox) || perimeter_dist <= 2)
 		color = BLACK;
-	color = get_avatar_color(data, data->piclib.avatar, cell, color);
+	color = get_avatar_color(data, &data->piclib.avatar, cell, color);
 	return (color);
 }
 
 	void
-draw_minimap_column(t_data *data, t_int scr, t_int center, double radius)
+draw_minimap_column(t_data *data, t_int pxl, t_int center, double radius)
 {
 	double	ctr_dist;
 	int		color;
 	double	perimeter_dist;
 
-	ctr_dist = hypot(scr.x - center.x, scr.y - center.y);
+	ctr_dist = hypot(pxl.x - center.x, pxl.y - center.y);
 	perimeter_dist = radius - ctr_dist;
 	if (ctr_dist > radius)
 		return ;
-	color = get_minimap_color(data, scr, perimeter_dist);
+	color = get_minimap_color(data, pxl, perimeter_dist);
 	if (color != GREY)
-		put_pixel(&data->scr, scr, color);
+		put_pixel(&data->win, pxl, color);
 }
 
 	void
 draw_minimap(t_data *data, t_int center, double radius)
 {
-	t_int	scr;
+	t_int	pxl;
 	int		draw_start;
 	int		draw_end;
 
 	draw_start = minimap_data(data, DRAW_START);
 	draw_end = minimap_data(data, DRAW_END);
-	scr.x = draw_start;
-	while (scr.x < draw_end)
+	pxl.x = draw_start;
+	while (pxl.x < draw_end)
 	{
-		scr.y = draw_start;
-		while (scr.y < draw_end)
+		pxl.y = draw_start;
+		while (pxl.y < draw_end)
 		{
-			draw_minimap_column(data, scr, center, radius);
-			scr.y++;
+			draw_minimap_column(data, pxl, center, radius);
+			pxl.y++;
 		}
-		scr.x++;
+		pxl.x++;
 	}
 }
 

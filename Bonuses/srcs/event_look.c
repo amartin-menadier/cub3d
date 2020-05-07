@@ -12,39 +12,19 @@
 
 #include "cub3d.h"
 
-	int
-img_color(int *colors, int pxl_x, int pxl_y, t_int size)
+	void
+look(t_dbl *angle, int key)
 {
-	if (pxl_x >= size.x && pxl_y >= size.y)
-		return (GREY);
-	else if (pxl_x < 0 && pxl_y < 0)
-		return (WHITE);
-	else if (pxl_x >= size.x)
-		return (RED);
-	else if (pxl_y >= size.y)
-		return (DARK_GREY);
-	else if (pxl_x < 0)
-		return (ORANGE);
-	else if (pxl_y < 0)
-		return (GREEN);
-	else
-		return (colors[size.x * pxl_y + pxl_x]);
+	if (key == LEFT)
+		angle->x += ROT_SPEED;
+	if (key == RIGHT)
+		angle->x -= ROT_SPEED;
+	if (key == DOWN)
+		angle->y -= ROT_SPEED / 2;
+	if (key == UP)
+		angle->y += ROT_SPEED / 2;
+	if (angle->y > PI / 2)
+		angle->y = PI / 2;
+	if (angle->y < - PI / 2)
+		angle->y = - PI / 2;
 }
-
-	unsigned char
-*int_to_rgb(unsigned char *copy, int color)
-{
-	int	blue;
-	int	green;
-	int	red;
-
-	blue = color % 256;
-	green = ((color - blue) / 256) % 256;
-	red = ((color - blue) / (256 * 256)) - green / 256;
-	copy[0] = (unsigned char)blue;
-	copy[1] = (unsigned char)green;
-	copy[2] = (unsigned char)red;
-	copy[3] = (unsigned char)0;
-	return (copy);
-}
-

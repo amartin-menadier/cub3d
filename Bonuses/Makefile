@@ -12,7 +12,15 @@
 
 NAME			= Cub3D
 
-SRCS1			= sprites.c sprite_utils.c floor.c bmp.c color_tools.c cub3d.c event.c frame.c free.c game.c img_utils.c init.c interface.c map.c minimap.c minimap_avatar.c move.c parsing.c print.c resolution.c set_game.c skybox.c  math_utils.c
+SRCS1			= cub3d.c \
+event.c event_game_over.c event_kneel_jump.c event_move.c event_sprite_hit.c\
+event_look.c \
+frame_DDA.c frame_floor_and_sky.c frame_raycasting.c frame_skybox.c \
+frame_sprites.c frame_walls.c \
+interface.c interface_avatar.c interface_lifebar.c interface_minimap.c \
+settings.c settings_free.c settings_images.c settings_init.c settings_map.c \
+settings_parsing.c settings_resolution.c settings_skybox.c settings_sprites.c \
+tools_bmp.c tools_colors.c tools_maths.c \
 
 SRCS			= $(addprefix $(SRCS_DIR), $(SRCS1))
 OBJS			= $(addprefix $(OBJS_DIR), $(SRCS1:.c=.o))

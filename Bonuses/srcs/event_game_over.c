@@ -32,56 +32,55 @@ game_over_answer(t_data *data, int key)
 }
 
 	void
-draw_game_over(t_data *data, t_int pxl, t_int draw_start)
+draw_game_over(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
 {
-	t_int		g_o_pxl;
+	t_int		img_pxl;
 	t_dbl		step;
-	t_int		win;
+	t_int		size;
+	int			color;
+	t_img		img;
 
-	win.x = data->set.win_size.x;
-	win.y = data->set.win_size.y;
-	if ((step.x = ((double)data->piclib.game_over.size.x / (double)win.x)) < 1)
+	size = data->win.size;
+	img = data->piclib.game_over;
+	if ((step.x = ((double)data->piclib.game_over.size.x / (double)size.x)) < 1)
 		step.x = 1;
-	if ((step.y = ((double)data->piclib.game_over.size.y / (double)win.y)) < 1)
-		step.y = 1;
-	g_o_pxl.x = (int)((pxl.x - draw_start.x) * step.x);
-	g_o_pxl.y = (int)((pxl.y - draw_start.y) * step.y);
-	put_pixel(&data->scr, pxl, data->piclib.game_over.colors
-				[(data->piclib.game_over.size.x * g_o_pxl.y + g_o_pxl.x)]);
+	if ((step.z = ((double)data->piclib.game_over.size.y / (double)size.y)) < 1)
+		step.z = 1;
+	img_pxl.x = (int)((pxl.x - draw_start.x) * step.x);
+	img_pxl.y = (int)((pxl.y - draw_start.y) * step.z);
+	if ((pxl.x < draw_start.x || pxl.x > draw_end.x) 
+			|| (pxl.y < draw_start.y || pxl.y > draw_end.y))
+		color = BLACK;
+	else
+		color = img.colors[img.size.x * img_pxl.y + img_pxl.x];
+	put_pixel(&data->win, pxl, color); 
 }
 
 	void
-game_over(t_data *data)
+game_over(t_data *data, t_int win_size, t_img *img)
 {
 	t_int	pxl;
-	t_int	win;
 	t_int	draw_start;
 	t_int	draw_end;
 
-	create_img(data, "./textures/gameover.xpm", &data->piclib.game_over);
-	win.x = data->set.win_size.x;
-	win.y = data->set.win_size.y;
-	if ((draw_start.x = (win.x - data->piclib.game_over.size.x) / 2) <= 0)
+	if ((draw_start.x = (win_size.x - img->size.x) / 2) <= 0)
 		draw_start.x = 0;
-	if ((draw_start.y = (win.y - data->piclib.game_over.size.y) / 2) <= 0)
+	if ((draw_start.y = (win_size.y - img->size.y) / 2) <= 0)
 		draw_start.y = 0;
-	draw_end.x = win.x - draw_start.x;
-	draw_end.y = win.y - draw_start.y;
+	draw_end.x = win_size.x - draw_start.x;
+	draw_end.y = win_size.y - draw_start.y;
 	pxl.x = 0;
-	while (pxl.x < win.x)
+	while (pxl.x < win_size.x)
 	{
 		pxl.y = 0;
-		while (pxl.y < win.y)
+		while (pxl.y < win_size.y)
 		{
-			if ((pxl.x < draw_start.x || pxl.x > draw_end.x) 
-					|| (pxl.y < draw_start.y || pxl.y > draw_end.y))
-				put_pixel(&data->scr, pxl, BLACK);
-			else
-				draw_game_over(data, pxl, draw_start);
+			draw_game_over(data, pxl, draw_start, draw_end);
 			pxl.y++;
 		}
 		pxl.x++;
 	}
-	mlx_put_image_to_window(data->mlx, data->window, data->scr.ptr, 0, 0);
-	mlx_string_put(data->mlx, data->window, (win.x / 2) - 119, 9 * win.y / 10, WHITE, "DO YOU WANT TO TRY AGAIN ? (Y / N)");
+	mlx_put_image_to_window(data->mlx, data->window, data->win.ptr, 0, 0);
+	mlx_string_put(data->mlx, data->window, (win_size.x / 2) - 119,
+			9 * win_size.y / 10, WHITE, "DO YOU WANT TO TRY AGAIN ? (Y / N)");
 }

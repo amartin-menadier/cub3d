@@ -13,11 +13,11 @@
 #include "cub3d.h"
 
 	double
-dist(t_dbl pos, t_dbl obj)
+dist(t_dbl obj1, t_dbl obj2)
 {
 	double	dist;
 
-	dist = hypot((pos.x - obj.x), (pos.y - obj.y));
+	dist = hypot((obj1.x - obj2.x), (obj1.z - obj2.z));
 	return (dist);
 }
 
@@ -31,20 +31,20 @@ rotate_point(double angle, t_dbl *ctr_ptr, t_dbl *old_ptr)
 	if (ctr_ptr == NULL)
 	{
 		ctr.x = 0;
-		ctr.y = 0;
+		ctr.z = 0;
 	}
 	else
 		ctr = *ctr_ptr;
 	if (old_ptr == NULL)
 	{
 		old.x = 1;
-		old.y = 0;
+		old.z = 0;
 	}
 	else
 		old = *old_ptr;
 	new.x = ctr.x;
-	new.x += (cos(angle) * (old.x - ctr.x) - sin(angle) * (old.y - ctr.y));
-	new.y = ctr.y;
-	new.y += (sin(angle) * (old.x - ctr.x) + cos(angle) * (old.y - ctr.y));
+	new.x += (cos(angle) * (old.x - ctr.x) - sin(angle) * (old.z - ctr.z));
+	new.z = ctr.z;
+	new.z += (sin(angle) * (old.x - ctr.x) + cos(angle) * (old.z - ctr.z));
 	return (new);
 }
