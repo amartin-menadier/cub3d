@@ -23,6 +23,18 @@ typedef struct	s_int{
 	int			z;
 }				t_int;
 
+/*
+** The struct img is used for each img the game uses ;
+** ptr is the pointer to this img. It is created by the minilibx;
+** bpp, line_length and endian are also mlx variables ;
+** bpp means bits per pixels ; usually 32 with mlx functions ;
+** colors stores the color for each pixel of an img. Ex : the color of pixel with coordinates (5 ; 7) will be colors[7 * img width + 5];
+** size.x is the img width;
+** size.y is the img height;
+** name is used in some functions to determinate which img to pick;
+
+*/
+
 typedef struct  s_img{
 	void		*ptr;
 	char		*path;
@@ -33,6 +45,10 @@ typedef struct  s_img{
 	t_int		size;
 	int			name;
 }               t_img;
+
+/*
+** piclib is simply a library of all imgs used for the game;
+*/
 
 typedef struct	s_piclib{
 	t_img		ea;
@@ -49,6 +65,22 @@ typedef struct	s_piclib{
 	t_img		mask;
 }				t_piclib;
 
+/*
+** DATA STRUCTURE :
+** mlx is a pointer to the whole mlx process ;
+** window is a pointer to the created window ;
+** win is the main img seen on screen ;
+** Regarding map_size, (map_)height in tutorial is map_size.z here because the player travels depths not heights ; map_size.y is therefore the size of a wall, so the size of a cub side so 1. This choice is to match x, y and z of the cam variable ;
+** z_buffer stores the size in pxl for the wall shown for each column of pixels of the current frame ;
+** cam gives the position of the player / camera. x and are its position on the map. y is the height of the cam /eyes. This changes when certain types of events are called ;
+** To understand the variable angle (unit : radians), one has to understand the trigonometric circle. See : https://fr.wikipedia.org/wiki/Cercle_trigonom%C3%A9trique#/media/Fichier:Unit_circle_angles_color.svg ;
+** angle.x gives the cardinal point the cam is aiming at. Ex : for angle = 0, the player is looking east, for angle = PI / 2, the player looks north ;
+** angle.y is the vertical view of the player. 0 for a look parallel to the floor. + to look up, - to look down ;
+** angle.z makes no sense and is unused ;
+** current_event stores the event happeningwhich started at the stored variable time ;
+** save, skybox and frame_done are booleansused to know if the corresponding events are activated ,
+*/
+
 typedef struct 	s_data{
 	char*		cub_path;
 	void		*mlx;
@@ -57,17 +89,17 @@ typedef struct 	s_data{
 	t_img		win;
 	char		**map;
 	t_int		map_size;
-	char		skymap[3][3];
+	char		skybox[3][3];
 	double		*z_buffer;
 	t_dbl		*spr;
 	int			spr_count;
 	t_dbl		cam;
 	t_dbl		angle;
-	clock_t		time;
 	int			current_event;
+	clock_t		time;
 	int			life;
 	int			save;
-	int			skybox;
+//	int			skybox;
 	int			frame_done;
 }               t_data;
 
@@ -104,14 +136,24 @@ game_over_answer(t_data *data, int key);
 */
 	int
 render_next_frame(t_data *data);
-	int
-set_drawing_limit(t_data *data, double perp_wall_dist, int mod);
 	double
-perform_DDA(t_data *data, t_dbl pos, t_dbl ray, int mod);
+ray_orientation(t_dbl ray);
+	t_dbl
+get_side_dist(t_data *data, t_dbl cam, t_dbl ray);
+	int
+drawing_limit(t_data *data, double perp_wall_dist, int mod);
+	t_dbl
+set_ray(t_data *data, t_int win_size);
+	t_dbl
+ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod);
+	double
+wall_side(t_data *data, t_dbl ray);
+	double
+perp_wall_dist(t_data *data, t_dbl cam, t_dbl ray);
 	void
-draw_wall_column(t_data *data, t_int *pxl, t_dbl ray, double perp_wall_dist);
+draw_walls(t_data *data, t_int *win_size);
 	void
-draw_skybox_column(t_data *data, t_int *pxl, t_dbl ray, double perp_wall_dist);
+draw_skybox(t_data *data, t_int *win_size);
 	void
 draw_floor_and_sky(t_data *data, t_dbl angle, t_int win_size);
 	void
@@ -198,16 +240,19 @@ get_image_path(t_data *data, t_piclib *lib, char *line, char *texture);
 dist(t_dbl obj1, t_dbl obj2);
 	unsigned char
 *int_to_rgb(unsigned char *copy, int color);
+	double
+square(double nb);
+
+#define PI 3.14159265358979323846
 
 /*
 ** SOME GAME VARIABLES AND MODS
-** ROT_SPEED = 0.39 = PI/8 soit un 1 seizieme de tour de cercle
+** ROT_SPEED = 0.39 = PI/8/ That is one sixteenth of a circle perimeter ;
 */
 #define MINIMAP_CELLS 9.000000
 #define ROT_SPEED 0.39269908169872
 #define MOVE_SPEED 0.51
 #define LOOK_SPEED 50
-//#define JUMP_SPEED 40
 #define PLAYER_SIZE 1.00
 #define EMPTY 48
 #define WALL 49
@@ -250,12 +295,7 @@ dist(t_dbl obj1, t_dbl obj2);
 #define SCREEN_X 50
 
 /*
-** PI
-*/
-#define PI 3.14159265358979323846
-
-/*
-** COLORS
+** SOME COLORS
 */
 # define BLACK 0x000000
 # define WHITE 0xffffff
@@ -266,6 +306,7 @@ dist(t_dbl obj1, t_dbl obj2);
 # define GREY 0x9e9e9e
 # define DARK_GREY 0x2e2e2e
 //# define ERROR(x) (x == )
+
 /*
 ** KEY VALUES
 */

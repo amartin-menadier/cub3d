@@ -53,7 +53,13 @@ deal_current_event(t_data *data)
 {
 	clock_t time_diff;
 
-	time_diff = clock () - data->time;
+	if (!data->current_event)
+	{
+		data->cam.y = data->win.size.y / 2;
+		return ;
+	}
+	else
+		time_diff = clock () - data->time;
 	if (data->current_event == KNEEL)
 		kneel(data, 1);
 	else if (data->current_event == UNKNEEL)
@@ -62,8 +68,6 @@ deal_current_event(t_data *data)
 		jump(data, time_diff);
 	else if (data->current_event == JUMP)
 		data->current_event = 0;
-	else
-		data->cam.y = data->win.size.y / 2;
 }
 
 	void

@@ -53,9 +53,11 @@ move(t_data *data, char **map, t_dbl *cam, int key)
 {
 	t_dbl	dir;
 
-	data->time = clock();
 	if (key == SPACE && data->current_event != KNEEL)
+	{
+		data->time = clock();
 		data->current_event = JUMP;
+	}
 	if (key == V && data->current_event != JUMP)// a modifier
 		data->current_event = KNEEL;
 	dir.x = cos(data->angle.x);

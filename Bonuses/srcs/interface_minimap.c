@@ -78,9 +78,9 @@ get_minimap_color(t_data *data, t_int pxl, double perimeter_dist)
 		value = data->map[(int)cell.z][(int)cell.x];
 	if (value == ' ' || value == (char)NULL)
 		color = GREY;
-	if (value == '0' || value >= '2' || data->skybox)
+	if (value == '0' || value >= '2' || data->skybox[0][0])
 		color = WHITE;
-	if ((value == '1' && !data->skybox) || perimeter_dist <= 2)
+	if ((value == '1' && !data->skybox[0][0]) || perimeter_dist <= 2)
 		color = BLACK;
 	color = get_avatar_color(data, &data->piclib.avatar, cell, color);
 	return (color);

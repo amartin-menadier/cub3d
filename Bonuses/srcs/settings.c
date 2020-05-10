@@ -17,7 +17,7 @@ get_first_angle(char c)
 {
 	t_dbl	angle;
 
-	angle.z = 0;
+	angle.y = 0;
 	if (c == 'E')
 		angle.x = 0;
 	if (c == 'N')
@@ -44,7 +44,7 @@ create_piclib(t_data *data, t_piclib *piclib)
 	create_img(data, "./textures/intellolcut.xpm", &piclib->avatar);
 	create_img(data, "./textures/gameover.xpm", &piclib->game_over);
 	create_img(data, "./textures/civ_mask.xpm", &piclib->mask);
-	if (data->skybox)
+	if (data->skybox[0][0])
 		create_skybox(data, piclib, &piclib->skybox);
 }
 
@@ -59,7 +59,7 @@ set_mlx(t_data *data, t_img *win, t_int win_size)
 	win->size.x = win_size.x;
 	win->size.y = win_size.y;
 }
-
+/*
 	void
 set_skymap(t_data *data)
 {
@@ -88,6 +88,7 @@ set_skymap(t_data *data)
 		i++;
 	}
 }
+*/
 	void
 set_game(t_data *data)
 {
@@ -95,6 +96,7 @@ set_game(t_data *data)
 	set_mlx(data, &data->win, data->win.size);
 	data->cam.y = data->win.size.y / 2;
 	create_piclib(data, &data->piclib);
+	/*
 	if (data->skybox)
 	{
 		ft_putstr_fd("\nset_game1", 1);
@@ -105,6 +107,7 @@ set_game(t_data *data)
 		data->cam.x = data->map_size.x / 2;
 		data->cam.z = data->map_size.z / 2;
 	}
+	*/
 	if (!(data->z_buffer = malloc(sizeof(double *) * data->win.size.x)))
 		close_program(data, "Failed allocating z_buffer while", "set_game");
 }

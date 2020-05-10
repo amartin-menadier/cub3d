@@ -17,17 +17,19 @@
 */
 
 	int
-set_drawing_limit(t_data *data, double wall_dist, int mod)
+drawing_limit(t_data *data, double wall_dist, int mod)
 {
 	int		line_height;
 	int		draw_start;
 	int		draw_end;
 	int		vertical_look;
 
+//	if (data->skybox[0][0])
+//		mod++;
 	vertical_look = sin(data->angle.y) * (data->win.size.y);
+//	if (mod % 2)
+//		wall_dist = fmax(data->win.size.x, data->win.size.y) / data->win.size.y;
 	line_height = fabs(data->win.size.y / wall_dist);
-	if (mod % 2)
-		line_height = data->win.size.x;
 	draw_start = vertical_look + data->cam.y - line_height / 2;
 	draw_end = vertical_look + data->cam.y + line_height / 2;
 	if ((mod == 0 || mod == 1) && draw_start < 0)
@@ -45,14 +47,14 @@ set_drawing_limit(t_data *data, double wall_dist, int mod)
 }
 
 	t_dbl
-set_ray(t_data *data, t_int win)
+set_ray(t_data *data, t_int win_size)
 {
 	double	camera_x;
 	t_dbl	ray;
 	t_dbl	plane;
 
-	camera_x = 2.0 * win.x / data->win.size.x - 1;
-	if (data->skybox)
+	camera_x = 2.0 * win_size.x / data->win.size.x - 1;
+	if (data->skybox[0][0] < 0)
 	{
 		ray = rotate_point(data->angle.x - (PI / 3) * camera_x, NULL, NULL);
 	}
@@ -65,62 +67,3 @@ set_ray(t_data *data, t_int win)
 	}
 	return(ray);
 }
-
-	void
-draw_walls(t_data *data, t_int *win_size, int skybox)
-{
-	t_int	*pxl_ptr;
-	t_int	pxl;
-	t_dbl	ray;
-	double	wall_dist;
-
-	pxl_ptr = &pxl;
-	pxl.x = 0;
-	while (pxl.x < win_size->x)
-	{
-		ft_putstr_fd("\nframe11", 1);
-		ray = set_ray(data, pxl);
-		ft_putstr_fd("\nframe12", 1);
-		wall_dist = perform_DDA(data, data->cam, ray, 0);
-		ft_putstr_fd("\nframe13", 1);
-		data->z_buffer[pxl.x] = wall_dist;
-		ft_putstr_fd("\nframe14", 1);
-		pxl.y = set_drawing_limit(data, wall_dist, skybox);
-		ft_putstr_fd("\nframe15", 1);
-		if (!skybox)
-		{
-			draw_wall_column(data, pxl_ptr, ray, wall_dist);
-		}
-		else
-		{
-			draw_skybox_column(data, pxl_ptr, ray, wall_dist);
-		}
-		pxl.x++;
-	}
-}
-
-	int
-render_next_frame(t_data *data)
-{
-	hook_event(data);
-	while (data->life > 0 && data->frame_done == 0)
-	{
-		ft_putstr_fd("\nframe1", 1);
-		draw_floor_and_sky(data, data->angle, data->win.size);
-		ft_putstr_fd("\nframe2", 1);
-		draw_walls(data, &data->win.size, data->skybox);
-		ft_putstr_fd("\nframe3", 1);
-		if (!data->skybox)
-			draw_sprites(data, &data->piclib);
-		ft_putstr_fd("\nframe4", 1);
-		draw_interface(data, &data->piclib);
-		ft_putstr_fd("\nframe5", 1);
-		mlx_put_image_to_window(data->mlx, data->window, data->win.ptr, 0, 0);
-		draw_life_string(data);
-		if (data->save == 1)
-			create_bmp(data, &data->win, "start.bmp");
-		data->frame_done = 1;
-	}
-	return (0);
-}
-

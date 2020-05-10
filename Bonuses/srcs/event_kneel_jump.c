@@ -25,7 +25,7 @@ kneel(t_data *data, int way)
 	data->cam.y -= kneel_speed;
 	if (data->cam.y < data->win.size.y / 4)
 		data->cam.y = data->win.size.y / 4;
-	if (data->cam.y > data->win.size.y / 2)
+	if (data->cam.y >= data->win.size.y / 2)
 	{
 		data->cam.y = data->win.size.y / 2;
 		data->current_event = 0;
@@ -33,7 +33,7 @@ kneel(t_data *data, int way)
 	data->frame_done = 0;
 }
 
-void
+	void
 jump(t_data *data, clock_t time_diff)
 {
 	int		jump_speed;
@@ -43,7 +43,7 @@ jump(t_data *data, clock_t time_diff)
 		data->cam.y += jump_speed;
 	else
 		data->cam.y -= jump_speed;
-	if (data->cam.y < data->win.size.y / 2)
+	if (data->cam.y <= data->win.size.y / 2)
 	{
 		data->cam.y = data->win.size.y / 2;
 		data->current_event = 0;

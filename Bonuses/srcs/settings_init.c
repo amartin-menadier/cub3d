@@ -38,6 +38,10 @@ init_piclib(t_piclib *piclib)
 	init_image(&piclib->mask, MASK);
 }
 
+/*
+** in init_data, angle.z is init, even though it is not supposedly used
+*/
+
 	void
 init_data(t_data *data)
 {
@@ -48,6 +52,7 @@ init_data(t_data *data)
 	data->cam.z = 0;
 	data->angle.x = -1;
 	data->angle.y = 0;
+	data->angle.z = 0;
 	data->map = NULL;
 	data->map_size.x = 1;
 	data->map_size.y = 1;
@@ -61,12 +66,36 @@ init_data(t_data *data)
 }
 
 	void
+init_skybox(t_data *data)
+{
+	int		skybox;
+	int		x;
+	int		z;
+
+	if (ft_memcmp(&data->cub_path[ft_strlen(data->cub_path) - 10], "skybox", 6))
+		skybox = 0;
+	else
+		skybox = 1;
+	x = 0;
+	while (x < 3)
+	{
+		z = 0;
+		while (z < 3)
+		{
+			data->skybox[z][x] = skybox * '1';
+			z++;
+		}
+		x++;
+	}
+	if (skybox)
+		data->skybox[1][1] = '0';
+}
+
+	void
 init_all(t_data *data)
 {
 	data->life = 100;
-	data->skybox = 1;
-	if (ft_memcmp(&data->cub_path[ft_strlen(data->cub_path) - 10], "skybox", 6))
-		data->skybox = 0;
+	init_skybox(data);
 	data->mlx = NULL;
 	data->window = NULL;
 	init_image(&data->win, 0);

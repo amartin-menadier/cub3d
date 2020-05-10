@@ -18,7 +18,7 @@ img_color(int *colors, int pxl_x, int pxl_y, t_int size)
 	if (pxl_x >= size.x && pxl_y >= size.y)
 		return (GREY);
 	else if (pxl_x < 0 && pxl_y < 0)
-		return (WHITE);
+		return (BLUE);
 	else if (pxl_x >= size.x)
 		return (RED);
 	else if (pxl_y >= size.y)

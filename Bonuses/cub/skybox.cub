@@ -1,5 +1,5 @@
-R 700     700           
-NO   ./textures/mountain.xpm         
+R 1000     700           
+NO   ./textures/skyboxcountry.xpm         
      
 SO ./textures/bat.xpm    
    WE ./textures/zombie.xpm
@@ -16,7 +16,7 @@ C ./textures/purplestone.xpm
 1000000000001
 1000000000001
 1000000000001
-100000E000001
+100000S000001
 1000000000001
 1000000000001
 1000000000001

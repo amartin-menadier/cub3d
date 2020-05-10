@@ -13,6 +13,12 @@
 #include "cub3d.h"
 
 	double
+square(double nb)
+{
+	return(nb * nb);
+}
+
+	double
 dist(t_dbl obj1, t_dbl obj2)
 {
 	double	dist;

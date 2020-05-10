@@ -15,7 +15,7 @@ NAME			= Cub3D
 SRCS1			= cub3d.c \
 event.c event_game_over.c event_kneel_jump.c event_move.c event_sprite_hit.c\
 event_look.c \
-frame_DDA.c frame_floor_and_sky.c frame_raycasting.c frame_skybox.c \
+frame.c frame_DDA.c frame_floor_and_sky.c frame_raycasting.c frame_skybox.c \
 frame_sprites.c frame_walls.c \
 interface.c interface_avatar.c interface_lifebar.c interface_minimap.c \
 settings.c settings_free.c settings_images.c settings_init.c settings_map.c \
