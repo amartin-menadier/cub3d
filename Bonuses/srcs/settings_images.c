@@ -74,7 +74,7 @@ create_img(t_data *data, char *path, t_img *img)
 	img->ptr = 
 		mlx_xpm_file_to_image(data->mlx, tmp, &img->size.x, &img->size.y);
 	if (img->ptr == NULL)
-		close_program(data, "create_img/Invalid or missing file at : ", tmp);
+		close_program(data, "Invalid or missing file at : ", tmp);
 	img->colors = (int*)mlx_get_data_addr(img->ptr, &img->bpp,
 			&img->line_length, &img->endian);
 	img->path = ft_strdup(tmp);

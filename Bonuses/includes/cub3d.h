@@ -32,7 +32,6 @@ typedef struct	s_int{
 ** size.x is the img width;
 ** size.y is the img height;
 ** name is used in some functions to determinate which img to pick;
-
 */
 
 typedef struct  s_img{
@@ -98,6 +97,7 @@ typedef struct 	s_data{
 	int			current_event;
 	clock_t		time;
 	int			life;
+	int			level;
 	int			save;
 //	int			skybox;
 	int			frame_done;

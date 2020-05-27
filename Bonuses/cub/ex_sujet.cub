@@ -7,7 +7,7 @@ EA ./textures/police.xpm
 
 S2 ./textures/microbeB.xpm
 S3 ./textures/rollB.xpm
-F ./textures/wood.xpm
+F ./textures/wod.xpm
 C ./textures/purplestone.xpm
 
         1111111111111111111111111

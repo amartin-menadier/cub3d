@@ -33,8 +33,8 @@ get_resolution(t_data *data, char *line)
 		close_program(data, "Wrong resolution in .cub file\n", "");
 	if (data->win.size.x < 50 || data->win.size.y < 50)
 		close_program(data, "Resolution is too small\n", "");
-	if (data->win.size.x > 2560)
-		data->win.size.x = 2560;
-	if (data->win.size.y > 1440)
-		data->win.size.y = 1440;
+	if (data->win.size.x > 1400)
+		data->win.size.x = 1400;
+	if (data->win.size.y > 800)
+		data->win.size.y = 800;
 }
