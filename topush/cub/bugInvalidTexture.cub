@@ -1,0 +1,14 @@
+R     7000      1500           
+NO   ./textures/roll.xpm         
+     
+SO ./textures/bat.xpm    
+   WE ./textures/zombie.xpm
+EA ./textures/police.xpm
+
+S ./textures/micrbeB.xpm
+F 50, 156, 31
+C     53, 189, 219  
+
+111111111111
+100N01
+111111
