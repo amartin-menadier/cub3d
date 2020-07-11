@@ -58,8 +58,15 @@ typedef struct	s_piclib{
 	t_img		sky;
 	t_img		s2;
 	t_img		s3;
+	t_img		s4;
+	t_img		s5;
+	t_img		s6;
+	t_img		s7;
+	t_img		s8;
+	t_img		s9;
 	t_img		skybox;
 	t_img		avatar;
+	t_img		victory;
 	t_img		game_over;
 	t_img		mask;
 }				t_piclib;
@@ -97,7 +104,7 @@ typedef struct 	s_data{
 	int			current_event;
 	clock_t		time;
 	int			life;
-	int			level;
+//	int			level;
 	int			save;
 //	int			skybox;
 	int			frame_done;
@@ -130,6 +137,12 @@ sprite_hit(t_data *data);
 game_over(t_data *data, t_int win_size, t_img *img);
 	int
 game_over_answer(t_data *data, int key);
+	char*
+new_level_path(char *old_path, char order);
+	void
+load_new_level(t_data *data, char order);
+	int
+victory(t_data *data, t_int win_size, t_img *img);
 
 /*
 ** frame.c and family files
@@ -144,6 +157,8 @@ get_side_dist(t_data *data, t_dbl cam, t_dbl ray);
 drawing_limit(t_data *data, double perp_wall_dist, int mod);
 	t_dbl
 set_ray(t_data *data, t_int win_size);
+	t_dbl
+DDA_step(t_dbl ray);
 	t_dbl
 ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod);
 	double
@@ -180,6 +195,8 @@ minimap_data(t_data *data, int mod);
 get_minimap_avatar(t_data *data);
 	int
 get_avatar_color(t_data *data, t_img *avatar, t_dbl minimap_pos, int color);
+	int
+draw_script(t_data *data, int option);
 
 /*
 ** settings.c and family files
@@ -220,6 +237,8 @@ get_resolution(t_data *data, char *line);
 check_map_errors(t_data *data);
 	void
 get_map(t_data *data, char *line, int i);
+	void
+replace_cub_path(t_data *data, char *new_path);
 
 /*
 ** tools.c and family files
@@ -254,10 +273,6 @@ square(double nb);
 #define MOVE_SPEED 0.51
 #define LOOK_SPEED 50
 #define PLAYER_SIZE 1.00
-#define EMPTY 48
-#define WALL 49
-#define DAMAGE_SPR 50
-#define HEAL_SPR 51
 #define JUMP 49
 #define KNEEL 9
 #define UNKNEEL 90
@@ -267,12 +282,31 @@ square(double nb);
 #define NO 3
 #define FLR 4
 #define SKY 5
+#define EMPTY '0'
+#define CLASSIC_WALL '1'
+#define DAMAGE_SPR '2'
+#define HEAL_SPR '3'
+#define PILLAR '4'
+#define OBSTACLE(x) (x == '1' || x == '4')
+#define NORMINET '5'
+#define SECRET '6'
+#define STAIRS_DOWN '7'
+#define STAIRS_UP '8'
+#define ELEVATOR '9'
+#define WALL(x) (x == '1' || (x >= '6' && x <= '9'))
 #define S2 12
 #define S3 13
+#define S4 14
+#define S5 15
+#define S6 16
+#define S7 17
+#define S8 18
+#define S9 19
 #define AVATAR 20
 #define SKYBOX 21
 #define GAME_OVER 22
 #define MASK 23
+#define VICTORY 24
 #define SIZE_IN_PXL 30
 #define CELL_SIZE 31
 #define MARGIN 32

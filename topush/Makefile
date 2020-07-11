@@ -27,10 +27,11 @@ event_bonus.c event_game_over_bonus.c event_kneel_jump_bonus.c event_move_bonus.
 event_look_bonus.c \
 frame_bonus.c frame_DDA_bonus.c frame_floor_and_sky_bonus.c frame_raycasting_bonus.c frame_skybox_bonus.c \
 frame_sprites_bonus.c frame_walls_bonus.c \
-interface_bonus.c interface_avatar_bonus.c interface_lifebar_bonus.c interface_minimap_bonus.c \
+interface_bonus.c interface_avatar_bonus.c interface_lifebar_bonus.c interface_minimap_bonus.c interface_scripts_bonus.c \
 settings_bonus.c settings_free_bonus.c settings_images_bonus.c settings_init_bonus.c settings_map_bonus.c \
 settings_parsing_bonus.c settings_resolution_bonus.c settings_skybox_bonus.c settings_sprites_bonus.c \
 tools_bmp_bonus.c tools_colors_bonus.c tools_maths_bonus.c \
+
 
 LIB_SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c \
 ft_isascii.c ft_isdigit.c ft_isprint.c ft_itoa.c \

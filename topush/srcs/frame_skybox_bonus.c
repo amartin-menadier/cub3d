@@ -121,8 +121,6 @@ draw_skybox(t_data *data, t_int *win_size)
 
 	pxl_ptr = &pxl;
 	pxl.x = 0;
-//	draw_floor_and_sky(data, data->angle, data->win.size);
-//	useless ? 
 	wall_dist = fmax(win_size->x, win_size->y) / win_size->y;
 	while (pxl.x < win_size->x)
 	{

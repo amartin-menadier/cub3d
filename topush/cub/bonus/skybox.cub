@@ -1,4 +1,4 @@
-R 1000     70000945643569548634569895468934856934586345989345797        
+R     1200      750       
 NO   ./textures/skyboxcountry.xpm         
      
 SO ./textures/bat.xpm    
@@ -7,6 +7,12 @@ EA ./textures/police.xpm
 
 S2 ./textures/microbeB.xpm
 S3 ./textures/rollB.xpm
+S4 ./textures/rollB.xpm
+S5 ./textures/rollB.xpm
+S6 ./textures/rollB.xpm
+S7 ./textures/rollB.xpm
+S8 ./textures/rollB.xpm
+S9 ./textures/rollB.xpm
 F ./textures/wood.xpm
 C ./textures/purplestone.xpm
 

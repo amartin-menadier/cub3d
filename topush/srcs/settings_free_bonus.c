@@ -34,9 +34,16 @@ free_piclib(t_data *data, t_piclib *lib)
 	free_image(data, &lib->sky);
 	free_image(data, &lib->s2);
 	free_image(data, &lib->s3);
+	free_image(data, &lib->s4);
+	free_image(data, &lib->s5);
+	free_image(data, &lib->s6);
+	free_image(data, &lib->s7);
+	free_image(data, &lib->s8);
+	free_image(data, &lib->s9);
 	free_image(data, &lib->avatar);
 	free_image(data, &lib->skybox);
 	free_image(data, &lib->game_over);
+	free_image(data, &lib->victory);
 	free_image(data, &lib->mask);
 }
 

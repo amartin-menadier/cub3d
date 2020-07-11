@@ -91,7 +91,7 @@ ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod)
 	side_dist = get_side_dist(data, data->cam, ray);
 	cell.x = (int)data->cam.x;
 	cell.z = (int)data->cam.z;
-	while (data->map[(int)cell.z][(int)cell.x] != WALL)
+	while (!WALL(data->map[(int)cell.z][(int)cell.x]))
 	{
 		if(side_dist.x < side_dist.z)
 		{
@@ -114,7 +114,7 @@ wall_side(t_data *data, t_dbl ray)
 {
 	t_dbl	side;
 	t_dbl	step;
-
+	
 	step = DDA_step(ray);
 	side = ray_to_wall(data, ray, step, 1);
 	if (!data->skybox[0][0])

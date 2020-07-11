@@ -32,9 +32,16 @@ init_piclib(t_piclib *piclib)
 	init_image(&piclib->sky, SKY);
 	init_image(&piclib->s2, S2);
 	init_image(&piclib->s3, S3);
+	init_image(&piclib->s4, S4);
+	init_image(&piclib->s5, S5);
+	init_image(&piclib->s6, S6);
+	init_image(&piclib->s7, S7);
+	init_image(&piclib->s8, S8);
+	init_image(&piclib->s9, S9);
 	init_image(&piclib->skybox, SKYBOX);
 	init_image(&piclib->avatar, AVATAR);
 	init_image(&piclib->game_over, GAME_OVER);
+	init_image(&piclib->victory, VICTORY);
 	init_image(&piclib->mask, MASK);
 }
 
@@ -47,21 +54,23 @@ init_data(t_data *data)
 {
 	data->win.size.x = 0;
 	data->win.size.y = 0;
+	data->map = NULL;
+	data->map_size.x = 1;
+	data->map_size.y = 1;
+	data->map_size.z = 0;
+	data->z_buffer = NULL;
+	data->spr = NULL;
+	data->spr_count = 0;
 	data->cam.x = 0;
 	data->cam.y = - 1;
 	data->cam.z = 0;
 	data->angle.x = -1;
 	data->angle.y = 0;
 	data->angle.z = 0;
-	data->map = NULL;
-	data->map_size.x = 1;
-	data->map_size.y = 1;
-	data->map_size.z = 0;
-	data->spr_count = 0;
-	data->spr = NULL;
-	data->z_buffer = NULL;
-	data->time = clock();// a free ?
 	data->current_event = 0;
+	data->time = clock();// a free ?
+//	if (data->cub_path && data->cub_path[3])
+//		data->level = data->cub_path[3];
 	data->frame_done = 0;
 }
 

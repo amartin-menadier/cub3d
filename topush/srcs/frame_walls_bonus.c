@@ -17,9 +17,9 @@
 {
 	t_img	*wall;
 	double	side;
+	t_dbl	cell;
 
 	wall = NULL;
-//	side = perform_DDA(data, data->cam, ray, 1);
 	side = wall_side(data, ray);
 	if (side == EA)
 		wall = &piclib->ea;
@@ -29,11 +29,13 @@
 		wall = &piclib->we;
 	else if (side == NO)
 		wall = &piclib->no;
-	else
-		wall->ptr = NULL;
-		//verifier la pertinence de ce cas d'erreur suivant
-//	if (text_img->size.x != text_img->size.y)
-//		close_program(data, "wall texture shall be a square", "");
+	cell = ray_to_wall(data, ray, DDA_step(ray), 0);
+	if (data->map[(int)cell.z][(int)cell.x] == STAIRS_DOWN)
+		wall = &piclib->s7;
+	if (data->map[(int)cell.z][(int)cell.x] == STAIRS_UP)
+		wall = &piclib->s8;
+	if (data->map[(int)cell.z][(int)cell.x] == ELEVATOR)
+		wall = &piclib->s9;
 	return (wall);
 }
 

@@ -13,38 +13,66 @@
 #include "cub3d_bonus.h"
 
 	void
-move_forward(char **map, t_dbl *cam, t_dbl dir)
+move_forward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
-	if(map[(int)cam->z][(int)(cam->x + dir.x * MOVE_SPEED)] != WALL)
+	int new_x;
+	int	new_z;
+
+	new_x = cam->x + dir.x * MOVE_SPEED;
+	new_z = cam->z + dir.z * MOVE_SPEED;
+	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
+		load_new_level(data, map[new_z][new_x]);
+	if (!OBSTACLE(map[(int)cam->z][(int)(cam->x + dir.x * MOVE_SPEED)]))
 		cam->x += dir.x * MOVE_SPEED;
-	if(map[(int)(cam->z + dir.z * MOVE_SPEED)][(int)cam->x] != WALL)
+	if (!OBSTACLE(map[(int)(cam->z + dir.z * MOVE_SPEED)][(int)cam->x]))
 		cam->z += dir.z * MOVE_SPEED;
 }
 
 	void
-move_backward(char **map, t_dbl *cam, t_dbl dir)
+move_backward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
-	if(map[(int)cam->z][(int)(cam->x - dir.x * MOVE_SPEED)] != WALL)
+	int new_x;
+	int	new_z;
+
+	new_x = cam->x - dir.x * MOVE_SPEED;
+	new_z = cam->z - dir.z * MOVE_SPEED;
+	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
+		load_new_level(data, map[new_z][new_x]);
+	if (!OBSTACLE(map[(int)cam->z][(int)new_x]))
 		cam->x -= dir.x * MOVE_SPEED;
-	if(map[(int)(cam->z - dir.z * MOVE_SPEED)][(int)cam->x] != WALL)
+	if (!OBSTACLE(map[(int)new_z][(int)cam->x]))
 		cam->z -= dir.z * MOVE_SPEED;
 }
 
 	void
-move_right(char **map, t_dbl *cam, t_dbl dir)
+move_right(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
-	if(map[(int)cam->z][(int)(cam->x + dir.z * MOVE_SPEED)] != WALL)
+	int new_x;
+	int	new_z;
+
+	new_x = cam->x + dir.z * MOVE_SPEED;
+	new_z = cam->z - dir.x * MOVE_SPEED;
+	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
+		load_new_level(data, map[new_z][new_x]);
+	if (!OBSTACLE(map[(int)cam->z][(int)new_x]))
 		cam->x += dir.z * MOVE_SPEED;
-	if(map[(int)(cam->z - dir.x * MOVE_SPEED)][(int)cam->x] != WALL)
+	if (!OBSTACLE(map[(int)new_z][(int)cam->x]))
 		cam->z -= dir.x * MOVE_SPEED;
 }
 
 	void
-move_left(char **map, t_dbl *cam, t_dbl dir)
+move_left(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
-	if(map[(int)cam->z][(int)(cam->x - dir.z * MOVE_SPEED)] != WALL)
+	int new_x;
+	int	new_z;
+
+	new_x = cam->x - dir.z * MOVE_SPEED;
+	new_z = cam->z + dir.x * MOVE_SPEED;
+	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
+		load_new_level(data, map[new_z][new_x]);
+	if (!OBSTACLE(map[(int)cam->z][(int)new_x]))
 		cam->x -= dir.z * MOVE_SPEED;
-	if(map[(int)(cam->z + dir.x * MOVE_SPEED)][(int)cam->x] != WALL)
+	if (!OBSTACLE(map[(int)new_z][(int)cam->x]))
 		cam->z += dir.x * MOVE_SPEED;
 }
 
@@ -63,11 +91,11 @@ move(t_data *data, char **map, t_dbl *cam, int key)
 	dir.x = cos(data->angle.x);
 	dir.z = sin(data->angle.x);
 	if (key == Z)
-		move_forward(map, cam, dir);
+		move_forward(data, map, cam, dir);
 	if (key == Q)
-		move_left(map, cam, dir);
+		move_left(data, map, cam, dir);
 	if (key == S)
-		move_backward(map, cam, dir);
+		move_backward(data, map, cam, dir);
 	if (key == D)
-		move_right(map, cam, dir);
+		move_right(data, map, cam, dir);
 }

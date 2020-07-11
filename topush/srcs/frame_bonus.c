@@ -33,5 +33,9 @@ render_next_frame(t_data *data)
 			create_bmp(data, &data->win, "start.bmp");
 		data->frame_done = 1;
 	}
+	if (!ft_strncmp(data->cub_path, "./cub/bonus/42_start1.cub", 25))
+		draw_script(data, DRAW_START);
+	if (!ft_strncmp(data->cub_path, "./cub/bonus/skybox.cub", 22))
+		draw_script(data, SKYBOX);
 	return (0);
 }

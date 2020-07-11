@@ -15,19 +15,24 @@
 	int
 press_key(int key, t_data *data)
 {
+	if (key == ESC)
+		close_program(data, "\nSee you next time ! ", "\\o/\n");
+	if (data->life == -9999)
+		return (victory(data, data->win.size, &data->piclib.victory));
 	if (data->life <= 0)
 		return (game_over_answer(data, key));
+	if (!ft_strncmp(data->cub_path, "./cub/bonus/42_start1.cub", 25)
+		|| !ft_strncmp(data->cub_path, "./cub/bonus/skybox.cub", 22))
+		replace_cub_path(data, "./cub/bonus/42_1.cub");
 	if (data->current_event == JUMP)
 		return (0);
 	if (key == P)
 		create_bmp(data, &data->win, "./screenshots/screenshot");
-	if (key == ESC)
-		close_program(data, "\nSee you next time ! ", "\\o/\n");
 	if (LOOK(key))
 		look(&data->angle, key);
 	if (MOVE(key))
 		move(data, data->map, &data->cam, key);
-	if(data->map[(int)data->cam.z][(int)data->cam.x] > WALL)
+	if(data->map[(int)data->cam.z][(int)data->cam.x] > CLASSIC_WALL)
 		sprite_hit(data);
 	data->frame_done = 0;
 	return(key);

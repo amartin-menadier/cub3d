@@ -20,14 +20,42 @@
 	value = map[(int)spr.z][(int)spr.x];
 	if (value == '2')
 		return (&piclib->s2);
-	else
+	if (value == '3')
 		return (&piclib->s3);
+	if (value == '4')
+		return (&piclib->s4);
+	if (value == '5')
+		return (&piclib->s5);
+	else
+		return (&piclib->s4);
+}
+
+	void
+get_sprite_path(t_piclib *piclib, char *tmp, char sprite_number)
+{
+	if (sprite_number == '2')
+		piclib->s2.path = ft_strdup(tmp);
+	if (sprite_number == '3')
+			piclib->s3.path = ft_strdup(tmp);
+	if (sprite_number == '4')
+			piclib->s4.path = ft_strdup(tmp);
+	if (sprite_number == '5')
+			piclib->s5.path = ft_strdup(tmp);
+	if (sprite_number == '6')
+			piclib->s6.path = ft_strdup(tmp);
+	if (sprite_number == '7')
+			piclib->s7.path = ft_strdup(tmp);
+	if (sprite_number == '8')
+			piclib->s8.path = ft_strdup(tmp);
+	if (sprite_number == '9')
+			piclib->s9.path = ft_strdup(tmp);
 }
 
 	void
 get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 {
 	char	*tmp;
+	int		fd;
 
 	if (!(tmp = ft_strtrim(&line[2], " ")))
 		close_program(data, "Failed allocating memory for path ", texture);
@@ -46,10 +74,10 @@ get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 		piclib->flr.path = ft_strdup(tmp);
 	if (!ft_strncmp(texture, "C", 1))
 		piclib->sky.path = ft_strdup(tmp);
-	if (!ft_strncmp(texture, "S2", 2))
-		piclib->s2.path = ft_strdup(tmp);
-	if (!ft_strncmp(texture, "S3", 2))
-		piclib->s3.path = ft_strdup(tmp);
+	if (line[0] == 'S' && ft_isdigit(texture[0]))
+		get_sprite_path(piclib, tmp, texture[0]);
+	if ((fd = open(tmp, O_RDONLY)) == -1)
+		close_program(data, "Counld open file for path: ", tmp);
 	free(tmp);
 	tmp = NULL;
 }
