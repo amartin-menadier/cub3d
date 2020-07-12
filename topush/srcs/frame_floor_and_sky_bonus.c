@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	void
-put_floor_and_sky_pixels(t_data *data, t_int pxl, t_dbl cam, t_dbl ray_cam)
+void
+	put_floor_and_sky_pixels(t_data *data, t_int pxl, t_dbl cam, t_dbl ray_cam)
 {
 	t_dbl	cell;
 	t_int	img_pxl;
@@ -40,8 +40,8 @@ put_floor_and_sky_pixels(t_data *data, t_int pxl, t_dbl cam, t_dbl ray_cam)
 	put_pixel(&data->win, pxl, color);
 }
 
-	double
-get_floor_or_sky_depth(t_data *data, int pxl_y)
+double
+	get_floor_or_sky_depth(t_data *data, int pxl_y)
 {
 	double	pxl_height;
 	double	depth;
@@ -58,8 +58,8 @@ get_floor_or_sky_depth(t_data *data, int pxl_y)
 	return (depth);
 }
 
-	void
-draw_floor_and_sky_lign(t_data *data, t_int pxl, t_dbl ray0, t_dbl ray1)
+void
+	draw_floor_and_sky_lign(t_data *data, t_int pxl, t_dbl ray0, t_dbl ray1)
 {
 	double	depth;
 	t_dbl	ray_cam;
@@ -85,8 +85,8 @@ draw_floor_and_sky_lign(t_data *data, t_int pxl, t_dbl ray0, t_dbl ray1)
 	}
 }
 
-	void
-draw_floor_and_sky(t_data *data, t_dbl angle, t_int win_size)
+void
+	draw_floor_and_sky(t_data *data, t_dbl angle, t_int win_size)
 {
 	t_int	pxl;
 	t_dbl	ray0;

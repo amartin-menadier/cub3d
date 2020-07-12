@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	int
-game_over_answer(t_data *data, int key)
+int
+	game_over_answer(t_data *data, int key)
 {
 	char *path;
 
@@ -31,8 +31,8 @@ game_over_answer(t_data *data, int key)
 	return (-1);
 }
 
-	void
-draw_game_over(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
+void
+	draw_game_over(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
 {
 	t_int		img_pxl;
 	t_dbl		step;
@@ -56,8 +56,8 @@ draw_game_over(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
 	put_pixel(&data->win, pxl, color); 
 }
 
-	void
-game_over(t_data *data, t_int win_size, t_img *img)
+void
+	game_over(t_data *data, t_int win_size, t_img *img)
 {
 	t_int	pxl;
 	t_int	draw_start;

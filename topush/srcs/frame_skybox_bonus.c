@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	double
-ray_orientation(t_dbl ray)
+double
+	ray_orientation(t_dbl ray)
 {
 	double	orientation;
 
@@ -30,8 +30,8 @@ ray_orientation(t_dbl ray)
 	return (orientation);
 }
 
-	t_img
-*get_skybox_face(t_piclib *piclib, t_dbl ray)
+t_img
+	*get_skybox_face(t_piclib *piclib, t_dbl ray)
 {
 	t_img	*face;
 	int		orientation;
@@ -54,8 +54,8 @@ ray_orientation(t_dbl ray)
 /*
 ** the while is cheating to fix a bug but it seems to work
 */
-	t_int
-get_skybox_pixel(t_data *data, int pxl_y, t_dbl ray, t_img *face)
+t_int
+	get_skybox_pixel(t_data *data, int pxl_y, t_dbl ray, t_img *face)
 {
 	t_int	face_pxl;
 	int		orientation;
@@ -85,8 +85,8 @@ get_skybox_pixel(t_data *data, int pxl_y, t_dbl ray, t_img *face)
 /*
 ** The second while is unecessary and just there to fix mountain.xpm bug => find another and proper skybox is needed
 */
-	void
-draw_skybox_column(t_data *data, t_int *pxl, t_dbl ray, double wall_dist)
+void
+	draw_skybox_column(t_data *data, t_int *pxl, t_dbl ray, double wall_dist)
 {
 	t_img	*face;
 	t_int	face_pxl;
@@ -111,8 +111,8 @@ draw_skybox_column(t_data *data, t_int *pxl, t_dbl ray, double wall_dist)
 	}
 }
 
-	void
-draw_skybox(t_data *data, t_int *win_size)
+void
+	draw_skybox(t_data *data, t_int *win_size)
 {
 	t_int	*pxl_ptr;
 	t_int	pxl;

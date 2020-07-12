@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	void
-look(t_dbl *angle, int key)
+void
+	look(t_dbl *angle, int key)
 {
 	if (key == LEFT)
 		angle->x += ROT_SPEED;
@@ -25,6 +25,6 @@ look(t_dbl *angle, int key)
 		angle->y += ROT_SPEED / 2;
 	if (angle->y > PI / 2)
 		angle->y = PI / 2;
-	if (angle->y < - PI / 2)
-		angle->y = - PI / 2;
+	if (angle->y < -PI / 2)
+		angle->y = -PI / 2;
 }

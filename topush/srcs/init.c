@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-	void
-init_settings(t_settings *settings)
+void
+	init_settings(t_settings *settings)
 {
 	settings->win_size.x = 0;
 	settings->win_size.y = 0;
@@ -37,8 +37,8 @@ init_settings(t_settings *settings)
 	settings->done = 0;
 }
 
-	void
-init_dir_and_plane(t_settings *settings, t_frame *frame)
+void
+	init_dir_and_plane(t_settings *settings, t_frame *frame)
 {
 		frame->dir.x = 0;
 		frame->dir.y = -1;
@@ -67,8 +67,8 @@ init_dir_and_plane(t_settings *settings, t_frame *frame)
 	}	
 }
 
-	void
-init_sprites(t_data *data, t_settings *settings, t_frame *frame)
+void
+	init_sprites(t_data *data, t_settings *settings, t_frame *frame)
 {
 	if (!(settings->spr_x = malloc(sizeof(double *) * (settings->spr_count))))
 		close_program(data, "Couldn't allocate mem for spr_x", "");
@@ -84,8 +84,8 @@ init_sprites(t_data *data, t_settings *settings, t_frame *frame)
 		close_program(data, "Failed allocating spr_dist", "");
 }
 
-	void
-init_frame(t_data *data, t_settings *settings, t_frame *frame)
+void
+	init_frame(t_data *data, t_settings *settings, t_frame *frame)
 {
 	init_dir_and_plane(settings, frame);
 	frame->pos.x = settings->starting_pos.x + 0.5;
@@ -99,8 +99,8 @@ init_frame(t_data *data, t_settings *settings, t_frame *frame)
 	create_texture_img(data, settings->S_path, &frame->S_img);
 }
 
-	void
-init_data(t_data *data)
+void
+	init_data(t_data *data)
 {
 	t_int	win_size;
 	t_img	*img;

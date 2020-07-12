@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-	int
-close_program(t_data *data, char *error_msg, char *str)
+int
+	close_program(t_data *data, char *error_msg, char *str)
 {
 	if (ft_memcmp(str, "\\o/\n", 4))
 		ft_putstr_fd("Error\n", 1);
@@ -32,8 +32,8 @@ close_program(t_data *data, char *error_msg, char *str)
 	return (0);
 }
 
-	void
-free_frame(t_data *data, t_frame *frame)
+void
+	free_frame(t_data *data, t_frame *frame)
 {
 	mlx_destroy_image(data->mlx, data->frame.NO_img.ptr);
 	mlx_destroy_image(data->mlx, data->frame.SO_img.ptr);
@@ -62,8 +62,8 @@ free_sprites(t_settings *settings)
 	settings->spr_text = NULL;
 }
 
-	void
-free_settings(t_settings *settings)
+void
+	free_settings(t_settings *settings)
 {
 	if (settings->NO_path != NULL)
 		free(settings->NO_path);
@@ -84,8 +84,8 @@ free_settings(t_settings *settings)
 	free_map(settings);
 }
 
-	void
-free_map(t_settings *settings)
+void
+	free_map(t_settings *settings)
 {
 	int i;
 

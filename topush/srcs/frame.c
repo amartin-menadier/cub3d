@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-	int
-render_next_frame(t_data *data)
+int
+	render_next_frame(t_data *data)
 {
 	int		x;
 	t_img	*text_img;
@@ -40,8 +40,8 @@ render_next_frame(t_data *data)
 	return (0);
 }
 
-	void
-draw_column(t_data *data, t_frame *F, t_img *text_img, int x)
+void
+	draw_column(t_data *data, t_frame *F, t_img *text_img, int x)
 {
 	t_int	pos;
 	double	step;
@@ -70,8 +70,8 @@ draw_column(t_data *data, t_frame *F, t_img *text_img, int x)
 		put_pixel(&data->img, pos, data->settings.floor_color);
 }
 
-	void
-set_drawing_limits(t_data *data, t_frame *F)
+void
+	set_drawing_limits(t_data *data, t_frame *F)
 {
 	F->line_height =
 		abs((int)(data->settings.win_size.y / (F->perp_wall_dist)));
@@ -92,8 +92,8 @@ set_drawing_limits(t_data *data, t_frame *F)
 ** DDA = Digital Differential Analyser
 */
 
-	void
-perform_DDA(t_data *data, t_frame *F)
+void
+	perform_DDA(t_data *data, t_frame *F)
 {
 	int	hit;
 
@@ -121,8 +121,8 @@ perform_DDA(t_data *data, t_frame *F)
 		F->perp_wall_dist = (F->map.y - F->pos.y + (1 - F->step.y)/2)/ F->ray.y;
 }
 
-	void
-set_ray(t_data *data, t_frame *F, int x)
+void
+	set_ray(t_data *data, t_frame *F, int x)
 {
 	F->map.x = (int)F->pos.x;
 	F->map.y = (int)F->pos.y;

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   img.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/19 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/20 12:15:52 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/03/12 21:56:19 by amartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	t_img
-*get_sprite_image(char **map, t_dbl spr, t_piclib *piclib)
+t_img
+	*get_sprite_image(char **map, t_dbl spr, t_piclib *piclib)
 {
 	char	value;
 
@@ -30,35 +30,34 @@
 		return (&piclib->s4);
 }
 
-	void
-get_sprite_path(t_piclib *piclib, char *tmp, char sprite_number)
+void
+	get_sprite_path(t_piclib *piclib, char *tmp, char sprite_number)
 {
 	if (sprite_number == '2')
 		piclib->s2.path = ft_strdup(tmp);
 	if (sprite_number == '3')
-			piclib->s3.path = ft_strdup(tmp);
+		piclib->s3.path = ft_strdup(tmp);
 	if (sprite_number == '4')
-			piclib->s4.path = ft_strdup(tmp);
+		piclib->s4.path = ft_strdup(tmp);
 	if (sprite_number == '5')
-			piclib->s5.path = ft_strdup(tmp);
+		piclib->s5.path = ft_strdup(tmp);
 	if (sprite_number == '6')
-			piclib->s6.path = ft_strdup(tmp);
+		piclib->s6.path = ft_strdup(tmp);
 	if (sprite_number == '7')
-			piclib->s7.path = ft_strdup(tmp);
+		piclib->s7.path = ft_strdup(tmp);
 	if (sprite_number == '8')
-			piclib->s8.path = ft_strdup(tmp);
+		piclib->s8.path = ft_strdup(tmp);
 	if (sprite_number == '9')
-			piclib->s9.path = ft_strdup(tmp);
+		piclib->s9.path = ft_strdup(tmp);
 }
 
-	void
-get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
+void
+	get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 {
 	char	*tmp;
 	int		fd;
 
-	if (!(tmp = ft_strtrim(&line[2], " ")))
-		close_program(data, "Failed allocating memory for path ", texture);
+	tmp = ft_strtrim(&line[2], " ");
 	if (ft_memcmp(&tmp[ft_strlen(tmp) - 4], ".xpm", 4) &&
 		ft_memcmp(&tmp[ft_strlen(tmp) - 4], ".png", 4))
 		close_program(data, "Wrong extension for file ", texture);
@@ -82,24 +81,24 @@ get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 	tmp = NULL;
 }
 
-	void
-put_pixel(t_img *img, t_int pos, int color)
+void
+	put_pixel(t_img *img, t_int pos, int color)
 {
 	char	*dst;
 
-	dst = (char *)img->colors 
+	dst = (char *)img->colors
 		+ (pos.y * img->line_length + pos.x * (img->bpp / 8));
 	*(int*)dst = color;
 }
 
-	void
-create_img(t_data *data, char *path, t_img *img)
+void
+	create_img(t_data *data, char *path, t_img *img)
 {
 	char *tmp;
 
 	tmp = ft_strdup(path);
 	free_image(data, img);
-	img->ptr = 
+	img->ptr =
 		mlx_xpm_file_to_image(data->mlx, tmp, &img->size.x, &img->size.y);
 	if (img->ptr == NULL)
 		close_program(data, "Invalid or missing file at : ", tmp);

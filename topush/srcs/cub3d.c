@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-	void
-check_args_errors(t_data *data, int argc, char **argv)
+void
+	check_args_errors(t_data *data, int argc, char **argv)
 {
 	if (argc == 1 || argc > 3)
 		close_program(data, "Invalid number of arguments\n", "");
@@ -29,8 +29,8 @@ check_args_errors(t_data *data, int argc, char **argv)
 		close_program(data, "Couldn't open .cub file\n", "");
 }
 
-	int
-main(int argc, char **argv)
+int
+	main(int argc, char **argv)
 {
 	t_data data;
 

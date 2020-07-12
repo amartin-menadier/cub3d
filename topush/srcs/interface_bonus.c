@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	void
-draw_minimap_mask(t_data *data, t_img *mask, int center)
+void
+	draw_minimap_mask(t_data *data, t_img *mask, int center)
 {
 	t_int	pxl;
 	int		diameter;
@@ -41,8 +41,8 @@ draw_minimap_mask(t_data *data, t_img *mask, int center)
 	}
 }
 
-	void
-draw_mask(t_data *data, t_img *mask)
+void
+	draw_mask(t_data *data, t_img *mask)
 {
 	int		draw_end_y;
 	int		color;
@@ -69,8 +69,8 @@ draw_mask(t_data *data, t_img *mask)
 	draw_minimap_mask(data, mask, minimap_data(data, CENTER));
 }
 
-	void
-draw_interface(t_data *data, t_piclib *piclib)
+void
+	draw_interface(t_data *data, t_piclib *piclib)
 {
 	int		lifebar_color;
 	int		lifebar_length;

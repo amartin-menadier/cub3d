@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	void
-get_minimap_avatar(t_data *data)
+void
+	get_minimap_avatar(t_data *data)
 {
 	t_img	*avatar;
 	char *path;
@@ -30,8 +30,8 @@ get_minimap_avatar(t_data *data)
 	path = NULL;
 }
 
-	int
-get_avatar_color(t_data *data, t_img *avatar, t_dbl minimap_cam, int color)
+int
+	get_avatar_color(t_data *data, t_img *avatar, t_dbl minimap_cam, int color)
 {
 	t_int	avat_pxl;
 	t_dbl	dist_from_player;

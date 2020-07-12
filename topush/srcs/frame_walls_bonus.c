@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	t_img
-*get_wall_img(t_data *data, t_piclib *piclib, t_dbl ray)
+t_img
+	*get_wall_img(t_data *data, t_piclib *piclib, t_dbl ray)
 {
 	t_img	*wall;
 	double	side;

@@ -12,9 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-
-	int
-get_sprite_y(t_data *data, t_img *img, int pxl_y, int height_on_win)
+int
+	get_sprite_y(t_data *data, t_img *img, int pxl_y, int height_on_win)
 {
 	int		spr_pxl_y;
 	int		spr_height;
@@ -28,8 +27,8 @@ get_sprite_y(t_data *data, t_img *img, int pxl_y, int height_on_win)
 	return (spr_pxl_y);
 }
 
-	int
-get_sprite_x(t_img *img, int pxl_x, int width_on_win, double center_x)
+int
+	get_sprite_x(t_img *img, int pxl_x, int width_on_win, double center_x)
 {
 	int		spr_pxl_x;
 	int		spr_width;
@@ -40,8 +39,8 @@ get_sprite_x(t_img *img, int pxl_x, int width_on_win, double center_x)
 	return (spr_pxl_x);
 }
 
-	t_dbl
-transform_sprite(double angle, t_dbl dist, double spr_y)
+t_dbl
+	transform_sprite(double angle, t_dbl dist, double spr_y)
 {
 	t_dbl	transform;
 	t_dbl	dir;
@@ -60,8 +59,8 @@ transform_sprite(double angle, t_dbl dist, double spr_y)
 /*
  * transform.z stands for depth
  */
-	void
-draw_one_sprite(t_data *data, t_img *img, t_dbl transform, t_int draw_end)
+void
+	draw_one_sprite(t_data *data, t_img *img, t_dbl transform, t_int draw_end)
 {
 	t_int	pxl;
 	t_int	spr_pxl;
@@ -89,8 +88,8 @@ draw_one_sprite(t_data *data, t_img *img, t_dbl transform, t_int draw_end)
 	}
 }
 
-	void
-draw_sprites(t_data *data, t_piclib *lib)
+void
+	draw_sprites(t_data *data, t_piclib *lib)
 {
 	int		i;
 	t_img	*img;

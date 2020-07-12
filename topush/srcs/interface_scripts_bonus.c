@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/03/12 21:56:19 by amartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	void
-draw_script_mask(t_data *data, t_int win_size, int option)
+void
+	draw_script_mask(t_data *data, t_int win_size, int option)
 {
 	t_int	win;
 	int		draw_start_y;
 
 	if (option == DRAW_START)
 		draw_start_y = 30;
-	else 
+	else
 		draw_start_y = 3 * win_size.y / 4;
 	win.x = 30;
 	while (win.x < win_size.x - 30)
@@ -34,7 +34,7 @@ draw_script_mask(t_data *data, t_int win_size, int option)
 			else if (win.x == 32 || win.x == win_size.x - 33
 				|| win.y == draw_start_y + 2 || win.y == win_size.y - 33)
 				put_pixel(&data->win, win, GREY);
-			else 
+			else
 				put_pixel(&data->win, win, WHITE);
 			win.y++;
 		}
@@ -42,11 +42,11 @@ draw_script_mask(t_data *data, t_int win_size, int option)
 	}
 }
 
-	char *
-start_message(void)
+char
+	*start_message(void)
 {
-	char	*str = NULL;
-	char	*tmp = NULL;
+	char	*str;
+	char	*tmp;
 
 	tmp = ft_strjoin("WELCOME TO GAMINET ! \\o/\n\nThe rules of the game ",
 		"are quite simple:\nYour goal is to find Norminet, stuck ");
@@ -68,41 +68,41 @@ start_message(void)
 	free(str);
 	str = ft_strjoin(tmp, "\n\n(press any key to continue)");
 	free(tmp);
-	tmp = NULL;	
+	tmp = NULL;
 	return (str);
 }
 
-	void
-write_start_message(t_data *data)
+void
+	write_start_message(t_data *data)
 {
-	mlx_string_put(data->mlx, data->window, 516, data->win.size.y / 10, 
+	mlx_string_put(data->mlx, data->window, 516, data->win.size.y / 10,
 		RED, "WELCOME TO GAMINET ! \\o/");
-	mlx_string_put(data->mlx, data->window, 460, data->win.size.y / 10 + 40, 
+	mlx_string_put(data->mlx, data->window, 460, data->win.size.y / 10 + 40,
 		BLACK, "The rules of the game are quite simple: ");
-	mlx_string_put(data->mlx, data->window, 404, data->win.size.y / 10 + 80, 
+	mlx_string_put(data->mlx, data->window, 404, data->win.size.y / 10 + 80,
 		BLACK, "To win, you must find Norminet who is stuck somewhere :(");
-	mlx_string_put(data->mlx, data->window, 446, data->win.size.y / 10 + 120, 
+	mlx_string_put(data->mlx, data->window, 446, data->win.size.y / 10 + 120,
 		BLACK, "Beware of the school rules and the virus o.o");
-	mlx_string_put(data->mlx, data->window, 387, data->win.size.y / 10 + 160, 
+	mlx_string_put(data->mlx, data->window, 387, data->win.size.y / 10 + 160,
 		BLACK, "In this troubled time, toilet paper rolls are your friends ;)");
-	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 240, 
+	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 240,
 		RED, "KEYS:");
-	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 280, 
+	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 280,
 		BLACK, "ZQSD to move");
-	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 320, 
+	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 320,
 		BLACK, "Arrows to look and change direction");
-	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 360, 
+	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 360,
 		BLACK, "V to kneel");
-	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 400, 
+	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 400,
 		BLACK, "SPACE to jump");
-	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 440, 
+	mlx_string_put(data->mlx, data->window, 50, data->win.size.y / 10 + 440,
 		BLACK, "P to print screen in a .bmp file under ./screenshot");
-	mlx_string_put(data->mlx, data->window, 558, data->win.size.y / 10 + 520, 
-		RED, "GOOD LUCK !               (press any key to start)");	
+	mlx_string_put(data->mlx, data->window, 558, data->win.size.y / 10 + 520,
+		RED, "GOOD LUCK !               (press any key to start)");
 }
 
-	int
-draw_script(t_data *data, int option)
+int
+	draw_script(t_data *data, int option)
 {
 	draw_script_mask(data, data->win.size, option);
 	mlx_put_image_to_window(data->mlx, data->window, data->win.ptr, 0, 0);

@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	int
-press_key(int key, t_data *data)
+int
+	press_key(int key, t_data *data)
 {
 	if (key == ESC)
 		close_program(data, "\nSee you next time ! ", "\\o/\n");
@@ -32,29 +32,29 @@ press_key(int key, t_data *data)
 		look(&data->angle, key);
 	if (MOVE(key))
 		move(data, data->map, &data->cam, key);
-	if(data->map[(int)data->cam.z][(int)data->cam.x] > CLASSIC_WALL)
+	if (data->map[(int)data->cam.z][(int)data->cam.x] > CLASSIC_WALL)
 		sprite_hit(data);
 	data->frame_done = 0;
-	return(key);
+	return (key);
 }
 
-	int	
-red_cross(t_data *data)
+int
+	red_cross(t_data *data)
 {
 	close_program(data, "\nSee you next time ! ", "\\o/\n");
 	return (0);
 }
 
-	int
-release_key(int key, t_data *data)
+int
+	release_key(int key, t_data *data)
 {
 	if (key == V && data->current_event != JUMP)
 		data->current_event = UNKNEEL;
 	return (key);
 }
 
-	void
-deal_current_event(t_data *data)
+void
+	deal_current_event(t_data *data)
 {
 	clock_t time_diff;
 
@@ -64,7 +64,7 @@ deal_current_event(t_data *data)
 		return ;
 	}
 	else
-		time_diff = clock () - data->time;
+		time_diff = clock() - data->time;
 	if (data->current_event == KNEEL)
 		kneel(data, 1);
 	else if (data->current_event == UNKNEEL)
@@ -75,8 +75,8 @@ deal_current_event(t_data *data)
 		data->current_event = 0;
 }
 
-	void
-hook_event(t_data *data)
+void
+	hook_event(t_data *data)
 {
 	deal_current_event(data);
 	mlx_hook(data->window, 2, 1L << 0, press_key, data);

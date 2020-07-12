@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	int
-lifebar_data(t_data *data, int mod)
+int
+	lifebar_data(t_data *data, int mod)
 {
 	t_int	size;
 
@@ -42,8 +42,8 @@ lifebar_data(t_data *data, int mod)
 	return (-9999);
 }
 
-	void
-draw_life_string(t_data *data)
+void
+	draw_life_string(t_data *data)
 {
 	char	*value;
 	t_int	ctr;
@@ -55,8 +55,8 @@ draw_life_string(t_data *data)
 	free(value);
 }
 
-	void
-draw_lifebar(t_data *data, int length, int color)
+void
+	draw_lifebar(t_data *data, int length, int color)
 {
 	t_int	win;
 	t_int	draw_start;

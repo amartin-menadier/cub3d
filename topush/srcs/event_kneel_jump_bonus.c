@@ -16,8 +16,8 @@
 ** three steps = some kneeling to gather momentum / jump / gravity to init pos
 */
 
-	void
-kneel(t_data *data, int way)
+void
+	kneel(t_data *data, int way)
 {
 	int		kneel_speed;
 
@@ -33,8 +33,8 @@ kneel(t_data *data, int way)
 	data->frame_done = 0;
 }
 
-	void
-jump(t_data *data, clock_t time_diff)
+void
+	jump(t_data *data, clock_t time_diff)
 {
 	int		jump_speed;
 

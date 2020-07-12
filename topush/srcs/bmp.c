@@ -1,7 +1,7 @@
 #include "cub3d.h"
 
-	unsigned char
-*create_bmp_info_header(t_img *img)
+unsigned char
+	*create_bmp_info_header(t_img *img)
 {
 	static unsigned char	info_header[40];
 	int						i;
@@ -23,8 +23,8 @@
 	return (info_header);
 }
 
-	unsigned char
-*create_bmp_file_header(t_img *img, int padding_size)
+unsigned char
+	*create_bmp_file_header(t_img *img, int padding_size)
 {
 	int						file_size;
 	static unsigned char	file_header[14];
@@ -45,8 +45,8 @@
 	return (file_header);
 }
 
-	void
-fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
+void
+	fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
 {
 	unsigned char padding[3] = {0, 0, 0};
 	unsigned char* file_header;
@@ -69,8 +69,8 @@ fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
 		close_program(data, "Couldn't close bmp fd", "");
 }
 
-	char 
-*get_screenshot_path(t_data *data, char *path)
+char 
+	*get_screenshot_path(t_data *data, char *path)
 {
 	char *path_number;
 	char *file_name;
@@ -90,8 +90,8 @@ fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
 	return (path);
 }
 
-	void 
-create_bmp(t_data *data, t_img *img, char *path)
+void 
+	create_bmp(t_data *data, t_img *img, char *path)
 {
 	unsigned char	image[img->size.y][img->size.x][img->bpp / 8];
 	t_int			pos;

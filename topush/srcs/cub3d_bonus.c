@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	void
-close_program(t_data *data, char *error_msg, char *str)
+void
+	close_program(t_data *data, char *error_msg, char *str)
 {
 	if (ft_memcmp(str, "\\o/\n", 4))
 		ft_putstr_fd("Error\n", 1);
@@ -24,8 +24,8 @@ close_program(t_data *data, char *error_msg, char *str)
 	exit(0);
 }
 
-	void
-check_args_errors(t_data *data, int argc, char **argv)
+void
+	check_args_errors(t_data *data, int argc, char **argv)
 {
 	if (argc == 1 || argc > 3)
 		close_program(data, "Invalid number of arguments\n", "");
@@ -50,8 +50,8 @@ start_game(t_data *data)
 	return (0);
 }
 
-	int
-main(int argc, char **argv)
+int
+	main(int argc, char **argv)
 {
 	t_data	data;
 

@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	char*
-new_level_path(char *old_path, char order)
+char
+	*new_level_path(char *old_path, char order)
 {
 	if (!ft_strncmp(old_path, "./cub/bonus/42_0.cub", 21))
 		return (ft_strdup("./cub/bonus/42_from01.cub"));
@@ -30,8 +30,8 @@ new_level_path(char *old_path, char order)
 	return (NULL);
 }
 
-	void
-load_new_level(t_data *data, char order)
+void
+	load_new_level(t_data *data, char order)
 {
 	char	*path;
 
@@ -57,8 +57,8 @@ draw_victory(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
 	t_img		img;
 
 	size = data->win.size;
-	img = data->piclib.victory;
-	if ((step.x = ((double)data->piclib.victory.size.x / (double)size.x)) < 1)
+img = data->piclib.victory;
+		if ((step.x = ((double)data->piclib.victory.size.x / (double)size.x)) < 1)
 		step.x = 1;
 	if ((step.z = ((double)data->piclib.victory.size.y / (double)size.y)) < 1)
 		step.z = 1;
@@ -72,8 +72,8 @@ draw_victory(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
 	put_pixel(&data->win, pxl, color); 
 }
 
-	int
-victory(t_data *data, t_int win_size, t_img *img)
+int
+	victory(t_data *data, t_int win_size, t_img *img)
 {
 	t_int	pxl;
 	t_int	draw_start;
@@ -101,8 +101,8 @@ victory(t_data *data, t_int win_size, t_img *img)
 	return (-1);
 }
 
-	void
-sprite_hit(t_data *data)
+void
+	sprite_hit(t_data *data)
 {
 	t_int	cam;
 	char	case_value;

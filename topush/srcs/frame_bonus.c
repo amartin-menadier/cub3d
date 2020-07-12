@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	int
-render_next_frame(t_data *data)
+int
+	render_next_frame(t_data *data)
 {
 	hook_event(data);
 	while (data->life > 0 && data->frame_done == 0)

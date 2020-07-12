@@ -16,8 +16,8 @@
 ** in set_drawing_limit, odd mods (so mod % 2 is true) are for skyboxes
 */
 
-	int
-drawing_limit(t_data *data, double wall_dist, int mod)
+int
+	drawing_limit(t_data *data, double wall_dist, int mod)
 {
 	int		line_height;
 	int		draw_start;
@@ -46,8 +46,8 @@ drawing_limit(t_data *data, double wall_dist, int mod)
 		return (-100000000);
 }
 
-	t_dbl
-set_ray(t_data *data, t_int win_size)
+t_dbl
+	set_ray(t_data *data, t_int win_size)
 {
 	double	camera_x;
 	t_dbl	ray;

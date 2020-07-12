@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	void
-move_forward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
+void
+	move_forward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
 	int new_x;
 	int	new_z;
@@ -28,8 +28,8 @@ move_forward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 		cam->z += dir.z * MOVE_SPEED;
 }
 
-	void
-move_backward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
+void
+	move_backward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
 	int new_x;
 	int	new_z;
@@ -44,8 +44,8 @@ move_backward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 		cam->z -= dir.z * MOVE_SPEED;
 }
 
-	void
-move_right(t_data *data, char **map, t_dbl *cam, t_dbl dir)
+void
+	move_right(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
 	int new_x;
 	int	new_z;
@@ -60,8 +60,8 @@ move_right(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 		cam->z -= dir.x * MOVE_SPEED;
 }
 
-	void
-move_left(t_data *data, char **map, t_dbl *cam, t_dbl dir)
+void
+	move_left(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 {
 	int new_x;
 	int	new_z;
@@ -76,8 +76,8 @@ move_left(t_data *data, char **map, t_dbl *cam, t_dbl dir)
 		cam->z += dir.x * MOVE_SPEED;
 }
 
-	void
-move(t_data *data, char **map, t_dbl *cam, int key)
+void
+	move(t_data *data, char **map, t_dbl *cam, int key)
 {
 	t_dbl	dir;
 
@@ -86,7 +86,7 @@ move(t_data *data, char **map, t_dbl *cam, int key)
 		data->time = clock();
 		data->current_event = JUMP;
 	}
-	if (key == V && data->current_event != JUMP)// a modifier
+	if (key == V && data->current_event != JUMP)
 		data->current_event = KNEEL;
 	dir.x = cos(data->angle.x);
 	dir.z = sin(data->angle.x);

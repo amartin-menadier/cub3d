@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-	unsigned char
-*int_to_rgb(unsigned char *image, int color)
+unsigned char
+	*int_to_rgb(unsigned char *image, int color)
 {
 	int	blue;
 	int	green;
@@ -29,8 +29,8 @@
 	return (image);
 }
 
-	void
-get_color(t_data *data, char *line, char *color)
+void
+	get_color(t_data *data, char *line, char *color)
 {
 	char	*tmp;
 	int		rgb;

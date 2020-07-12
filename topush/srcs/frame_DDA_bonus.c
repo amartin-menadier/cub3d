@@ -16,8 +16,8 @@
  ** DDA = Digital Differential Analyser
  */
 
-	t_dbl
-get_delta_dist(t_data *data, t_dbl ray)
+t_dbl
+	get_delta_dist(t_data *data, t_dbl ray)
 {
 	t_dbl	delta_dist;
 
@@ -26,7 +26,6 @@ get_delta_dist(t_data *data, t_dbl ray)
 	else if (ray.z == 0)
 		delta_dist.z = 1;
 	else
-	//	delta_dist.z = fabs(1 / ray.z);
 		delta_dist.z = sqrt(1 + square(ray.x) / square(ray.z));
 	if (ray.z == 0)
 		delta_dist.x = 0;
@@ -42,8 +41,8 @@ get_delta_dist(t_data *data, t_dbl ray)
 return (delta_dist);
 }
 
-	t_dbl
-get_side_dist(t_data *data, t_dbl cam, t_dbl ray)
+t_dbl
+	get_side_dist(t_data *data, t_dbl cam, t_dbl ray)
 {
 	t_dbl	cell;
 	t_dbl	side_dist;
@@ -63,8 +62,8 @@ get_side_dist(t_data *data, t_dbl cam, t_dbl ray)
 	return (side_dist);
 }
 
-	t_dbl
-DDA_step(t_dbl ray)
+t_dbl
+	DDA_step(t_dbl ray)
 {
 	t_dbl	step;
 
@@ -79,8 +78,8 @@ DDA_step(t_dbl ray)
 	return (step);
 }
 
-	t_dbl
-ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod)
+t_dbl
+	ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod)
 {
 	t_dbl	cell;
 	t_dbl	delta_dist;
@@ -109,8 +108,8 @@ ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod)
 	return (mod == 0 ? cell : side);
 }
 
-	double
-wall_side(t_data *data, t_dbl ray)
+double
+	wall_side(t_data *data, t_dbl ray)
 {
 	t_dbl	side;
 	t_dbl	step;
@@ -123,8 +122,8 @@ wall_side(t_data *data, t_dbl ray)
 		return (ray_orientation(ray));
 }
 
-	double
-perp_wall_dist(t_data *data, t_dbl cam, t_dbl ray)
+double
+	perp_wall_dist(t_data *data, t_dbl cam, t_dbl ray)
 {
 	t_dbl	step;
 	t_dbl	wall_cell;
