@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   settings_init_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:19 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:45:07 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ init_piclib(t_piclib *piclib)
 ** in init_data, angle.z is init, even though it is not supposedly used
 */
 
-	void
-init_data(t_data *data)
+void
+	init_data(t_data *data)
 {
 	data->win.size.x = 0;
 	data->win.size.y = 0;
@@ -62,20 +62,18 @@ init_data(t_data *data)
 	data->spr = NULL;
 	data->spr_count = 0;
 	data->cam.x = 0;
-	data->cam.y = - 1;
+	data->cam.y = -1;
 	data->cam.z = 0;
 	data->angle.x = -1;
 	data->angle.y = 0;
 	data->angle.z = 0;
 	data->current_event = 0;
-	data->time = clock();// a free ?
-//	if (data->cub_path && data->cub_path[3])
-//		data->level = data->cub_path[3];
+	data->time = clock();
 	data->frame_done = 0;
 }
 
-	void
-init_skybox(t_data *data)
+void
+	init_skybox(t_data *data)
 {
 	int		skybox;
 	int		x;
@@ -100,8 +98,8 @@ init_skybox(t_data *data)
 		data->skybox[1][1] = '0';
 }
 
-	void
-init_all(t_data *data)
+void
+	init_all(t_data *data)
 {
 	data->life = 100;
 	init_skybox(data);

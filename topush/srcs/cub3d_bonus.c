@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   cub3d_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:49 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void
 		data->save = 1;
 	else
 		data->save = 0;
-	if(ft_memcmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4))
+	if (ft_memcmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4))
 		close_program(data, "File extension is not .cub\n", "");
 	data->cub_path = ft_strdup(argv[1]);
 }
 
-	int
-start_game(t_data *data)
+int
+	start_game(t_data *data)
 {
 	init_all(data);
 	set_game(data);
@@ -57,6 +57,5 @@ int
 
 	check_args_errors(&data, argc, argv);
 	start_game(&data);
-//	mlx_loop(data.mlx);
 	return (0);
 }

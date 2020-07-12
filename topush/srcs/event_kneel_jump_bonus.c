@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   event.c                                            :+:      :+:    :+:   */
+/*   event_kneel_jump_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:26 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
+
 /*
 ** NB : cam_height = 0 at the top of the screen and  win_height -1 at the bottom
 ** three steps = some kneeling to gather momentum / jump / gravity to init pos
@@ -52,5 +53,3 @@ void
 		data->cam.y = data->win.size.y;
 	data->frame_done = 0;
 }
-
-

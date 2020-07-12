@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                            :+:      :+:    :+:   */
+/*   interface_minimap_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
+/*   Updated: 2020/07/12 14:45:51 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	double
-minimap_data(t_data *data, int mod)
+double
+	minimap_data(t_data *data, int mod)
 {
 	double	ret;
 	int		size_in_pxl;
@@ -40,8 +40,8 @@ minimap_data(t_data *data, int mod)
 	return (ret);
 }
 
-	t_dbl
-get_minimap_cell(t_data *data, t_int pxl, t_dbl *cam)
+t_dbl
+	get_minimap_cell(t_data *data, t_int pxl, t_dbl *cam)
 {
 	t_dbl	cell;
 	double	first_cell;
@@ -62,8 +62,8 @@ get_minimap_cell(t_data *data, t_int pxl, t_dbl *cam)
 	return (cell);
 }
 
-	int
-get_minimap_color(t_data *data, t_int pxl, double perimeter_dist)
+int
+	get_minimap_color(t_data *data, t_int pxl, double perimeter_dist)
 {
 	int		color;
 	char	value;
@@ -86,8 +86,8 @@ get_minimap_color(t_data *data, t_int pxl, double perimeter_dist)
 	return (color);
 }
 
-	void
-draw_minimap_column(t_data *data, t_int pxl, t_int center, double radius)
+void
+	draw_minimap_column(t_data *data, t_int pxl, t_int center, double radius)
 {
 	double	ctr_dist;
 	int		color;
@@ -102,8 +102,8 @@ draw_minimap_column(t_data *data, t_int pxl, t_int center, double radius)
 		put_pixel(&data->win, pxl, color);
 }
 
-	void
-draw_minimap(t_data *data, t_int center, double radius)
+void
+	draw_minimap(t_data *data, t_int center, double radius)
 {
 	t_int	pxl;
 	int		draw_start;
@@ -123,4 +123,3 @@ draw_minimap(t_data *data, t_int center, double radius)
 		pxl.x++;
 	}
 }
-

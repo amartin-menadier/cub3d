@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   tools_maths_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:43:45 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	double
-square(double nb)
+double
+	square(double nb)
 {
-	return(nb * nb);
+	return (nb * nb);
 }
 
-	double
-dist(t_dbl obj1, t_dbl obj2)
+double
+	dist(t_dbl obj1, t_dbl obj2)
 {
 	double	dist;
 
@@ -27,8 +27,8 @@ dist(t_dbl obj1, t_dbl obj2)
 	return (dist);
 }
 
-	t_dbl
-rotate_point(double angle, t_dbl *ctr_ptr, t_dbl *old_ptr)
+t_dbl
+	rotate_point(double angle, t_dbl *ctr_ptr, t_dbl *old_ptr)
 {
 	t_dbl	new;
 	t_dbl	ctr;

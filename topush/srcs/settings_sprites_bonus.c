@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   settings_sprites_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:44:34 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	void
-get_sprites_in_map(t_data *data, char **map)
+void
+	get_sprites_in_map(t_data *data, char **map)
 {
 	t_int	cam;
 	int		i;
@@ -30,20 +30,20 @@ get_sprites_in_map(t_data *data, char **map)
 		while (cam.x < data->map_size.x && i < data->spr_count)
 		{
 			if (map[cam.z][cam.x] >= '2' && map[cam.z][cam.x] <= '9')
-				{
-					data->spr[i].x = cam.x + 0.5;
-					data->spr[i].y = drand48() * data->win.size.y / 2.0;
-					data->spr[i].z = cam.z + 0.5;
-					i++;
-				}
+			{
+				data->spr[i].x = cam.x + 0.5;
+				data->spr[i].y = drand48() * data->win.size.y / 2.0;
+				data->spr[i].z = cam.z + 0.5;
+				i++;
+			}
 			cam.x++;
 		}
 		cam.z++;
 	}
 }
 
-	double
-sprite_data(t_data *data, t_dbl transform, t_int win, int mod)
+double
+	sprite_data(t_data *data, t_dbl transform, t_int win, int mod)
 {
 	double	center_x;
 	t_int	length;
@@ -72,8 +72,8 @@ sprite_data(t_data *data, t_dbl transform, t_int win, int mod)
 	return (-9999);
 }
 
-	void
-sort_sprites(t_dbl cam, t_dbl *spr, int spr_count)
+void
+	sort_sprites(t_dbl cam, t_dbl *spr, int spr_count)
 {
 	int		i;
 	int		j;
@@ -87,7 +87,7 @@ sort_sprites(t_dbl cam, t_dbl *spr, int spr_count)
 		j = i;
 		while (++j < spr_count)
 		{
-		if ((dist(cam, spr[i]) < dist(cam, spr[j]) && i < j)
+			if ((dist(cam, spr[i]) < dist(cam, spr[j]) && i < j)
 				|| (dist(cam, spr[i]) > dist(cam, spr[j]) && i > j))
 			{
 				k++;
@@ -100,8 +100,8 @@ sort_sprites(t_dbl cam, t_dbl *spr, int spr_count)
 	}
 }
 
-	int
-sprite_player_same_cell(t_data *data, int i)
+int
+	sprite_player_same_cell(t_data *data, int i)
 {
 	t_int	spr;
 	t_int	player;
@@ -110,7 +110,6 @@ sprite_player_same_cell(t_data *data, int i)
 	spr.y = (int)data->spr[i].z;
 	player.x = (int)data->cam.x;
 	player.y = (int)data->cam.z;
-
 	if (spr.x == player.x && spr.z == player.z)
 		return (1);
 	else

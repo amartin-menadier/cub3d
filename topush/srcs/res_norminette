@@ -157,20 +157,20 @@ Error (line 25, col 14): bad spacing
 Error (line 32, col 1): bad spacing
 Error (line 34): must have only tabulations between struct and s_settings.
 Error (line 34, col 14): bad spacing
-Error (line 37, col 8): NO_path not unixcase
-Error (line 38, col 8): SO_path not unixcase
-Error (line 39, col 8): EA_path not unixcase
-Error (line 40, col 8): WE_path not unixcase
-Error (line 41, col 8): S_path not unixcase
+Error (line 37, col 8): no_path not unixcase
+Error (line 38, col 8): so_path not unixcase
+Error (line 39, col 8): ea_path not unixcase
+Error (line 40, col 8): we_path not unixcase
+Error (line 41, col 8): s_path not unixcase
 Error (line 53, col 1): bad spacing
 Error (line 55): s_frame and t_frame not aligned.
 Error (line 55): must have only tabulations between struct and s_frame.
 Error (line 55, col 14): bad spacing
-Error (line 71, col 8): NO_img not unixcase
-Error (line 72, col 8): SO_img not unixcase
-Error (line 73, col 8): EA_img not unixcase
-Error (line 74, col 8): WE_img not unixcase
-Error (line 75, col 8): S_img not unixcase
+Error (line 71, col 8): no_img not unixcase
+Error (line 72, col 8): so_img not unixcase
+Error (line 73, col 8): ea_img not unixcase
+Error (line 74, col 8): we_img not unixcase
+Error (line 75, col 8): s_img not unixcase
 Error (line 88): must have only tabulations between struct and s_data.
 Error (line 88, col 14): bad spacing
 Error (line 95, col 1): bad spacing
@@ -195,7 +195,7 @@ Error (line 148): bad indentation
 Error (line 150): bad indentation
 Error (line 156): bad indentation
 Error (line 158): bad indentation
-Error (line 159, col 0): perform_DDA not unixcase
+Error (line 159, col 0): perform_dda not unixcase
 Error (line 160): bad indentation
 Error (line 162): bad indentation
 Error (line 164): bad indentation
@@ -564,7 +564,7 @@ Error (line 48, col 8): texPos not unixcase
 Error (line 74, col 34): F not unixcase
 Error (line 79, col 1): missing space after if
 Error (line 82, col 1): missing space after if
-Error (line 95, col 0): perform_DDA not unixcase
+Error (line 95, col 0): perform_dda not unixcase
 Error (line 96, col 27): F not unixcase
 Error (line 103, col 2): missing space after if
 Error (line 115, col 2): missing space after if

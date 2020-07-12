@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   settings_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:19 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:45:22 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	void
-replace_cub_path(t_data *data, char *new_path)
+void
+	replace_cub_path(t_data *data, char *new_path)
 {
 	free(data->cub_path);
 	data->cub_path = ft_strdup(new_path);
@@ -36,16 +36,16 @@ get_first_angle(char c)
 	return (angle);
 }
 
-	void
-create_piclib(t_data *data, t_piclib *piclib)
+void
+	create_piclib(t_data *data, t_piclib *piclib)
 {
 	create_img(data, piclib->ea.path, &piclib->ea);
 	create_img(data, piclib->so.path, &piclib->so);
 	create_img(data, piclib->we.path, &piclib->we);
 	create_img(data, piclib->no.path, &piclib->no);
-	create_img(data, piclib->flr.path, &piclib->flr); 
-	create_img(data, piclib->sky.path, &piclib->sky); 
-	create_img(data, piclib->s2.path, &piclib->s2); 
+	create_img(data, piclib->flr.path, &piclib->flr);
+	create_img(data, piclib->sky.path, &piclib->sky);
+	create_img(data, piclib->s2.path, &piclib->s2);
 	create_img(data, piclib->s3.path, &piclib->s3);
 	create_img(data, piclib->s4.path, &piclib->s4);
 	create_img(data, piclib->s5.path, &piclib->s5);
@@ -62,8 +62,8 @@ create_piclib(t_data *data, t_piclib *piclib)
 		create_skybox(data, piclib, &piclib->skybox);
 }
 
-	void
-set_mlx(t_data *data, t_img *win, t_int win_size)
+void
+	set_mlx(t_data *data, t_img *win, t_int win_size)
 {
 	data->mlx = mlx_init();
 	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "Cub3D");
@@ -73,55 +73,14 @@ set_mlx(t_data *data, t_img *win, t_int win_size)
 	win->size.x = win_size.x;
 	win->size.y = win_size.y;
 }
-/*
-	void
-set_skymap(t_data *data)
-{
-	int		i;
-	int		j;
 
-	data->map_size.x = 1000;
-	data->map_size.z = 1000;
-	if (!(data->map = malloc(sizeof(char *) * data->map_size.z)))
-		close_program(data, "Failed allocating skybox map ligns", "");
-	i = 0;
-	while (i < data->map_size.z)
-	{
-		if (!(data->map[i] = malloc(sizeof(char) * (data->map_size.x + 1))))
-			close_program(data, "Failed allocating skybox map lign", "");
-		data->map[i][data->map_size.x] = '\0';
-		j = 0;
-		while (j < data->map_size.x)
-		{
-			if (!i || i == data->map_size.z || !j || j == data->map_size.x - 1)
-				data->map[i][j] = 1;
-			else
-				data->map[i][j] = 0;
-			j++;
-		}
-		i++;
-	}
-}
-*/
-	void
-set_game(t_data *data)
+void
+	set_game(t_data *data)
 {
 	parse_cub_file(data);
 	set_mlx(data, &data->win, data->win.size);
 	data->cam.y = data->win.size.y / 2;
 	create_piclib(data, &data->piclib);
-	/*
-	if (data->skybox)
-	{
-		ft_putstr_fd("\nset_game1", 1);
-		free_data(data);
-		ft_putstr_fd("\nset_game2", 1);
-		set_skymap(data);
-		ft_putstr_fd("\nset_game3", 1);
-		data->cam.x = data->map_size.x / 2;
-		data->cam.z = data->map_size.z / 2;
-	}
-	*/
 	if (!(data->z_buffer = malloc(sizeof(double *) * data->win.size.x)))
 		close_program(data, "Failed allocating z_buffer while", "set_game");
 }

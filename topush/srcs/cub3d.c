@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:56 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void
 		data->save = 1;
 	else
 		data->save = 0;
-	if(ft_memcmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4))
+	if (ft_memcmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4))
 		close_program(data, "File extension is not .cub\n", "");
 	if ((data->settings.fd = open(argv[1], O_RDONLY)) == -1)
 		close_program(data, "Couldn't open .cub file\n", "");

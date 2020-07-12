@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resolution.c                                            :+:      :+:    :+:   */
+/*   settings_resolution_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/06 14:06:30 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 11:52:48 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/07/12 14:44:45 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	void
-get_resolution(t_data *data, char *line)
+void
+	get_resolution(t_data *data, char *line)
 {
 	int	i;
 	i = 1;

@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.c                                            :+:      :+:    :+:   */
+/*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/06 14:06:30 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 11:52:48 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/07/12 14:45:44 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-
-	int
-is_map(t_data *data, t_settings *settings, int x, int y)
+int
+	is_map(t_data *data, t_settings *settings, int x, int y)
 {
 	char c;
 
@@ -42,8 +41,8 @@ is_map(t_data *data, t_settings *settings, int x, int y)
 	return (0);
 }
 
-	int
-check_map_errors(t_data *data, t_settings *settings)
+int
+	check_map_errors(t_data *data, t_settings *settings)
 {
 	int x;
 	int y;
@@ -67,11 +66,11 @@ check_map_errors(t_data *data, t_settings *settings)
 	}
 	if (settings->player_orientation == (char)NULL)
 		close_program(data, "No map or no player set :'(", "");
-	return(0);
+	return (0);
 }
 
-	void
-check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
+void
+	check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
 {
 	int i;
 	int j;
@@ -98,8 +97,8 @@ check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
 ** NB : map_size.y has not yet been incremented in fill_tmp hence +1 each time
 */
 
-	char
-**get_tmp_map(t_data *data, t_settings *settings, char **tmp, char *line)
+char
+	**get_tmp_map(t_data *data, t_settings *settings, char **tmp, char *line)
 {
 	int i;
 
@@ -120,8 +119,8 @@ check_square_neighbors(t_data *data, t_settings *settings, int x, int y)
 	return (tmp);
 }
 
-	void
-get_map(t_data *data, char *line, int i, t_settings *settings)
+void
+	get_map(t_data *data, char *line, int i, t_settings *settings)
 {
 	char	**tmp;
 

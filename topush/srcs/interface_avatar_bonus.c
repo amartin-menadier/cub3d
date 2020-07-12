@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                            :+:      :+:    :+:   */
+/*   interface_avatar_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/07/12 14:46:03 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void
 	get_minimap_avatar(t_data *data)
 {
 	t_img	*avatar;
-	char *path;
+	char	*path;
 
 	avatar = &data->piclib.avatar;
 	if (data->life >= 80)

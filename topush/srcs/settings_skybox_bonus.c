@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   settings_skybox_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:44:39 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	t_int
-skybox_face_first_pixel(t_img *face, int face_nb)
+t_int
+	skybox_face_first_pixel(t_img *face, int face_nb)
 {
 	t_int	start;
 
@@ -29,8 +29,8 @@ skybox_face_first_pixel(t_img *face, int face_nb)
 	return (start);
 }
 
-	void
-create_skybox_face(t_data *data, t_img skybox, t_img *face, int face_nb)
+void
+	create_skybox_face(t_data *data, t_img skybox, t_img *face, int face_nb)
 {
 	t_int	start;
 	t_int	pxl;
@@ -58,10 +58,9 @@ create_skybox_face(t_data *data, t_img skybox, t_img *face, int face_nb)
 	}
 }
 
-	void
-create_skybox(t_data *data, t_piclib *piclib, t_img *skybox)
+void
+	create_skybox(t_data *data, t_piclib *piclib, t_img *skybox)
 {
-
 	if (skybox->size.x / 4 != skybox->size.y / 3)
 		close_program(data, "skybox img is not a 4*3 img", "");
 	create_skybox_face(data, *skybox, &piclib->ea, EA);

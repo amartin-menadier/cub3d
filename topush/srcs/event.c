@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:41 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ int
 	if (key == KEY_Q)
 		move_left(&data->frame, data->settings.map);
 	data->frame.spr_sorted = 0;
-	return(key);
+	return (key);
 }
 
-int	
+int
 	red_cross(t_data *data)
 {
 	close_program(data, "\nEverything went well ! ", "\\o/\n");

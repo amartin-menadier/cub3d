@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resolution.c                                            :+:      :+:    :+:   */
+/*   resolution.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/06 14:06:30 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 11:52:48 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/07/12 14:45:26 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-	int
-get_res_size(char *line, int *size)
+int
+	get_res_size(char *line, int *size)
 {
 	int	len;
 
@@ -31,8 +31,8 @@ get_res_size(char *line, int *size)
 	return (len);
 }
 
-	void
-get_resolution(t_data *data, char *line, t_settings *settings)
+void
+	get_resolution(t_data *data, char *line, t_settings *settings)
 {
 	int	i;
 

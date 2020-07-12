@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   tools_colors_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:44:09 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	int
-img_color(int *colors, int pxl_x, int pxl_y, t_int size)
+int
+	img_color(int *colors, int pxl_x, int pxl_y, t_int size)
 {
 	if (pxl_x >= size.x && pxl_y >= size.y)
 		return (RED);
@@ -31,8 +31,8 @@ img_color(int *colors, int pxl_x, int pxl_y, t_int size)
 		return (colors[size.x * pxl_y + pxl_x]);
 }
 
-	unsigned char
-*int_to_rgb(unsigned char *copy, int color)
+unsigned char
+	*int_to_rgb(unsigned char *copy, int color)
 {
 	int	blue;
 	int	green;
@@ -47,4 +47,3 @@ img_color(int *colors, int pxl_x, int pxl_y, t_int size)
 	copy[3] = (unsigned char)0;
 	return (copy);
 }
-

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.c                                            :+:      :+:    :+:   */
+/*   settings_map_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/06 14:06:30 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 11:52:48 by amartin-         ###   ########.fr       */
+/*   Created: 2020/07/12 14:44:51 by amenadier         #+#    #+#             */
+/*   Updated: 2020/07/12 14:45:03 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	int
-is_map(t_data *data, int x, int z)
+int
+	is_map(t_data *data, int x, int z)
 {
 	char	c;
 
@@ -42,8 +42,8 @@ is_map(t_data *data, int x, int z)
 	return (0);
 }
 
-	int
-check_map_errors(t_data *data)
+int
+	check_map_errors(t_data *data)
 {
 	int x;
 	int z;
@@ -67,11 +67,11 @@ check_map_errors(t_data *data)
 	}
 	if (data->angle.x == -1)
 		close_program(data, "No map or no player data :'(", "");
-	return(0);
+	return (0);
 }
 
-	void
-check_cell_neighbors(t_data *data, int x, int z)
+void
+	check_cell_neighbors(t_data *data, int x, int z)
 {
 	int i;
 	int j;
@@ -98,22 +98,21 @@ check_cell_neighbors(t_data *data, int x, int z)
 ** NB : map_size.y has not yet been incremented in fill_tmp hence +1 each time
 */
 
-	char
-**get_tmp_map(t_data *data, char **tmp, char *line)
+char
+	**get_tmp_map(t_data *data, char **tmp, char *line)
 {
 	int i;
 
 	i = 0;
 	if (!(tmp = malloc(sizeof(char**) * (data->map_size.z + 1))))
 		close_program(data, "Failed allocating memory for tmp map\n", "");
-//	tmp[0] = NULL;
 	while (i < data->map_size.z + 1)
 	{
 		if (!(tmp[i] = malloc(sizeof(char*) * (data->map_size.x + 1))))
 			close_program(data, "Failed allocating memory for tmp map\n", "");
 		if (i != 0)
-			tmp[i] = ft_strcharcpy
-				(tmp[i], data->map[i - 1], data->map_size.x, ' ');
+			tmp[i] = 
+				ft_strcharcpy(tmp[i], data->map[i - 1], data->map_size.x, ' ');
 		else
 			tmp[i] = ft_strcharcpy(tmp[i], line, data->map_size.x, ' ');
 		i++;
@@ -121,8 +120,8 @@ check_cell_neighbors(t_data *data, int x, int z)
 	return (tmp);
 }
 
-	void
-get_map(t_data *data, char *line, int i)
+void
+	get_map(t_data *data, char *line, int i)
 {
 	char	**tmp;
 

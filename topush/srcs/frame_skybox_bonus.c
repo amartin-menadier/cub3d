@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   frame_skybox_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:46:19 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,13 @@ t_int
 	face_pxl.x = ratio.x * face->size.x;
 	while (face_pxl.x >= face->size.x)
 		face_pxl.x--;
-	line_height = drawing_limit(data, 1, 5);//try PWD 0.5 instead of 1
+	line_height = drawing_limit(data, 1, 5);
 	cam_height = data->cam.y + sin(data->angle.y) * data->win.size.y;
 	ratio.y = 1.00 * (line_height / 2 - cam_height + pxl_y) / line_height;
 	face_pxl.y = ratio.y * face->size.y;
-	return(face_pxl);
+	return (face_pxl);
 }
 
-/*
-** The second while is unecessary and just there to fix mountain.xpm bug => find another and proper skybox is needed
-*/
 void
 	draw_skybox_column(t_data *data, t_int *pxl, t_dbl ray, double wall_dist)
 {

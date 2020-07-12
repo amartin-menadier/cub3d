@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   frame_floor_and_sky_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:46:59 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void
 	}
 	cell.x = floor(ray_cam.x);
 	cell.z = floor(ray_cam.z);
-	img_pxl.x = (int)(img->size.x * (ray_cam.x - cell.x));// & (img->size.x - 1);
-	img_pxl.y = (int)(img->size.y * (ray_cam.z - cell.z));// & (img->size.y - 1);
+	img_pxl.x = (int)(img->size.x * (ray_cam.x - cell.x));
+	img_pxl.y = (int)(img->size.y * (ray_cam.z - cell.z));
 	color = img_color(img->colors, img_pxl.x, img_pxl.y, img->size);
 	put_pixel(&data->win, pxl, color);
 }

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c						                    :+:      :+:    :+:   */
+/*   settings_free_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/07/12 14:45:18 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	void
-free_image(t_data *data, t_img *img)
+void
+	free_image(t_data *data, t_img *img)
 {
 	if (img->path != NULL)
 		free(img->path);
@@ -23,8 +23,8 @@ free_image(t_data *data, t_img *img)
 	img->ptr = NULL;
 }
 
-	void
-free_piclib(t_data *data, t_piclib *lib)
+void
+	free_piclib(t_data *data, t_piclib *lib)
 {
 	free_image(data, &lib->ea);
 	free_image(data, &lib->so);
@@ -47,8 +47,8 @@ free_piclib(t_data *data, t_piclib *lib)
 	free_image(data, &lib->mask);
 }
 
-	void
-free_map(t_data *data, char **map, int ligns_to_free)
+void
+	free_map(t_data *data, char **map, int ligns_to_free)
 {
 	int	i;
 
@@ -74,8 +74,8 @@ free_map(t_data *data, char **map, int ligns_to_free)
 	}
 }
 
-	void
-free_data(t_data *data)
+void
+	free_data(t_data *data)
 {
 	free_map(data, data->map, data->map_size.z);
 	if (data->spr != NULL)
@@ -83,11 +83,11 @@ free_data(t_data *data)
 	data->spr = NULL;
 	if (data->z_buffer != NULL)
 		free(data->z_buffer);
-	data->z_buffer = NULL; 
+	data->z_buffer = NULL;
 }
 
-	void
-free_all(t_data *data)
+void
+	free_all(t_data *data)
 {
 	free(data->cub_path);
 	data->cub_path = NULL;

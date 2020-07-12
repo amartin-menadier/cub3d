@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   frame_walls_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:46:13 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_img
 		wall = &piclib->we;
 	else if (side == NO)
 		wall = &piclib->no;
-	cell = ray_to_wall(data, ray, DDA_step(ray), 0);
+	cell = ray_to_wall(data, ray, dda_step(ray), 0);
 	if (data->map[(int)cell.z][(int)cell.x] == STAIRS_DOWN)
 		wall = &piclib->s7;
 	if (data->map[(int)cell.z][(int)cell.x] == STAIRS_UP)
@@ -39,8 +39,8 @@ t_img
 	return (wall);
 }
 
-	double
-img_step_x(t_data *data, double wall_dist, t_dbl ray, t_dbl cam)
+double
+	img_step_x(t_data *data, double wall_dist, t_dbl ray, t_dbl cam)
 {
 	double	step;
 
@@ -59,13 +59,12 @@ img_step_x(t_data *data, double wall_dist, t_dbl ray, t_dbl cam)
 	return (step);
 }
 
-	double
-img_step(t_data *data, t_dbl cam, t_dbl ray, int *pxl_y)
+double
+	img_step(t_data *data, t_dbl cam, t_dbl ray, int *pxl_y)
 {
 	t_dbl	step;
 	double	wall_dist;
 	double	line_height;
-//	t_int	*win_size;
 	int		vertical_look;
 
 	wall_dist = perp_wall_dist(data, cam, ray);
@@ -77,7 +76,6 @@ img_step(t_data *data, t_dbl cam, t_dbl ray, int *pxl_y)
 	else
 	{
 		vertical_look = sin(data->angle.y) * (data->win.size.y);
-	//	win_size = &data->win.size;
 		line_height = drawing_limit(data, wall_dist, 4);
 		step.y = 1.0 * (line_height / 2 - data->cam.y - vertical_look + *pxl_y);
 		step.y /= line_height;
@@ -85,8 +83,8 @@ img_step(t_data *data, t_dbl cam, t_dbl ray, int *pxl_y)
 	}
 }
 
-	void
-draw_wall_column(t_data *data, t_int *pxl, t_dbl cam, t_dbl ray)
+void
+	draw_wall_column(t_data *data, t_int *pxl, t_dbl cam, t_dbl ray)
 {
 	t_img	*wall;
 	t_int	wall_pxl;

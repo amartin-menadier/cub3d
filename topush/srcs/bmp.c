@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bmp.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/12 14:40:31 by amenadier         #+#    #+#             */
+/*   Updated: 2020/07/12 14:42:43 by amenadier        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 unsigned char
@@ -9,13 +21,13 @@ unsigned char
 	i = 0;
 	while (i < 40)
 		info_header[i++] = 0;
-	info_header[ 0] = (unsigned char)(40);
-	info_header[ 4] = (unsigned char)(img->size.x);
-	info_header[ 5] = (unsigned char)(img->size.x >> 8);
-	info_header[ 6] = (unsigned char)(img->size.x >> 16);
-	info_header[ 7] = (unsigned char)(img->size.x >> 24);
-	info_header[ 8] = (unsigned char)(-img->size.y    );
-	info_header[ 9] = (unsigned char)(-img->size.y >> 8);
+	info_header[0] = (unsigned char)(40);
+	info_header[4] = (unsigned char)(img->size.x);
+	info_header[5] = (unsigned char)(img->size.x >> 8);
+	info_header[6] = (unsigned char)(img->size.x >> 16);
+	info_header[7] = (unsigned char)(img->size.x >> 24);
+	info_header[8] = (unsigned char)(-img->size.y);
+	info_header[9] = (unsigned char)(-img->size.y >> 8);
 	info_header[10] = (unsigned char)(-img->size.y >> 16);
 	info_header[11] = (unsigned char)(-img->size.y >> 24);
 	info_header[12] = (unsigned char)(1);
@@ -35,12 +47,12 @@ unsigned char
 		file_header[i++] = 0;
 	file_size = 14 + 40
 		+ ((img->bpp / 8) * img->size.x + padding_size) * img->size.y;
-	file_header[ 0] = (unsigned char)('B');
-	file_header[ 1] = (unsigned char)('M');
-	file_header[ 2] = (unsigned char)(file_size    );
-	file_header[ 3] = (unsigned char)(file_size >> 8);
-	file_header[ 4] = (unsigned char)(file_size >> 16);
-	file_header[ 5] = (unsigned char)(file_size >> 24);
+	file_header[0] = (unsigned char)('B');
+	file_header[1] = (unsigned char)('M');
+	file_header[2] = (unsigned char)(file_size);
+	file_header[3] = (unsigned char)(file_size >> 8);
+	file_header[4] = (unsigned char)(file_size >> 16);
+	file_header[5] = (unsigned char)(file_size >> 24);
 	file_header[10] = (unsigned char)(14 + 40);
 	return (file_header);
 }
@@ -48,9 +60,9 @@ unsigned char
 void
 	fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
 {
-	unsigned char padding[3] = {0, 0, 0};
-	unsigned char* file_header;
-	unsigned char* info_header;
+	unsigned char	padding[3] = {0, 0, 0};
+	unsigned char	*file_header;
+	unsigned char	*info_header;
 	int i;
 
 	i = (4 - (img->size.x * img->bpp / 8) % 4) % 4;
@@ -61,7 +73,7 @@ void
 	i = 0;
 	while (i < img->size.y)
 	{
-		write(bmp_fd, image+(i * 4 * img->size.x), 4 *img->size.x);
+		write(bmp_fd, image + (i * 4 * img->size.x), 4 * img->size.x);
 		write(bmp_fd, padding, (4 - (img->size.x * img->bpp / 8) % 4) % 4);
 		i++;
 	}
@@ -72,8 +84,8 @@ void
 char 
 	*get_screenshot_path(t_data *data, char *path)
 {
-	char *path_number;
-	char *file_name;
+	char	*path_number;
+	char	*file_name;
 
 	if (data->save == 0)
 		data->save++;

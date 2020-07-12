@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                            :+:      :+:    :+:   */
+/*   frame_raycasting_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
+/*   Updated: 2020/07/12 14:46:50 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,7 @@ int
 	int		draw_end;
 	int		vertical_look;
 
-//	if (data->skybox[0][0])
-//		mod++;
 	vertical_look = sin(data->angle.y) * (data->win.size.y);
-//	if (mod % 2)
-//		wall_dist = fmax(data->win.size.x, data->win.size.y) / data->win.size.y;
 	line_height = fabs(data->win.size.y / wall_dist);
 	draw_start = vertical_look + data->cam.y - line_height / 2;
 	draw_end = vertical_look + data->cam.y + line_height / 2;
@@ -61,9 +57,35 @@ t_dbl
 	else
 	{
 		plane = rotate_point(data->angle.x - PI / 2, NULL, NULL);
-		ray = rotate_point(data->angle.x , NULL, NULL);
+		ray = rotate_point(data->angle.x, NULL, NULL);
 		ray.x += plane.x * camera_x;
 		ray.z += plane.z * camera_x;
 	}
-	return(ray);
+	return (ray);
+}
+
+double
+	perp_wall_dist(t_data *data, t_dbl cam, t_dbl ray)
+{
+	t_dbl	step;
+	t_dbl	wall_cell;
+	double	perp_wall_dist;
+	double	side;
+
+	step = dda_step(ray);
+	wall_cell = ray_to_wall(data, ray, step, 0);
+	if (data->skybox[0][0])
+	{
+		wall_cell = get_side_dist(data, cam, ray);
+		wall_cell.x += 1.5;
+		wall_cell.z += 1.5;
+		wall_cell.x = (int)wall_cell.x;
+		wall_cell.z = (int)wall_cell.z;
+	}
+	side = wall_side(data, ray);
+	if (side == EA || side == WE)
+		perp_wall_dist = (wall_cell.x - cam.x + (1 - step.x) / 2) / ray.x;
+	else
+		perp_wall_dist = (wall_cell.z - cam.z + (1 - step.z) / 2) / ray.z;
+	return (perp_wall_dist);
 }

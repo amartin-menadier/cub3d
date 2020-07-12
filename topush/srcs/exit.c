@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                            :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:09 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int
 	ft_putstr_fd(error_msg, 1);
 	ft_putstr_fd(str, 1);
 	free_settings(&data->settings);
-	if(data->settings.done)
+	if (data->settings.done)
 	{
 		free_frame(data, &data->frame);
 		mlx_destroy_image(data->mlx, data->img.ptr);
@@ -35,13 +35,13 @@ int
 void
 	free_frame(t_data *data, t_frame *frame)
 {
-	mlx_destroy_image(data->mlx, data->frame.NO_img.ptr);
-	mlx_destroy_image(data->mlx, data->frame.SO_img.ptr);
-	mlx_destroy_image(data->mlx, data->frame.EA_img.ptr);
-	mlx_destroy_image(data->mlx, data->frame.WE_img.ptr);
-	mlx_destroy_image(data->mlx, data->frame.S_img.ptr);
+	mlx_destroy_image(data->mlx, data->frame.no_img.ptr);
+	mlx_destroy_image(data->mlx, data->frame.so_img.ptr);
+	mlx_destroy_image(data->mlx, data->frame.ea_img.ptr);
+	mlx_destroy_image(data->mlx, data->frame.we_img.ptr);
+	mlx_destroy_image(data->mlx, data->frame.s_img.ptr);
 	free(frame->z_buffer);
-	frame->z_buffer = NULL; 
+	frame->z_buffer = NULL;
 	free(frame->spr_order);
 	frame->spr_order = NULL;
 	free(frame->spr_dist);
@@ -65,21 +65,21 @@ free_sprites(t_settings *settings)
 void
 	free_settings(t_settings *settings)
 {
-	if (settings->NO_path != NULL)
-		free(settings->NO_path);
-	if (settings->SO_path != NULL)
-		free(settings->SO_path);
-	if (settings->WE_path != NULL)
-		free(settings->WE_path);
-	if (settings->EA_path != NULL)
-		free(settings->EA_path);
-	if (settings->S_path != NULL)
-		free(settings->S_path);
-	settings->NO_path = NULL;
-	settings->SO_path = NULL;
-	settings->WE_path = NULL;
-	settings->EA_path = NULL;
-	settings->S_path = NULL;
+	if (settings->no_path != NULL)
+		free(settings->no_path);
+	if (settings->so_path != NULL)
+		free(settings->so_path);
+	if (settings->we_path != NULL)
+		free(settings->we_path);
+	if (settings->ea_path != NULL)
+		free(settings->ea_path);
+	if (settings->s_path != NULL)
+		free(settings->s_path);
+	settings->no_path = NULL;
+	settings->so_path = NULL;
+	settings->we_path = NULL;
+	settings->ea_path = NULL;
+	settings->s_path = NULL;
 	free_sprites(settings);
 	free_map(settings);
 }

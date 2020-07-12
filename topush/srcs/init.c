@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:19 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:46:06 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void
 {
 	settings->win_size.x = 0;
 	settings->win_size.y = 0;
-	settings->NO_path = NULL;
-	settings->SO_path = NULL;
-	settings->WE_path = NULL;
-	settings->EA_path = NULL;
-	settings->S_path = NULL;
+	settings->no_path = NULL;
+	settings->so_path = NULL;
+	settings->we_path = NULL;
+	settings->ea_path = NULL;
+	settings->s_path = NULL;
 	settings->floor_color = -1;
 	settings->ceiling_color = -1;
 	settings->map = NULL;
@@ -40,10 +40,10 @@ void
 void
 	init_dir_and_plane(t_settings *settings, t_frame *frame)
 {
-		frame->dir.x = 0;
-		frame->dir.y = -1;
-		frame->plane.x = 0.7;
-		frame->plane.y = 0;
+	frame->dir.x = 0;
+	frame->dir.y = -1;
+	frame->plane.x = 0.7;
+	frame->plane.y = 0;
 	if (settings->player_orientation == 'E')
 	{
 		frame->dir.x = 1;
@@ -64,7 +64,7 @@ void
 		frame->dir.y = 0;
 		frame->plane.x = 0;
 		frame->plane.y = -0.7;
-	}	
+	}
 }
 
 void
@@ -76,11 +76,11 @@ void
 		close_program(data, "Couldn't allocate mem for spr_y", "");
 	if (!(settings->spr_text = malloc(sizeof(char *) * (settings->spr_count))))
 		close_program(data, "Couldn't allocate mem for spr_text", "");
-	if(!(frame->z_buffer = malloc(sizeof(double *) * settings->win_size.x)))
+	if (!(frame->z_buffer = malloc(sizeof(double *) * settings->win_size.x)))
 		close_program(data, "Failed allocating z_buffer", "");
-	if(!(frame->spr_order = malloc(sizeof(int *) * settings->spr_count)))
+	if (!(frame->spr_order = malloc(sizeof(int *) * settings->spr_count)))
 		close_program(data, "Failed allocating spr_order", "");
-	if(!(frame->spr_dist = malloc(sizeof(double *) * settings->spr_count)))
+	if (!(frame->spr_dist = malloc(sizeof(double *) * settings->spr_count)))
 		close_program(data, "Failed allocating spr_dist", "");
 }
 
@@ -92,11 +92,11 @@ void
 	frame->pos.y = settings->starting_pos.y + 0.5;
 	settings->map[settings->starting_pos.y][settings->starting_pos.x] = '0';
 	frame->spr_sorted = 0;
-	create_texture_img(data, settings->NO_path, &frame->NO_img);
-	create_texture_img(data, settings->SO_path, &frame->SO_img);
-	create_texture_img(data, settings->WE_path, &frame->WE_img);
-	create_texture_img(data, settings->EA_path, &frame->EA_img);
-	create_texture_img(data, settings->S_path, &frame->S_img);
+	create_texture_img(data, settings->no_path, &frame->no_img);
+	create_texture_img(data, settings->so_path, &frame->so_img);
+	create_texture_img(data, settings->we_path, &frame->we_img);
+	create_texture_img(data, settings->ea_path, &frame->ea_img);
+	create_texture_img(data, settings->s_path, &frame->s_img);
 }
 
 void

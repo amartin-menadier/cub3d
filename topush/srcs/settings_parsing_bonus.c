@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   settings_parsing_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:30:05 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 11:22:33 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:44:50 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	int
-one_parameter_already_set(t_data *data, t_piclib *lib, char *line)
+int
+	one_parameter_already_set(t_data *data, t_piclib *lib, char *line)
 {
 	if ((!ft_memcmp(line, "R ", 2) && data->win.size.y)
 		|| (!ft_memcmp(line, "EA ", 3) && lib->ea.path)
@@ -35,8 +35,8 @@ one_parameter_already_set(t_data *data, t_piclib *lib, char *line)
 		return (0);
 }
 
-	int
-data_ok(t_data *data, t_piclib *lib, char *line)
+int
+	data_ok(t_data *data, t_piclib *lib, char *line)
 {
 	if (one_parameter_already_set(data, lib, line))
 		close_program(data, "One parameter is set twice\n", "");
@@ -50,8 +50,8 @@ data_ok(t_data *data, t_piclib *lib, char *line)
 		return (1);
 }
 
-	int
-check_data(t_data *data, t_piclib *lib, char *line)
+int
+	check_data(t_data *data, t_piclib *lib, char *line)
 {
 	int i;
 
@@ -79,13 +79,13 @@ check_data(t_data *data, t_piclib *lib, char *line)
 	return (i);
 }
 
-	void
-parse_line(t_data *data, t_piclib *lib, char *line)
+void
+	parse_line(t_data *data, t_piclib *lib, char *line)
 {
 	int i;
 
 	if ((i = check_data(data, lib, line)) == -1)
-		return;
+		return ;
 	if (line[i] == 'R' && line[i + 1] == ' ')
 		get_resolution(data, &line[i]);
 	if (line[i] == 'S' && line[i + 1] == 'O')

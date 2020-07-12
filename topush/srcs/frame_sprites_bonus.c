@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sprites.c                                          :+:      :+:    :+:   */
+/*   frame_sprites_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:46:16 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int
 	int		spr_width;
 
 	spr_width = img->size.x;
-	spr_pxl_x = (int)(256 * fabs(pxl_x - (- width_on_win / 2 
+	spr_pxl_x = (int)(256 * fabs(pxl_x - (-width_on_win / 2
 					+ center_x)) * spr_width / width_on_win) / 256;
 	return (spr_pxl_x);
 }
@@ -57,16 +57,16 @@ t_dbl
 }
 
 /*
- * transform.z stands for depth
- */
+** transform.z stands for depth
+*/
 void
 	draw_one_sprite(t_data *data, t_img *img, t_dbl transform, t_int draw_end)
 {
-	t_int	pxl;
-	t_int	spr_pxl;
-	unsigned int		color;
-	t_int	size_on_win;
-	double	center_x;
+	t_int			pxl;
+	t_int			spr_pxl;
+	unsigned int	color;
+	t_int			size_on_win;
+	double			center_x;
 
 	size_on_win.x = (int)sprite_data(data, transform, data->win.size, WIDTH);
 	size_on_win.y = (int)sprite_data(data, transform, data->win.size, HEIGHT);

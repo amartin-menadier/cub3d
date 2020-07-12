@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   event_sprite_hit_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:18 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void
 	start_game(data);
 }
 
-	void
-draw_victory(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
+void
+	draw_victory(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
 {
 	t_int		img_pxl;
 	t_dbl		step;
@@ -57,19 +57,19 @@ draw_victory(t_data *data, t_int pxl, t_int draw_start, t_int draw_end)
 	t_img		img;
 
 	size = data->win.size;
-img = data->piclib.victory;
-		if ((step.x = ((double)data->piclib.victory.size.x / (double)size.x)) < 1)
+	img = data->piclib.victory;
+	if ((step.x = ((double)data->piclib.victory.size.x / (double)size.x)) < 1)
 		step.x = 1;
 	if ((step.z = ((double)data->piclib.victory.size.y / (double)size.y)) < 1)
 		step.z = 1;
 	img_pxl.x = (int)((pxl.x - draw_start.x) * step.x);
 	img_pxl.y = (int)((pxl.y - draw_start.y) * step.z);
-	if ((pxl.x < draw_start.x || pxl.x > draw_end.x) 
+	if ((pxl.x < draw_start.x || pxl.x > draw_end.x)
 			|| (pxl.y < draw_start.y || pxl.y > draw_end.y))
 		color = BLACK;
 	else
 		color = img.colors[img.size.x * img_pxl.y + img_pxl.x];
-	put_pixel(&data->win, pxl, color); 
+	put_pixel(&data->win, pxl, color);
 }
 
 int
@@ -106,12 +106,12 @@ void
 {
 	t_int	cam;
 	char	case_value;
-	
+
 	cam.x = (int)data->cam.x;
 	cam.z = (int)data->cam.z;
 	case_value = data->map[cam.z][cam.x];
 	if (case_value == HEAL_SPR && data->life == 100)
-		return;
+		return ;
 	if (case_value == DAMAGE_SPR)
 		data->life -= 19;
 	if (data->life <= 0)
@@ -128,4 +128,3 @@ void
 	data->spr = NULL;
 	get_sprites_in_map(data, data->map);
 }
-

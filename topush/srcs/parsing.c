@@ -3,39 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:30:05 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 11:22:33 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:45:37 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-	int
-settings_ok(t_data *data, t_settings *settings, char *line)
+int
+	settings_ok(t_data *data, t_settings *settings, char *line)
 {
 	if ((!ft_memcmp(line, "R ", 2) && settings->win_size.y) ||
-		(!ft_memcmp(line, "NO ", 3) && settings->NO_path) ||
-		(!ft_memcmp(line, "SO ", 3) && settings->SO_path) ||
-		(!ft_memcmp(line, "EA ", 3) && settings->EA_path) ||
-		(!ft_memcmp(line, "WE ", 3) && settings->WE_path) ||
-		(!ft_memcmp(line, "S ", 2) && settings->S_path) ||
+		(!ft_memcmp(line, "NO ", 3) && settings->no_path) ||
+		(!ft_memcmp(line, "SO ", 3) && settings->so_path) ||
+		(!ft_memcmp(line, "EA ", 3) && settings->ea_path) ||
+		(!ft_memcmp(line, "WE ", 3) && settings->we_path) ||
+		(!ft_memcmp(line, "S ", 2) && settings->s_path) ||
 		(!ft_memcmp(line, "F ", 2) && settings->floor_color > -1) ||
 		(!ft_memcmp(line, "C ", 2) && settings->ceiling_color > -1))
-			close_program(data, "One parameter is set twice\n", "");
+		close_program(data, "One parameter is set twice\n", "");
 	if (settings->win_size.x == -1 || settings->win_size.y == -1 ||
-		settings->SO_path == NULL || settings->WE_path == NULL ||
-		settings->EA_path == NULL || settings->NO_path == NULL ||
-		settings->S_path == NULL || settings->floor_color == -1 ||
+		settings->so_path == NULL || settings->we_path == NULL ||
+		settings->ea_path == NULL || settings->no_path == NULL ||
+		settings->s_path == NULL || settings->floor_color == -1 ||
 		settings->ceiling_color == -1)
 		return (0);
 	else
 		return (1);
 }
 
-	int
-check_settings(t_data *data, t_settings *settings, char *line)
+int
+	check_settings(t_data *data, t_settings *settings, char *line)
 {
 	int i;
 
@@ -59,13 +59,13 @@ check_settings(t_data *data, t_settings *settings, char *line)
 	return (i);
 }
 
-	void
-parse_line(t_data *data, char *line)
+void
+	parse_line(t_data *data, char *line)
 {
 	int i;
 
 	if ((i = check_settings(data, &data->settings, line)) == -1)
-		return;
+		return ;
 	if (line[i] == 'R' && line[i + 1] == ' ')
 		get_resolution(data, &line[i], &data->settings);
 	if (line[i] == 'N' && line[i + 1] == 'O')
@@ -86,8 +86,8 @@ parse_line(t_data *data, char *line)
 		get_map(data, line, i, &data->settings);
 }
 
-	void
-get_sprites_data(t_data *data, t_settings *settings, char **map)
+void
+	get_sprites_data(t_data *data, t_settings *settings, char **map)
 {
 	t_int	pos;
 	int		i;
@@ -101,20 +101,20 @@ get_sprites_data(t_data *data, t_settings *settings, char **map)
 		while (pos.x < settings->map_size.x && i < settings->spr_count)
 		{
 			if (map[pos.y][pos.x] >= '2' && map[pos.y][pos.x] <= '9')
-				{
-					settings->spr_x[i] = pos.x + 0.5;
-					settings->spr_y[i] = pos.y + 0.5;
-					settings->spr_text[i] = map[pos.y][pos.x];
-					i++;
-				}
+			{
+				settings->spr_x[i] = pos.x + 0.5;
+				settings->spr_y[i] = pos.y + 0.5;
+				settings->spr_text[i] = map[pos.y][pos.x];
+				i++;
+			}
 			pos.x++;
 		}
 		pos.y++;
 	}
 }
 
-	void
-parse_cub_file(t_data *data)
+void
+	parse_cub_file(t_data *data)
 {
 	int		ret;
 	char	*line;

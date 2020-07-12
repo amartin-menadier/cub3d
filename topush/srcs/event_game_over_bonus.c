@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   event_game_over_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 12:15:52 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:31 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ void
 		step.z = 1;
 	img_pxl.x = (int)((pxl.x - draw_start.x) * step.x);
 	img_pxl.y = (int)((pxl.y - draw_start.y) * step.z);
-	if ((pxl.x < draw_start.x || pxl.x > draw_end.x) 
+	if ((pxl.x < draw_start.x || pxl.x > draw_end.x)
 			|| (pxl.y < draw_start.y || pxl.y > draw_end.y))
 		color = BLACK;
 	else
 		color = img.colors[img.size.x * img_pxl.y + img_pxl.x];
-	put_pixel(&data->win, pxl, color); 
+	put_pixel(&data->win, pxl, color);
 }
 
 void

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frame.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/12 21:56:07 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/12 14:47:06 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int
 	while (x < data->settings.win_size.x)
 	{
 		set_ray(data, &data->frame, x);
-		perform_DDA(data, &data->frame);
+		perform_dda(data, &data->frame);
 		data->frame.z_buffer[x] = data->frame.perp_wall_dist;
 		set_drawing_limits(data, &data->frame);
 		text_img = get_texture_img(&data->frame);
@@ -30,18 +30,18 @@ int
 		x++;
 	}
 	sort_sprites(&data->settings, &data->frame);
-	draw_sprites(data, &data->settings, &data->frame, &data->frame.S_img);
+	draw_sprites(data, &data->settings, &data->frame, &data->frame.s_img);
 	if (data->save == 1)
 	{
 		create_bmp(data, &data->img, "start.bmp");
 		close_program(data, "First image of the game saved ", "\\o/\n");
-	}	
+	}
 	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
 	return (0);
 }
 
 void
-	draw_column(t_data *data, t_frame *F, t_img *text_img, int x)
+	draw_column(t_data *data, t_frame *frame, t_img *text_img, int x)
 {
 	t_int	pos;
 	double	step;
@@ -49,20 +49,20 @@ void
 
 	pos.x = x;
 	pos.y = 0;
-	while (pos.y < F->draw_start)
+	while (pos.y < frame->draw_start)
 	{
 		put_pixel(&data->img, pos, data->settings.ceiling_color);
 		pos.y++;
 	}
-	step = 1.0 * text_img->size.y / F->line_height;
-	texPos = (F->draw_start - data->settings.win_size.y / 2 +
-		F->line_height / 2) * step;
-	while (pos.y < F->draw_end)
+	step = 1.0 * text_img->size.y / frame->line_height;
+	texPos = (frame->draw_start - data->settings.win_size.y / 2 +
+		frame->line_height / 2) * step;
+	while (pos.y < frame->draw_end)
 	{
-		F->text.y = (int)texPos & (text_img->size.y - 1);
+		frame->text.y = (int)texPos & (text_img->size.y - 1);
 		texPos += step;
 		put_pixel(&data->img, pos, text_img->colors
-			[(text_img->size.y * F->text.y + F->text.x)]);
+			[(text_img->size.y * frame->text.y + frame->text.x)]);
 		pos.y++;
 	}
 	pos.y--;
@@ -71,82 +71,82 @@ void
 }
 
 void
-	set_drawing_limits(t_data *data, t_frame *F)
+	set_drawing_limits(t_data *data, t_frame *frame)
 {
-	F->line_height =
-		abs((int)(data->settings.win_size.y / (F->perp_wall_dist)));
-	F->draw_start = -F->line_height / 2 + data->settings.win_size.y / 2;
-	if(F->draw_start < 0)
-		F->draw_start = 0;
-	F->draw_end = F->line_height / 2 + data->settings.win_size.y / 2;
-	if(F->draw_end >= data->settings.win_size.y)
-		F->draw_end = data->settings.win_size.y;
-	if (F->side == 0)
-		F->wall_x = F->pos.y + F->perp_wall_dist * F->ray.y;
+	frame->line_height =
+		abs((int)(data->settings.win_size.y / (frame->perp_wall_dist)));
+	frame->draw_start = -frame->line_height / 2 + data->settings.win_size.y / 2;
+	if (frame->draw_start < 0)
+		frame->draw_start = 0;
+	frame->draw_end = frame->line_height / 2 + data->settings.win_size.y / 2;
+	if (frame->draw_end >= data->settings.win_size.y)
+		frame->draw_end = data->settings.win_size.y;
+	if (frame->side == 0)
+		frame->wall_x = frame->pos.y + frame->perp_wall_dist * frame->ray.y;
 	else
-		F->wall_x = F->pos.x + F->perp_wall_dist * F->ray.x;
-	F->wall_x -= floor((F->wall_x));
+		frame->wall_x = frame->pos.x + frame->perp_wall_dist * frame->ray.x;
+	frame->wall_x -= floor((frame->wall_x));
 }
 
 /*
-** DDA = Digital Differential Analyser
+** dda = Digital Differential Analyser
 */
 
 void
-	perform_DDA(t_data *data, t_frame *F)
+	perform_dda(t_data *data, t_frame *frame)
 {
 	int	hit;
 
 	hit = 0;
 	while (hit == 0)
 	{
-		if(F->side_dist.x < F->side_dist.y)
+		if (frame->side_dist.x < frame->side_dist.y)
 		{
-			F->side_dist.x += F->delta_dist.x;
-			F->map.x += F->step.x;
-			F->side = 0;
+			frame->side_dist.x += frame->delta_dist.x;
+			frame->map.x += frame->step.x;
+			frame->side = 0;
 		}
 		else
 		{
-			F->side_dist.y += F->delta_dist.y;
-			F->map.y += F->step.y;
-			F->side = 1;
+			frame->side_dist.y += frame->delta_dist.y;
+			frame->map.y += frame->step.y;
+			frame->side = 1;
 		}
-		if(data->settings.map[(int)F->map.y][(int)F->map.x] == '1')
+		if (data->settings.map[(int)frame->map.y][(int)frame->map.x] == '1')
 			hit = 1;
 	}
-	if(F->side == 0)
-		F->perp_wall_dist = (F->map.x - F->pos.x + (1 - F->step.x)/2)/ F->ray.x;
+	if (frame->side == 0)
+		frame->perp_wall_dist = (frame->map.x - frame->pos.x + (1 - frame->step.x)/2)/ frame->ray.x;
 	else
-		F->perp_wall_dist = (F->map.y - F->pos.y + (1 - F->step.y)/2)/ F->ray.y;
+		frame->perp_wall_dist = (frame->map.y - frame->pos.y + (1 - frame->step.y)/2)/ frame->ray.y;
 }
 
 void
-	set_ray(t_data *data, t_frame *F, int x)
+	set_ray(t_data *data, t_frame *frame, int x)
 {
-	F->map.x = (int)F->pos.x;
-	F->map.y = (int)F->pos.y;
-	F->camera_x = 2 * x /(double)data->settings.win_size.x - 1;
-	F->ray.x = F->dir.x + F->plane.x * F->camera_x;
-	F->ray.y = F->dir.y + F->plane.y * F->camera_x;
-	F->delta_dist.x =
-		(F->ray.y == 0) ? 0 : ((F->ray.x == 0) ? 1 : fabs(1 / F->ray.x));
-	F->delta_dist.y =
-		(F->ray.x == 0) ? 0 : ((F->ray.y == 0) ? 1 : fabs(1 / F->ray.y));
-	if (F->ray.x < 0)
-		F->step.x = -1;
+	frame->map.x = (int)frame->pos.x;
+	frame->map.y = (int)frame->pos.y;
+	frame->camera_x = 2 * x /(double)data->settings.win_size.x - 1;
+	frame->ray.x = frame->dir.x + frame->plane.x * frame->camera_x;
+	frame->ray.y = frame->dir.y + frame->plane.y * frame->camera_x;
+	frame->delta_dist.x =
+		(frame->ray.y == 0) ? 0 : ((frame->ray.x == 0) ? 1 : fabs(1 / frame->ray.x));
+	frame->delta_dist.y =
+		(frame->ray.x == 0) ? 0 : ((frame->ray.y == 0) ? 1 : fabs(1 / frame->ray.y));
+	if (frame->ray.x < 0)
+		frame->step.x = -1;
 	else
-		F->step.x = 1;
-	if (F->ray.y < 0)
-		F->step.y = -1;
+		frame->step.x = 1;
+	if (frame->ray.y < 0)
+		frame->step.y = -1;
 	else
-		F->step.y = 1;
-	if (F->ray.x < 0)
-		F->side_dist.x = (F->pos.x - F->map.x) * F->delta_dist.x;
+		frame->step.y = 1;
+	if (frame->ray.x < 0)
+		frame->side_dist.x = (frame->pos.x - frame->map.x) * frame->delta_dist.x;
 	else
-		F->side_dist.x = (F->map.x + 1.0 - F->pos.x) * F->delta_dist.x;
-	if (F->ray.y < 0)
-		F->side_dist.y = (F->pos.y - F->map.y) * F->delta_dist.y;
+		frame->side_dist.x = (frame->map.x + 1.0 - frame->pos.x) * frame->delta_dist.x;
+	if (frame->ray.y < 0)
+		frame->side_dist.y = (frame->pos.y - frame->map.y) * frame->delta_dist.y;
 	else
-		F->side_dist.y = (F->map.y + 1.0 - F->pos.y) * F->delta_dist.y;
+		frame->side_dist.y = (frame->map.y + 1.0 - frame->pos.y) * frame->delta_dist.y;
 }

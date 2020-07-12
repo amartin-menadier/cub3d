@@ -15,7 +15,7 @@ NAME			= Cub3D
 SRCS1			= cub3d_bonus.c \
 event_bonus.c event_game_over_bonus.c event_kneel_jump_bonus.c event_move_bonus.c event_sprite_hit_bonus.c\
 event_look_bonus.c \
-frame_bonus.c frame_DDA_bonus.c frame_floor_and_sky_bonus.c frame_raycasting_bonus.c frame_skybox_bonus.c \
+frame_bonus.c frame_dda_bonus.c frame_floor_and_sky_bonus.c frame_raycasting_bonus.c frame_skybox_bonus.c \
 frame_sprites_bonus.c frame_walls_bonus.c \
 interface_bonus.c interface_avatar_bonus.c interface_lifebar_bonus.c interface_minimap_bonus.c \
 settings_bonus.c settings_free_bonus.c settings_images_bonus.c settings_init_bonus.c settings_map_bonus.c \
