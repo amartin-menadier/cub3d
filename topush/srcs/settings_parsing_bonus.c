@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   settings_parsing_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:30:05 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:44:50 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:59:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int
 		|| !ft_memcmp(&line[i], "S4 ", 3) || !ft_memcmp(&line[i], "S5 ", 3)
 		|| !ft_memcmp(&line[i], "S6 ", 3) || !ft_memcmp(&line[i], "S7 ", 3)
 		|| !ft_memcmp(&line[i], "S8 ", 3) || !ft_memcmp(&line[i], "S9 ", 3)))
-			close_program(data, "Invalid parameter before map\n", line);
+		close_program(data, "Invalid parameter before map\n", line);
 	return (i);
 }
 
@@ -106,8 +106,8 @@ void
 		get_map(data, line, i);
 }
 
-	void
-parse_cub_file(t_data *data)
+void
+	parse_cub_file(t_data *data)
 {
 	int		ret;
 	char	*line;

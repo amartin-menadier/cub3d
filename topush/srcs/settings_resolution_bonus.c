@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   settings_resolution_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:44:45 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:31:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void
 	get_resolution(t_data *data, char *line)
 {
 	int	i;
+
 	i = 1;
 	data->win.size.x = 0;
 	data->win.size.y = 0;

@@ -13,7 +13,7 @@
 #include "cub3d_bonus.h"
 
 int
-	is_look(int	key)
+	is_look(int key)
 {
 	if (key == LEFT || key == RIGHT || key == DOWN || key == UP)
 		return (1);

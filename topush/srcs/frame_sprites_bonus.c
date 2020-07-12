@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frame_sprites_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:46:16 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 19:19:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_dbl
 /*
 ** transform.z stands for depth
 */
+
 void
 	draw_one_sprite(t_data *data, t_img *img, t_dbl transform, t_int draw_end)
 {

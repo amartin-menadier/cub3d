@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interface_lifebar_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:45:59 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 19:27:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int
 	else if (mod == CENTER_X)
 		return ((data->win.size.x - 21) / 2 + 4);
 	else if (mod == CENTER_Y)
-		return (minimap_data(data, DRAW_START) / 2
-			+ lifebar_data(data, DRAW_END_Y) / 2 + 5);
-	return (-9999);
+		return (minimap_data(data, DRAW_START) / 2 + lifebar_data(data,
+			DRAW_END_Y) / 2 + 5);
+		return (-9999);
 }
 
 void

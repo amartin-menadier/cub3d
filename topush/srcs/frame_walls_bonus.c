@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frame_walls_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:46:13 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:32:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ void
 	}
 }
 
-	void
-draw_walls(t_data *data, t_int *win_size)
+void
+	draw_walls(t_data *data, t_int *win_size)
 {
 	t_int	*pxl_ptr;
 	t_int	pxl;

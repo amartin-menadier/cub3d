@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:47:45 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 19:29:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _CUB3D_BONUS_H_
-# define _CUB3D_BONUS_H_
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 # include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -114,7 +114,7 @@ typedef struct	s_piclib{
 */
 
 typedef struct	s_data{
-	char*		cub_path;
+	char		*cub_path;
 	void		*mlx;
 	void		*window;
 	t_piclib	piclib;
@@ -137,164 +137,98 @@ typedef struct	s_data{
 /*
 ** cub3d.c
 */
-void
-	close_program(t_data *data, char *error_msg, char *str);
-int
-	start_game(t_data *data);
+void			close_program(t_data *data, char *error_msg, char *str);
+int				start_game(t_data *data);
 
 /*
 ** event.c and family files
 */
-void
-	hook_event(t_data *data);
-void
-	look(t_dbl *angle, int key);
-void
-	move(t_data *data, char **map, t_dbl *pos, int key);
-void
-	jump(t_data *data, clock_t time_diff);
-void
-	kneel(t_data *data, int way);
-void
-	sprite_hit(t_data *data);
-void
-	game_over(t_data *data, t_int win_size, t_img *img);
-int
-	game_over_answer(t_data *data, int key);
-char*
-	new_level_path(char *old_path, char order);
-void
-	load_new_level(t_data *data, char order);
-int
-	victory(t_data *data, t_int win_size, t_img *img);
+void			hook_event(t_data *data);
+void			look(t_dbl *angle, int key);
+void			move(t_data *data, char **map, t_dbl *pos, int key);
+void			jump(t_data *data, clock_t time_diff);
+void			kneel(t_data *data, int way);
+void			sprite_hit(t_data *data);
+void			game_over(t_data *data, t_int win_size, t_img *img);
+int				game_over_answer(t_data *data, int key);
+char			*new_level_path(char *old_path, char order);
+void			load_new_level(t_data *data, char order);
+int				victory(t_data *data, t_int win_size, t_img *img);
 
 /*
 ** frame.c and family files
 */
-int
-	render_next_frame(t_data *data);
-double
-	ray_orientation(t_dbl ray);
-t_dbl
-	get_side_dist(t_data *data, t_dbl cam, t_dbl ray);
-int
-	drawing_limit(t_data *data, double perp_wall_dist, int mod);
-t_dbl
-	set_ray(t_data *data, t_int win_size);
-t_dbl
-	dda_step(t_dbl ray);
-t_dbl
-	ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod);
-double
-	wall_side(t_data *data, t_dbl ray);
-double
-	perp_wall_dist(t_data *data, t_dbl cam, t_dbl ray);
-void
-	draw_walls(t_data *data, t_int *win_size);
-void
-	draw_skybox(t_data *data, t_int *win_size);
-void
-	draw_floor_and_sky(t_data *data, t_dbl angle, t_int win_size);
-void
-	draw_sprites(t_data *data, t_piclib *lib);
+int				render_next_frame(t_data *data);
+double			ray_orientation(t_dbl ray);
+t_dbl			get_side_dist(t_data *data, t_dbl cam, t_dbl ray);
+int				drawing_limit(t_data *data, double perp_wall_dist, int mod);
+t_dbl			set_ray(t_data *data, t_int win_size);
+t_dbl			dda_step(t_dbl ray);
+t_dbl			ray_to_wall(t_data *data, t_dbl ray, t_dbl step, int mod);
+double			wall_side(t_data *data, t_dbl ray);
+double			perp_wall_dist(t_data *data, t_dbl cam, t_dbl ray);
+void			draw_walls(t_data *data, t_int *win_size);
+void			draw_skybox(t_data *data, t_int *win_size);
+void			draw_floor_and_sky(t_data *data, t_dbl angle, t_int win_size);
+void			draw_sprites(t_data *data, t_piclib *lib);
 
 /*
 ** interface.c and family files
 */
-void
-	draw_interface(t_data *data, t_piclib *piclib);
-void
-	draw_life_string(t_data *data);
-void
-	draw_minimap(t_data *data, t_int center, double radius);
-void
-	draw_lifebar(t_data *data, int length, int color);
-int
-	lifebar_data(t_data *data, int mod);
-void
-	get_minimap_avatar(t_data *data);
-double
-	minimap_data(t_data *data, int mod);
-void
-	get_minimap_avatar(t_data *data);
-int
-	get_avatar_color(t_data *data, t_img *avatar, t_dbl minimap_pos, int color);
-int
-	draw_script(t_data *data, int option);
+void			draw_interface(t_data *data, t_piclib *piclib);
+void			draw_life_string(t_data *data);
+void			draw_minimap(t_data *data, t_int center, double radius);
+void			draw_lifebar(t_data *data, int length, int color);
+int				lifebar_data(t_data *data, int mod);
+void			get_minimap_avatar(t_data *data);
+double			minimap_data(t_data *data, int mod);
+void			get_minimap_avatar(t_data *data);
+int				get_avatar_color
+					(t_data *data, t_img *avatar, t_dbl minimap_pos, int color);
+int				draw_script(t_data *data, int option);
 
 /*
 ** settings.c and family files
 */
-void
-	free_all(t_data *data);
-void
-	free_data(t_data *data);
-void
-	free_map(t_data *data, char **map, int ligns_to_free);
-void
-	free_image(t_data *data, t_img *img);
-t_dbl
-	get_first_angle(char c);
-void
-	parse_cub_file(t_data *data);
-void
-	init_all(t_data *data);
-void
-	set_game(t_data *data);
-void
-	get_sprites_in_map(t_data *data, char **map);
-double
-	sprite_data(t_data *data, t_dbl transform, t_int win, int mod);
-void
-	sort_sprites(t_dbl pos, t_dbl *spr, int spr_count);
-int
-	sprite_player_same_cell(t_data *data, int i);
-t_img
-	*get_sprite_image(char **map, t_dbl spr, t_piclib *lib);
-void
-	create_skybox(t_data *data, t_piclib *piclib, t_img *skybox);
-void
-	check_cell_neighbors(t_data *data, int i, int j);
-void
-	get_resolution(t_data *data, char *line);
-int
-	check_map_errors(t_data *data);
-void
-	get_map(t_data *data, char *line, int i);
-void
-	replace_cub_path(t_data *data, char *new_path);
+void			free_all(t_data *data);
+void			free_data(t_data *data);
+void			free_map(t_data *data, char **map, int ligns_to_free);
+void			free_image(t_data *data, t_img *img);
+t_dbl			get_first_angle(char c);
+void			parse_cub_file(t_data *data);
+void			init_all(t_data *data);
+void			set_game(t_data *data);
+void			get_sprites_in_map(t_data *data, char **map);
+double			sprite_data(t_data *data, t_dbl transform, t_int win, int mod);
+void			sort_sprites(t_dbl pos, t_dbl *spr, int spr_count);
+int				sprite_player_same_cell(t_data *data, int i);
+t_img			*get_sprite_image(char **map, t_dbl spr, t_piclib *lib);
+void			create_skybox(t_data *data, t_piclib *piclib, t_img *skybox);
+void			check_cell_neighbors(t_data *data, int i, int j);
+void			get_resolution(t_data *data, char *line);
+int				check_map_errors(t_data *data);
+void			get_map(t_data *data, char *line, int i);
+void			replace_cub_path(t_data *data, char *new_path);
 
 /*
 ** tools.c and family files
 */
-void
-	create_bmp(t_data *data, t_img *img, char *path);
-void
-	put_pixel(t_img *img, t_int pos, int color);
-void
-	create_img(t_data *data, char *path, t_img *img);
-int
-	img_color(int *colors, int pxl_x, int pxl_y, t_int size);
-t_dbl
-	rotate_point(double angle, t_dbl *ctr, t_dbl *old);
-void
-	get_image_path(t_data *data, t_piclib *lib, char *line, char *texture);
-double
-	dist(t_dbl obj1, t_dbl obj2);
-unsigned char
-	*int_to_rgb(unsigned char *copy, int color);
-double
-	square(double nb);
-int
-	is_look(int	key);
-int
-	is_move(int key);
-int
-	is_wall(char map_element);
-int
-	is_obstacle(char map_element);
+void			create_bmp(t_data *data, t_img *img, char *path);
+void			put_pixel(t_img *img, t_int pos, int color);
+void			create_img(t_data *data, char *path, t_img *img);
+int				img_color(int *colors, int pxl_x, int pxl_y, t_int size);
+t_dbl			rotate_point(double angle, t_dbl *ctr, t_dbl *old);
+void			get_image_path
+					(t_data *data, t_piclib *lib, char *line, char *texture);
+double			dist(t_dbl obj1, t_dbl obj2);
+unsigned char	*int_to_rgb(unsigned char *copy, int color);
+double			square(double nb);
+int				is_look(int	key);
+int				is_move(int key);
+int				is_wall(char map_element);
+int				is_obstacle(char map_element);
 
-#define PI 3.14159265358979323846
+# define PI 3.14159265358979323846
 
 /*
 ** SOME GAME VARIABLES AND MODS
@@ -379,7 +313,6 @@ int
 # define D 2
 # define V 9
 # define SPACE 49
-# define MOVE(x) (x == Z || x == Q || x == S || x == D || x == SPACE || x == V)
 # define N 45
 # define P 35
 # define Y 16

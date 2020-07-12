@@ -12,8 +12,8 @@
 
 #include "cub3d_bonus.h"
 
-	t_img
-*get_sprite_image(char **map, t_dbl spr, t_piclib *piclib)
+t_img
+	*get_sprite_image(char **map, t_dbl spr, t_piclib *piclib)
 {
 	char	value;
 
@@ -30,8 +30,8 @@
 		return (&piclib->s4);
 }
 
-	void
-get_sprite_path(t_piclib *piclib, char *tmp, char sprite_number)
+void
+	get_sprite_path(t_piclib *piclib, char *tmp, char sprite_number)
 {
 	if (sprite_number == '2')
 		piclib->s2.path = ft_strdup(tmp);
@@ -51,8 +51,8 @@ get_sprite_path(t_piclib *piclib, char *tmp, char sprite_number)
 		piclib->s9.path = ft_strdup(tmp);
 }
 
-	void
-get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
+void
+	get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 {
 	char	*tmp;
 	int		fd;
@@ -81,8 +81,8 @@ get_image_path(t_data *data, t_piclib *piclib, char *line, char *texture)
 	tmp = NULL;
 }
 
-	void
-put_pixel(t_img *img, t_int pos, int color)
+void
+	put_pixel(t_img *img, t_int pos, int color)
 {
 	char	*dst;
 
@@ -91,8 +91,8 @@ put_pixel(t_img *img, t_int pos, int color)
 	*(int*)dst = color;
 }
 
-	void
-create_img(t_data *data, char *path, t_img *img)
+void
+	create_img(t_data *data, char *path, t_img *img)
 {
 	char *tmp;
 

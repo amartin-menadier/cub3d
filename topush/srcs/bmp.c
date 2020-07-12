@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bmp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:40:31 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/12 14:42:43 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:19:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,14 @@ unsigned char
 void
 	fill_bmp(t_data *data, unsigned char *image, t_img *img, int bmp_fd)
 {
-	unsigned char	padding[3] = {0, 0, 0};
+	unsigned char	padding[3];
 	unsigned char	*file_header;
 	unsigned char	*info_header;
-	int i;
+	int				i;
 
+	padding[0] = 0;
+	padding[1] = 0;
+	padding[2] = 0;
 	i = (4 - (img->size.x * img->bpp / 8) % 4) % 4;
 	file_header = create_bmp_file_header(img, i);
 	info_header = create_bmp_info_header(img);
@@ -81,7 +84,7 @@ void
 		close_program(data, "Couldn't close bmp fd", "");
 }
 
-char 
+char
 	*get_screenshot_path(t_data *data, char *path)
 {
 	char	*path_number;
@@ -102,7 +105,7 @@ char
 	return (path);
 }
 
-void 
+void
 	create_bmp(t_data *data, t_img *img, char *path)
 {
 	unsigned char	image[img->size.y][img->size.x][img->bpp / 8];
@@ -117,7 +120,7 @@ void
 		pos.y = 0;
 		while (pos.y < img->size.x)
 		{
-			color  = img->colors[(pos.x * img->size.x + pos.y)];
+			color = img->colors[(pos.x * img->size.x + pos.y)];
 			int_to_rgb(image[pos.x][pos.y], color);
 			pos.y++;
 		}

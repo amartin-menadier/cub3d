@@ -12,7 +12,7 @@ LXFLAGS = -lmlx -framework OpenGL -framework AppKit
 
 HEADER = cub3d.h
 
-SRC = cub3d.c colors.c event.c exit.c frame.c img.c init.c map.c move.c parsing.c resolution.c textures.c print.c bmp.c sprites.c
+SRC = cub3d.c colors.c event.c exit.c frame.c img.c init.c map.c move.c parsing.c raycasting.c resolution.c textures.c print.c bmp.c sprites.c
 
 FIL = $(addprefix srcs/, $(SRC)) $(addprefix libft/, $(LIB_SRC))
 
@@ -30,7 +30,7 @@ frame_sprites_bonus.c frame_walls_bonus.c \
 interface_bonus.c interface_avatar_bonus.c interface_lifebar_bonus.c interface_minimap_bonus.c interface_scripts_bonus.c \
 settings_bonus.c settings_free_bonus.c settings_images_bonus.c settings_init_bonus.c settings_map_bonus.c \
 settings_parsing_bonus.c settings_resolution_bonus.c settings_skybox_bonus.c settings_sprites_bonus.c \
-tools_bmp_bonus.c tools_colors_bonus.c tools_maths_bonus.c \
+tools_bmp_bonus.c tools_colors_bonus.c tools_maths_bonus.c tools_macros_bonus.c\
 
 
 LIB_SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c \

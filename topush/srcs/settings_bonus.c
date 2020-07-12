@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   settings_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:45:22 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:32:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void
 	data->cub_path = ft_strdup(new_path);
 }
 
-	t_dbl
-get_first_angle(char c)
+t_dbl
+	get_first_angle(char c)
 {
 	t_dbl	angle;
 

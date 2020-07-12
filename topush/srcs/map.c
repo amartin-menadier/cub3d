@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:45:44 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:34:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ char
 		if (!(tmp[i] = malloc(sizeof(char*) * (settings->map_size.x + 1))))
 			close_program(data, "Failed allocating memory for tmp map\n", "");
 		if (i != (settings->map_size.y))
-			tmp[i] = ft_strcharcpy
-				(tmp[i], settings->map[i], settings->map_size.x, ' ');
+			tmp[i] = ft_strcharcpy(tmp[i],
+				settings->map[i], settings->map_size.x, ' ');
 		else
 			tmp[i] = ft_strcharcpy(tmp[i], line, settings->map_size.x, ' ');
 		i++;

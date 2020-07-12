@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frame_skybox_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:46:19 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:33:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_img
 /*
 ** the while is cheating to fix a bug but it seems to work
 */
+
 t_int
 	get_skybox_pixel(t_data *data, int pxl_y, t_dbl ray, t_img *face)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_bmp_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:44:13 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/12 14:44:17 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:21:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,14 @@ unsigned char
 void
 	fill_bmp(t_data *data, unsigned char *copy, t_img *scr, int bmp_fd)
 {
-	unsigned char	padding[3] = {0, 0, 0};
+	unsigned char	padding[3];
 	unsigned char	*file_header;
 	unsigned char	*info_header;
-	int i;
+	int				i;
 
+	padding[0] = 0;
+	padding[1] = 0;
+	padding[2] = 0;
 	i = (4 - (scr->size.x * scr->bpp / 8) % 4) % 4;
 	file_header = create_bmp_file_header(scr, i);
 	info_header = create_bmp_info_header(scr);

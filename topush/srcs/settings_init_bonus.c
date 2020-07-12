@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   settings_init_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:45:07 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:58:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
 
-	void
-init_image(t_img *img, int name)
+void
+	init_image(t_img *img, int name)
 {
 	img->ptr = NULL;
 	img->path = NULL;
@@ -21,8 +21,8 @@ init_image(t_img *img, int name)
 	img->name = name;
 }
 
-	void
-init_piclib(t_piclib *piclib)
+void
+	init_piclib(t_piclib *piclib)
 {
 	init_image(&piclib->ea, EA);
 	init_image(&piclib->so, SO);

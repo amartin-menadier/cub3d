@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:07:21 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/12 14:46:10 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:03:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void
 	put_pixel(t_img *img, t_int pos, int color)
 {
-	char	*
+	char	*dst;
 
 	dst = (char *)img->colors
 		+ (pos.y * img->line_length + pos.x * (img->bpp / 8));

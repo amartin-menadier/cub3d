@@ -55,7 +55,7 @@ int
 		|| !ft_memcmp(&line[i], "SO ", 3) || !ft_memcmp(&line[i], "WE ", 3)
 		|| !ft_memcmp(&line[i], "EA ", 3) || !ft_memcmp(&line[i], "S ", 2)
 		|| !ft_memcmp(&line[i], "F ", 2) || !ft_memcmp(&line[i], "C ", 2)))
-			close_program(data, "Invalid parameter before map\n", "");
+		close_program(data, "Invalid parameter before map\n", "");
 	return (i);
 }
 

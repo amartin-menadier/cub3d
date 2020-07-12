@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:47:09 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 18:35:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void
 	frame->spr_dist = NULL;
 }
 
-	void
-free_sprites(t_settings *settings)
+void
+	free_sprites(t_settings *settings)
 {
 	if (settings->spr_x != NULL)
 		free(settings->spr_x);
