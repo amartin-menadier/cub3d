@@ -6,7 +6,7 @@
 /*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:47:36 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 21:21:43 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int
 		return (0);
 	if (key == P)
 		create_bmp(data, &data->win, "./screenshots/screenshot");
-	if (LOOK(key))
+	if (is_look(key))
 		look(&data->angle, key);
-	if (MOVE(key))
+	if (is_move(key))
 		move(data, data->map, &data->cam, key);
 	if (data->map[(int)data->cam.z][(int)data->cam.x] > CLASSIC_WALL)
 		sprite_hit(data);

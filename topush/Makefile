@@ -12,7 +12,7 @@ LXFLAGS = -lmlx -framework OpenGL -framework AppKit
 
 HEADER = cub3d.h
 
-SRC = cub3d.c colors.c event.c exit.c frame.c img.c init.c map.c move.c parsing.c raycasting.c resolution.c textures.c print.c bmp.c sprites.c
+SRC = cub3d.c colors.c event.c exit.c frame.c img.c init.c map.c move.c parsing.c raycasting.c resolution.c textures.c bmp.c sprites.c
 
 FIL = $(addprefix srcs/, $(SRC)) $(addprefix libft/, $(LIB_SRC))
 

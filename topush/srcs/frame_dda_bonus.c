@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   frame_dda_bonus.c                                  :+:      :+:    :+:   */
+/*   frame_DDA_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 18:37:25 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/12 21:23:48 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_dbl
 	side_dist = get_side_dist(data, data->cam, ray);
 	cell.x = (int)data->cam.x;
 	cell.z = (int)data->cam.z;
-	while (!WALL(data->map[(int)cell.z][(int)cell.x]))
+	while (!is_wall(data->map[(int)cell.z][(int)cell.x]))
 	{
 		if (side_dist.x < side_dist.z)
 		{

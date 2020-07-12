@@ -6,7 +6,7 @@
 /*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:47:13 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 21:23:22 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void
 	new_z = cam->z + dir.z * MOVE_SPEED;
 	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
 		load_new_level(data, map[new_z][new_x]);
-	if (!OBSTACLE(map[(int)cam->z][(int)(cam->x + dir.x * MOVE_SPEED)]))
+	if (!is_obstacle(map[(int)cam->z][(int)(cam->x + dir.x * MOVE_SPEED)]))
 		cam->x += dir.x * MOVE_SPEED;
-	if (!OBSTACLE(map[(int)(cam->z + dir.z * MOVE_SPEED)][(int)cam->x]))
+	if (!is_obstacle(map[(int)(cam->z + dir.z * MOVE_SPEED)][(int)cam->x]))
 		cam->z += dir.z * MOVE_SPEED;
 }
 
@@ -38,9 +38,9 @@ void
 	new_z = cam->z - dir.z * MOVE_SPEED;
 	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
 		load_new_level(data, map[new_z][new_x]);
-	if (!OBSTACLE(map[(int)cam->z][(int)new_x]))
+	if (!is_obstacle(map[(int)cam->z][(int)new_x]))
 		cam->x -= dir.x * MOVE_SPEED;
-	if (!OBSTACLE(map[(int)new_z][(int)cam->x]))
+	if (!is_obstacle(map[(int)new_z][(int)cam->x]))
 		cam->z -= dir.z * MOVE_SPEED;
 }
 
@@ -54,9 +54,9 @@ void
 	new_z = cam->z - dir.x * MOVE_SPEED;
 	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
 		load_new_level(data, map[new_z][new_x]);
-	if (!OBSTACLE(map[(int)cam->z][(int)new_x]))
+	if (!is_obstacle(map[(int)cam->z][(int)new_x]))
 		cam->x += dir.z * MOVE_SPEED;
-	if (!OBSTACLE(map[(int)new_z][(int)cam->x]))
+	if (!is_obstacle(map[(int)new_z][(int)cam->x]))
 		cam->z -= dir.x * MOVE_SPEED;
 }
 
@@ -70,9 +70,9 @@ void
 	new_z = cam->z + dir.x * MOVE_SPEED;
 	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
 		load_new_level(data, map[new_z][new_x]);
-	if (!OBSTACLE(map[(int)cam->z][(int)new_x]))
+	if (!is_obstacle(map[(int)cam->z][(int)new_x]))
 		cam->x -= dir.z * MOVE_SPEED;
-	if (!OBSTACLE(map[(int)new_z][(int)cam->x]))
+	if (!is_obstacle(map[(int)new_z][(int)cam->x]))
 		cam->z += dir.x * MOVE_SPEED;
 }
 
