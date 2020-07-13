@@ -1,14 +1,14 @@
-NAME = Cub3D
+NAME = cub3D
 
 CC = clang
 
-CFLAGS = -O3 -Wall -Wextra -Werror
+CFLAGS = -O3 -Wall -Wextra -Werror #-O2 -fsanitize=address
 
 LIBFT = libft
 
 MLX = mlx
 
-LXFLAGS = -lmlx -framework OpenGL -framework AppKit
+LXFLAGS = -lmlx -framework OpenGL -framework AppKit 
 
 HEADER = cub3d.h
 

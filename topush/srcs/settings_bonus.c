@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   settings_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 18:32:37 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/13 17:07:24 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void
 	set_mlx(t_data *data, t_img *win, t_int win_size)
 {
 	data->mlx = mlx_init();
-	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "Cub3D");
+	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "cub3D");
 	win->ptr = mlx_new_image(data->mlx, win_size.x, win_size.y);
 	win->colors = (int *)mlx_get_data_addr(win->ptr, &win->bpp,
 			&win->line_length, &win->endian);

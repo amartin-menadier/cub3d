@@ -6,7 +6,7 @@
 /*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:46:06 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/12 21:50:37 by amenadier        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void
 	win_size.x = data->settings.win_size.x;
 	win_size.y = data->settings.win_size.y;
 	data->mlx = mlx_init();
-	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "Cub3D");
+	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "cub3D");
 	img = &data->img;
 	img->ptr = mlx_new_image(data->mlx, data->settings.win_size.x,
 			data->settings.win_size.y);
