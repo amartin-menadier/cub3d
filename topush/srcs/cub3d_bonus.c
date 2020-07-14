@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/13 17:05:18 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/14 14:56:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void
 	ft_putstr_fd(str, 1);
 	free_all(data);
 	ft_putstr_fd("\n_END_OF_PROGRAM_\n", 1);
-	system("sudo leaks cub3D"); //a supprimer
 	exit(0);
 }
 
