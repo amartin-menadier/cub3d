@@ -1,0 +1,17 @@
+R 1000     600           
+NO   ./textures/skyboxtest2.xpm         
+     
+SO ./textures/bat.xpm    
+   WE ./textures/zombie.xpm
+EA ./textures/police.xpm
+
+S2 ./textures/microbeB.xpm
+S3 ./textures/rollB.xpm
+F ./textures/wood.xpm
+C ./textures/purplestone.xpm
+
+11111
+10001
+10N01
+10001
+11111

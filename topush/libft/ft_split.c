@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 12:33:33 by amartin-          #+#    #+#             */
-/*   Updated: 2019/10/22 12:33:38 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/13 19:11:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,8 @@ static char	*ft_strdupspec(char const *str, char c)
 {
 	char	*dest;
 	int		i;
-	int		j;
-	int		count;
 
 	i = 0;
-	j = 0;
-	count = 0;
 	while (str[i])
 	{
 		if (str[i] == c)
