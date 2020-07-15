@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/14 14:13:53 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/15 14:14:04 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int
 {
 	init_all(data);
 	set_game(data);
+	hook_event(data);
 	mlx_loop_hook(data->mlx, render_next_frame, data);
 	mlx_loop(data->mlx);
 	return (0);

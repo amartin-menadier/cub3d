@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/02 11:01:29 by celeloup          #+#    #+#              #
-#    Updated: 2020/07/14 13:19:34 by user42           ###   ########.fr        #
+#    Updated: 2020/07/15 12:23:01 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ NAME			= cub3D
 NAME_BONUS      = Gaminet
 
 SRCS_FILE		= cub3d.c colors.c event.c exit.c frame.c img.c init.c map.c move.c parsing.c raycasting.c resolution.c textures.c bmp.c sprites.c
-SRCS_FILE_BONUS = cub3d_bonus.c \
+
+SRCS_FILE_BONUS	= cub3d_bonus.c \
 event_bonus.c event_game_over_bonus.c event_kneel_jump_bonus.c event_move_bonus.c event_sprite_hit_bonus.c\
 event_look_bonus.c \
 frame_bonus.c frame_dda_bonus.c frame_floor_and_sky_bonus.c frame_raycasting_bonus.c frame_skybox_bonus.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   frame_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:47:02 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/15 14:12:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int
 	render_next_frame(t_data *data)
 {
-	hook_event(data);
 	while (data->life > 0 && data->frame_done == 0)
 	{
 		if (data->skybox[0][0] < 0)

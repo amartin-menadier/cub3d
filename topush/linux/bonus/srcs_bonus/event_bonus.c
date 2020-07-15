@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/14 14:26:10 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/15 14:10:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int
 	press_key(int key, t_data *data)
 {
-	printf("\n%d", key);
 	if (key == ESC)
 		close_program(data, "\nSee you next time ! ", "\\o/\n");
 	if (data->life == -9999)
@@ -82,6 +81,6 @@ void
 	deal_current_event(data);
 	mlx_hook(data->window, 2, 1L << 0, press_key, data);
 	mlx_hook(data->window, 3, 1L << 1, release_key, data);
-	mlx_hook(data->window, 33, 1L << 17, red_cross, data);
+	mlx_hook(data->window, 0, 1L << 17, red_cross, data);
 	return ;
 }
