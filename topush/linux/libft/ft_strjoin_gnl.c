@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin_GNL.c                                   :+:      :+:    :+:   */
+/*   ft_strjoin_gnl.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 16:55:49 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/05 16:59:06 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/15 14:26:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strjoin_GNL(char *dest, char *src)
+char		*ft_strjoin_gnl(char *dest, char *src)
 {
 	void	*copy;
 	int		dest_len;

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amartin- <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/25 12:09:26 by amartin-          #+#    #+#              #
-#    Updated: 2020/03/07 23:08:59 by amartin-         ###   ########.fr        #
+#    Updated: 2020/07/15 14:25:55 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ ft_calloc.c ft_strdup.c ft_strjoin.c \
 ft_strcat.c ft_strlcat.c ft_strlen.c ft_strmapi.c ft_strncmp.c \
 ft_strcpy.c ft_strncpy.c ft_strlcpy.c ft_strnstr.c ft_strrchr.c \
 ft_strtrim.c ft_tolower.c ft_toupper.c ft_substr.c \
-get_next_line.c ft_strjoin_GNL.c ft_rgb_from_str.c \
+get_next_line.c ft_strjoin_gnl.c ft_rgb_from_str.c \
 ft_strcharcpy.c
 
 OBJ = $(SRC:.c=.o)

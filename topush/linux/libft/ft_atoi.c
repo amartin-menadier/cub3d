@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 11:52:09 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/05 15:52:21 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/15 14:34:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#define SPACE(x) (x=='\t'||x=='\v'||x=='\f'||x=='\r'||x=='\n'||x==' ')
+
+int			is_space(char c)
+{
+	if (c == '\t' || c == '\v' || c == '\f'
+		|| c == '\r' || c == '\n' || c == ' ')
+		return (1);
+	else
+		return (0);
+}
 
 static int	whatsign(const char *str)
 {
@@ -42,7 +50,7 @@ int			ft_atoi(const char *str)
 	i = 0;
 	s = ft_strdup(str);
 	sign = (whatsign(s));
-	while (SPACE(s[i]))
+	while (is_space(s[i]))
 		i++;
 	if (s[i] == '+' || s[i] == '-')
 		i++;

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 17:07:21 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/13 18:12:20 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/15 14:27:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		clean_return(char **ptr, char **ptr2, int ret)
 int		find_nl(char *str)
 {
 	int i;
-	
+
 	i = -1;
 	while (str[++i])
 		if (str[i] == '\n')
@@ -56,11 +56,11 @@ int		read_line(int fd, char **line, char *buff)
 		{
 			ft_strcpy(buff, tmp + nl_char + 1);
 			tmp[nl_char] = '\0';
-			if ((*line = ft_strjoin_GNL(*line, tmp)) == NULL)
+			if ((*line = ft_strjoin_gnl(*line, tmp)) == NULL)
 				return (clean_return(&tmp, NULL, -1));
 			return (clean_return(&tmp, NULL, 1));
 		}
-		if ((*line = ft_strjoin_GNL(*line, tmp)) == NULL)
+		if ((*line = ft_strjoin_gnl(*line, tmp)) == NULL)
 			return (clean_return(&tmp, NULL, -1));
 	}
 	if (ret == -1)
@@ -72,7 +72,7 @@ int		get_next_line(int fd, char **line)
 {
 	int			nl_char;
 	static char	buff[_SC_OPEN_MAX][BUFFER_SIZE + 1] = {{0}};
-	
+
 	if (fd < 0 || fd > _SC_OPEN_MAX || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
 	if ((*line = ft_strdup("")) == NULL)

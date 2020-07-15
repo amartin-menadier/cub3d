@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 13:14:07 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/07 23:03:54 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/15 14:32:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,3 @@ char		*ft_strncpy(char *dest, const char *src, size_t n)
 	dest[i] = '\0';
 	return (dest);
 }
-
