@@ -34,6 +34,7 @@ int
 {
 	t_data data;
 
+	init_settings(&data.settings);
 	check_args_errors(&data, argc, argv);
 	parse_cub_file(&data);
 	init_data(&data);
