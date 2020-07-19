@@ -13,8 +13,8 @@ S6 ./textures/rollB.xpm
 S7 ./textures/rollB.xpm
 S8 ./textures/rollB.xpm
 S9 ./textures/rollB.xpm
-F ./textures/wood.xpm
-C ./textures/purplestone.xpm
+F ./textures/roll.xpm
+C ./textures/roll.xpm
 
 1111111111111
 1000000000001

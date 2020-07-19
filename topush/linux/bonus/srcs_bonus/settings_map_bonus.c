@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:44:51 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/12 18:58:57 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/19 21:03:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,7 @@ int
 		z++;
 	}
 	if (data->angle.x == -1)
-	{
-		ft_putstr_fd("\nCurrent path is :", 1); 
-		ft_putstr_fd(data->cub_path, 1);//
 		close_program(data, "No map or no player data :'(", "");
-	}
 	return (0);
 }
 

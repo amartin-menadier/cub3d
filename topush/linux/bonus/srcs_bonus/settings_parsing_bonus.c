@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:30:05 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 18:59:27 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/19 21:02:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,19 +115,11 @@ void
 
 	line = NULL;
 	ret = 0;
-	ft_putstr_fd("\nParsing ", 1);
-	ft_putstr_fd(data->cub_path, 1);
 	if ((fd = open(data->cub_path, O_RDONLY)) == -1)
 		close_program(data, "Couldn't open .cub file\n", "");
-	ft_putstr_fd("\nfd number is :", 1);
-	ft_putnbr_fd(fd, 1);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		ft_putstr_fd("\nret = ", 1);
-		ft_putnbr_fd(ret, 1);
 		parse_line(data, &data->piclib, line);
-		ft_putchar_fd('\n', 1);
-		ft_putstr_fd(line, 1);
 		free(line);
 		line = NULL;
 	}

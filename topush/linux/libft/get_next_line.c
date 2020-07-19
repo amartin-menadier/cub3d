@@ -6,93 +6,71 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 17:07:21 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/15 14:27:27 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/19 20:59:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <limits.h>
-#include "libft.h"
+#include "get_next_line.h"
+#include <stdio.h>
 
-int		clean_return(char **ptr, char **ptr2, int ret)
+int		get_next_line3(t_struct *info, int fd)
 {
-	if (ptr != NULL)
-	{
-		free(*ptr);
-		*ptr = NULL;
-	}
-	if (ptr2 != NULL)
-	{
-		free(*ptr2);
-		*ptr2 = NULL;
-	}
-	return (ret);
+	if (!(info->buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+		return (-1);
+	info->nb_read = read(fd, info->buf, BUFFER_SIZE);
+	info->buf[info->nb_read] = 0;
+	info->str = ft_strjoingnl(&info->str, info->buf);
+	free(info->buf);
+	info->buf = 0;
+	return (0);
 }
 
-int		find_nl(char *str)
+int		get_next_line2(t_struct *info, int fd, char **line)
 {
-	int i;
+	size_t	i;
 
-	i = -1;
-	while (str[++i])
-		if (str[i] == '\n')
-			return (i);
-	return (-1);
-}
-
-int		read_line(int fd, char **line, char *buff)
-{
-	int		ret;
-	int		nl_char;
-	char	*tmp;
-
-	if ((tmp = malloc(sizeof(char) * (BUFFER_SIZE + 1))) == NULL)
-		return (clean_return(line, NULL, -1));
-	while ((ret = read(fd, tmp, BUFFER_SIZE)) > 0)
+	i = 0;
+	while (ft_strchrgnl(info->str, '\n') == NULL && info->nb_read != 0)
+		if (get_next_line3(info, fd) == -1)
+			return (-1);
+	if (ft_strchrgnl(info->str, '\n') != NULL)
 	{
-		tmp[ret] = '\0';
-		if ((nl_char = find_nl(tmp)) != -1)
-		{
-			ft_strcpy(buff, tmp + nl_char + 1);
-			tmp[nl_char] = '\0';
-			if ((*line = ft_strjoin_gnl(*line, tmp)) == NULL)
-				return (clean_return(&tmp, NULL, -1));
-			return (clean_return(&tmp, NULL, 1));
-		}
-		if ((*line = ft_strjoin_gnl(*line, tmp)) == NULL)
-			return (clean_return(&tmp, NULL, -1));
+		while (i < ft_strlengnl(info->str) && info->str[i] != '\n')
+			i += 1;
+		*line = i == 0 ? ft_strdupgnl("") : ft_substrgnl(info->str, 0, i);
+		info->tmp =
+			ft_substrgnl(info->str, i + 1, ft_strlengnl(&info->str[i + 1]));
+		free(info->str);
+		info->str = ft_strdupgnl(info->tmp);
+		free(info->tmp);
+		return (1);
 	}
-	if (ret == -1)
-		return (clean_return(&tmp, line, -1));
-	return (clean_return(&tmp, NULL, ret));
+	else
+	{
+		*line = ft_strdupgnl(info->str);
+		free(info->str);
+		info->str = 0;
+		return (0);
+	}
 }
 
 int		get_next_line(int fd, char **line)
 {
-	int			nl_char;
-	static char	buff[_SC_OPEN_MAX][BUFFER_SIZE + 1] = {{0}};
+	static t_struct	info;
 
-	if (fd < 0 || fd > _SC_OPEN_MAX || line == NULL || BUFFER_SIZE <= 0)
+	if (fd < 0 || line == NULL || BUFFER_SIZE < 1)
 		return (-1);
-	if ((*line = ft_strdup("")) == NULL)
-		return (-1);
-	if (buff[fd][0] == '\0')
-		return (read_line(fd, line, buff[fd]));
-	if ((nl_char = find_nl(buff[fd])) != -1)
+	if (!info.str)
 	{
-		free(*line);
-		if ((*line = (char *)malloc(sizeof(char) * (nl_char + 1))) == NULL)
-			return (-1);
-		ft_strncpy(*line, buff[fd], nl_char + 1);
-		(*line)[nl_char] = '\0';
-		ft_strcpy(buff[fd], buff[fd] + nl_char + 1);
-		return (1);
+		info.str = ft_strdupgnl("");
+		info.nb_read = 1;
 	}
-	free(*line);
-	if (!(*line = (char*)malloc(sizeof(char) * (ft_strlen(buff[fd]) + 1))))
-		return (-1);
-	ft_strcpy(*line, buff[fd]);
-	buff[fd][0] = '\0';
-	return (read_line(fd, line, buff[fd]));
+	while (info.nb_read > 0 || ft_strchrgnl(info.str, '\n') != NULL)
+		return (get_next_line2(&info, fd, line));
+	*line = ft_strdupgnl(info.str);
+	free(info.str);
+	free(info.buf);
+	info.buf = 0;
+	info.str = 0;
+	return (0);
 }

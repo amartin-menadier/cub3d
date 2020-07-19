@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/15 14:14:04 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/19 21:04:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int
 {
 	t_data	data;
 
-//	init_all(&data);
 	check_args_errors(&data, argc, argv);
 	start_game(&data);
 	return (0);
