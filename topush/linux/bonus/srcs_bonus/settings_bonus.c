@@ -66,7 +66,8 @@ void
 	set_mlx(t_data *data, t_img *win, t_int win_size)
 {
 	data->mlx = mlx_init();
-	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "cub3D");
+	data->window =
+		mlx_new_window(data->mlx, win_size.x, win_size.y, "Gaminet");
 	win->ptr = mlx_new_image(data->mlx, win_size.x, win_size.y);
 	win->colors = (int *)mlx_get_data_addr(win->ptr, &win->bpp,
 			&win->line_length, &win->endian);

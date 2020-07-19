@@ -114,11 +114,20 @@ void
 	int		fd;
 
 	line = NULL;
+	ret = 0;
+	ft_putstr_fd("\nParsing ", 1);
+	ft_putstr_fd(data->cub_path, 1);
 	if ((fd = open(data->cub_path, O_RDONLY)) == -1)
 		close_program(data, "Couldn't open .cub file\n", "");
+	ft_putstr_fd("\nfd number is :", 1);
+	ft_putnbr_fd(fd, 1);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
+		ft_putstr_fd("\nret = ", 1);
+		ft_putnbr_fd(ret, 1);
 		parse_line(data, &data->piclib, line);
+		ft_putchar_fd('\n', 1);
+		ft_putstr_fd(line, 1);
 		free(line);
 		line = NULL;
 	}

@@ -66,7 +66,11 @@ int
 		z++;
 	}
 	if (data->angle.x == -1)
+	{
+		ft_putstr_fd("\nCurrent path is :", 1); 
+		ft_putstr_fd(data->cub_path, 1);//
 		close_program(data, "No map or no player data :'(", "");
+	}
 	return (0);
 }
 

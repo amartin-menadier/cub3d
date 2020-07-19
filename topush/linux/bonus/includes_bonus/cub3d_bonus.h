@@ -197,6 +197,7 @@ void			free_image(t_data *data, t_img *img);
 t_dbl			get_first_angle(char c);
 void			parse_cub_file(t_data *data);
 void			init_all(t_data *data);
+void			init_data(t_data *data);
 void			set_game(t_data *data);
 void			get_sprites_in_map(t_data *data, char **map);
 double			sprite_data(t_data *data, t_dbl transform, t_int win, int mod);

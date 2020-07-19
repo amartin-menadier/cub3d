@@ -43,6 +43,9 @@ void
 int
 	start_game(t_data *data)
 {
+	ft_putstr_fd("\nLoading ", 1);
+	ft_putstr_fd(data->cub_path, 1);
+	ft_putstr_fd("...", 1);
 	init_all(data);
 	set_game(data);
 	hook_event(data);
@@ -56,6 +59,7 @@ int
 {
 	t_data	data;
 
+//	init_all(&data);
 	check_args_errors(&data, argc, argv);
 	start_game(&data);
 	return (0);
