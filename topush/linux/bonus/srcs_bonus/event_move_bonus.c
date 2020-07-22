@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   event_move_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 21:23:22 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/20 17:35:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../includes_bonus/cub3d_bonus.h"
 
 void
 	move_forward(t_data *data, char **map, t_dbl *cam, t_dbl dir)
@@ -94,9 +94,9 @@ void
 		data->current_event = KNEEL;
 	dir.x = cos(data->angle.x);
 	dir.z = sin(data->angle.x);
-	if (key == Z)
+	if (key == Z || key == W)
 		move_forward(data, map, cam, dir);
-	if (key == Q)
+	if (key == Q || key == A)
 		move_left(data, map, cam, dir);
 	if (key == S)
 		move_backward(data, map, cam, dir);

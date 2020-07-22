@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/15 14:12:53 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../includes_bonus/cub3d_bonus.h"
 
 int
 	render_next_frame(t_data *data)

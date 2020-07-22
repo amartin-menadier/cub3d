@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 21:50:37 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/21 16:52:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,13 @@ void
 	t_int	win_size;
 	t_img	*img;
 
+	data->mlx = mlx_init();
+	ft_putstr_fd("\nChecking resolution...", 1);
+	check_resolution(data, &data->settings);
 	win_size.x = data->settings.win_size.x;
 	win_size.y = data->settings.win_size.y;
-	data->mlx = mlx_init();
-	data->window = mlx_new_window(data->mlx, win_size.x, win_size.y, "cub3D");
+	if (!data->save)
+		data->win = mlx_new_window(data->mlx, win_size.x, win_size.y, "cub3D");
 	img = &data->img;
 	img->ptr = mlx_new_image(data->mlx, data->settings.win_size.x,
 			data->settings.win_size.y);
@@ -116,5 +119,7 @@ void
 			&img->line_length, &img->endian);
 	img->size.x = data->settings.win_size.x;
 	img->size.y = data->settings.win_size.y;
+	ft_putstr_fd("\nInitializing frame...", 1);
 	init_frame(data, &data->settings, &data->frame);
+	ft_putstr_fd("\nAll the data has been initialized...", 1);
 }

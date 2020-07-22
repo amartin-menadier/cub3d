@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:31:09 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/12 14:44:23 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/21 15:42:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,19 @@ void
 
 	if (!ft_strncmp(texture, "NO", 2))
 		if ((fd = open(data->settings.no_path, O_RDONLY)) == -1)
-			close_program(data, "Couldn't open xpm file for ", texture);
+			close_program(data, "Wrong path for ", texture);
 	if (!ft_strncmp(texture, "SO", 2))
 		if ((fd = open(data->settings.so_path, O_RDONLY)) == -1)
-			close_program(data, "Couldn't open xpm file for ", texture);
+			close_program(data, "Wrong path for ", texture);
 	if (!ft_strncmp(texture, "WE", 2))
 		if ((fd = open(data->settings.we_path, O_RDONLY)) == -1)
-			close_program(data, "Couldn't open xpm file for ", texture);
+			close_program(data, "Wrong path for ", texture);
 	if (!ft_strncmp(texture, "EA", 2))
 		if ((fd = open(data->settings.ea_path, O_RDONLY)) == -1)
-			close_program(data, "Couldn't open xpm file for ", texture);
+			close_program(data, "Wrong path for ", texture);
 	if (!ft_strncmp(texture, "S ", 2))
 		if ((fd = open(data->settings.s_path, O_RDONLY)) == -1)
-			close_program(data, "Couldn't open xpm file for ", texture);
+			close_program(data, "Wrong path for ", texture);
 }
 
 void

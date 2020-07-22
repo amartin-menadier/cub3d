@@ -6,11 +6,29 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:07:21 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/12 18:03:43 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/21 19:52:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+t_int
+	check_texture_pxl(t_int text, t_int img_size)
+{
+	t_int		ret;
+
+	ret.x = text.x;
+	ret.y = text.y;
+	if (ret.x < 0)
+		ret.x = 0;
+	if (ret.y < 0)
+		ret.y = 0;
+	if (ret.x >= img_size.x)
+		ret.x = img_size.x - 1;
+	if (ret.y >= img_size.y)
+		ret.y = img_size.y - 1;
+	return (ret);
+}
 
 void
 	put_pixel(t_img *img, t_int pos, int color)

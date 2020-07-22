@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   settings_sprites_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:44:34 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../includes_bonus/cub3d_bonus.h"
 
 void
 	get_sprites_in_map(t_data *data, char **map)

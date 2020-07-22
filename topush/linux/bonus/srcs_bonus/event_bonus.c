@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/15 14:10:25 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../includes_bonus/cub3d_bonus.h"
 
 int
 	press_key(int key, t_data *data)

@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/19 21:04:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/21 15:47:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../includes_bonus/cub3d_bonus.h"
 
 void
 	close_program(t_data *data, char *error_msg, char *str)
@@ -36,16 +36,13 @@ void
 	else
 		data->save = 0;
 	if (ft_memcmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4))
-		close_program(data, "File extension is not .cub\n", "");
+		close_program(data, "Map file name does not end with .cub\n", "");
 	data->cub_path = ft_strdup(argv[1]);
 }
 
 int
 	start_game(t_data *data)
 {
-	ft_putstr_fd("\nLoading ", 1);
-	ft_putstr_fd(data->cub_path, 1);
-	ft_putstr_fd("...", 1);
 	init_all(data);
 	set_game(data);
 	hook_event(data);

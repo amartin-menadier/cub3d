@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 19:01:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/22 15:23:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void
 	t_int		spr_img_pos;
 	t_settings	*settings;
 	int			d;
+	int			color;
 
 	spr_img_pos.x = stripe;
 	spr_img_pos.y = frame->spr_draw_start.y;
@@ -32,10 +33,10 @@ void
 			d = (spr_img_pos.y)
 				* 256 - settings->win_size.y * 128 + frame->spr_size.y * 128;
 			frame->text.y = ((d * img->size.y) / frame->spr_size.y) / 256;
-			if ((img->colors[(img->size.y * frame->text.y + frame->text.x)]
-				& 0x00FFFFFF) != 0)
-				put_pixel(&data->img, spr_img_pos,
-					img->colors[(img->size.y * frame->text.y + frame->text.x)]);
+			frame->text = check_texture_pxl(frame->text, img->size);
+			color = img->colors[(img->size.x * frame->text.y + frame->text.x)];
+			if ((color & 0x00FFFFFF) != 0)
+				put_pixel(&data->img, spr_img_pos, color);
 			spr_img_pos.y++;
 		}
 	}
@@ -79,6 +80,7 @@ void
 	int	j;
 	int	stripe;
 
+	sort_sprites(&data->settings, &data->frame);
 	i = 0;
 	j = 0;
 	while (i < settings->spr_count || j < settings->spr_count)

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/13 19:34:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/21 19:52:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ typedef struct	s_frame{
 
 typedef struct	s_data{
 	void		*mlx;
-	void		*window;
+	void		*win;
 	t_img		img;
 	t_settings	settings;
 	t_frame		frame;
@@ -158,6 +158,7 @@ void			draw_column(t_data *data,
 /*
 ** img.c
 */
+t_int			check_texture_pxl(t_int text, t_int img_size);
 void			put_pixel(t_img *img, t_int pos, int color);
 void			create_texture_img(t_data *data, char *path, t_img *textimg);
 
@@ -203,6 +204,7 @@ void			parse_cub_file(t_data *data);
 /*
 ** resolution.c
 */
+void			check_resolution(t_data *data, t_settings *settings);
 void			get_resolution(t_data *data, char *line, t_settings *settings);
 
 /*
@@ -222,6 +224,8 @@ void			get_texture(t_data *data, char *line, char *texture);
 /*
 ** KEY VALUES
 */
+# define KEY_A 97
+# define KEY_W 119
 # define KEY_Q 113
 # define KEY_S 115
 # define KEY_D 100

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:47:41 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/21 16:06:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ int
 		look_left(&data->frame);
 	if (key == KEY_RIGHT)
 		look_right(&data->frame);
-	if (key == KEY_Z)
+	if (key == KEY_Z || key == KEY_W)
 		move_forward(&data->frame, data->settings.map);
 	if (key == KEY_S)
 		move_backward(&data->frame, data->settings.map);
 	if (key == KEY_D)
 		move_right(&data->frame, data->settings.map);
-	if (key == KEY_Q)
+	if (key == KEY_Q || key == KEY_A)
 		move_left(&data->frame, data->settings.map);
 	data->frame.spr_sorted = 0;
 	return (key);
@@ -81,7 +81,7 @@ int
 void
 	hook_event(t_data *data)
 {
-	mlx_hook(data->window, 2, 1L << 0, press_key, data);
-	mlx_hook(data->window, 17, 1L << 17, red_cross, data);
+	mlx_hook(data->win, 2, 1L << 0, press_key, data);
+	mlx_hook(data->win, 17, 1L << 17, red_cross, data);
 	return ;
 }

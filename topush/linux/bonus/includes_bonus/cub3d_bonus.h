@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/14 14:18:34 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/20 14:35:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,6 +308,8 @@ int				is_obstacle(char map_element);
 /*
 ** KEY VALUES
 */
+# define A 97
+# define W 119
 # define Z 122
 # define Q 113
 # define S 115

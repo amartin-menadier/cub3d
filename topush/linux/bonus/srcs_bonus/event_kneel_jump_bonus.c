@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   event_kneel_jump_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:47:26 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../includes_bonus/cub3d_bonus.h"
 
 /*
 ** NB : cam_height = 0 at the top of the screen and  win_height -1 at the bottom

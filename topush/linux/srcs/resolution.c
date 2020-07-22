@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   resolution.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadier <amenadier@student.42.fr>        +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 14:45:26 by amenadier        ###   ########.fr       */
+/*   Updated: 2020/07/21 15:38:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void
+	check_resolution(t_data *data, t_settings *settings)
+{
+	int	x_max;
+	int y_max;
+
+	mlx_get_screen_size(data->mlx, &x_max, &y_max);
+	if (settings->win_size.x > x_max)
+		settings->win_size.x = x_max;
+	if (settings->win_size.y > y_max)
+		settings->win_size.y = y_max;
+}
 
 int
 	get_res_size(char *line, int *size)
@@ -44,11 +57,7 @@ void
 	i += get_res_size(&line[i], &settings->win_size.x);
 	i += get_res_size(&line[i], &settings->win_size.y);
 	if (line[i])
-		close_program(data, "Wrong resolution in .cub file\n", "");
+		close_program(data, "Wrong resolution format\n", "");
 	if (settings->win_size.x < 50 || settings->win_size.y < 50)
-		close_program(data, "Resolution is too small\n", "");
-	if (settings->win_size.x > 1400)
-		settings->win_size.x = 1400;
-	if (settings->win_size.y > 800)
-		settings->win_size.y = 800;
+		close_program(data, "Resolution is too small or wrong format\n", "");
 }

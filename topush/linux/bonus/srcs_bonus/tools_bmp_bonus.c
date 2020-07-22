@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:44:13 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/12 18:21:02 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../includes_bonus/cub3d_bonus.h"
 
 unsigned char
 	*create_bmp_info_header(t_img *scr)
@@ -126,8 +126,7 @@ void
 		}
 		pos.x++;
 	}
-	if ((bmp_fd = open(path, O_RDWR | O_CREAT | O_TRUNC,
-					S_IRWXU | S_IRWXG | S_IRWXO)) < 0)
+	if ((bmp_fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0700)) < 0)
 		close_program(data, "Couldn't create screenshot at ", path);
 	fill_bmp(data, (unsigned char *)copy, scr, bmp_fd);
 	free(path);

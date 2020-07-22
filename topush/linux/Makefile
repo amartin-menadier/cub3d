@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/03/02 11:01:29 by celeloup          #+#    #+#              #
-#    Updated: 2020/07/15 12:23:01 by user42           ###   ########.fr        #
+#    Created: 2020/07/20 16:28:24 by user42            #+#    #+#              #
+#    Updated: 2020/07/20 17:16:55 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,8 +62,10 @@ _HIDE_CURS	= "\033[?25l"
 _SHOW_CURS	= "\033[?25h"
 _UP			= "\033[A"
 _CUT		= "\033[k"
-.PHONY: all launch clean fclean re norme title bonus
-.SILENT:
+.PHONY: all launch clean fclean re norme title bonus 
+.SILENT: 
+
+
 all: launch
 launch:
 	$(MAKE) $(LIBFT)
@@ -79,7 +81,7 @@ $(LIBFT): FORCE
 $(MINILIBX): FORCE
 	$(MAKE) -sC $(MLX_DIR) 2>/dev/null
 FORCE:
-$(NAME): $(OBJS_DIR) $(OBJS)
+$(NAME): $(LIBFT) $(MINILIBX) $(OBJS_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLXFLAGS) $(MINILIBX) -o $(NAME)
 $(OBJS): $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADER)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -103,7 +105,7 @@ bonus:
 	$(MAKE) $(NAME_BONUS)
 	echo $(_GREEN)"\nDone."$(_END)$(_SHOW_CURS)
 
-$(NAME_BONUS): $(OBJS_DIR_BONUS) $(OBJS_BONUS)
+$(NAME_BONUS): $(LIBFT) $(MINILIBX) $(OBJS_DIR_BONUS) $(OBJS_BONUS)
 	$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT) $(MLXFLAGS) $(MINILIBX) -o $(NAME_BONUS)
 $(OBJS_DIR_BONUS):
 	mkdir $@

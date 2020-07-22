@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/12 18:27:20 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/22 15:23:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int
 	t_img	*text_img;
 
 	x = 0;
+	mlx_destroy_image(data->mlx, data->img.ptr);
+	data->img.ptr = mlx_new_image(data->mlx, data->settings.win_size.x,
+			data->settings.win_size.y);
 	while (x < data->settings.win_size.x)
 	{
 		set_ray(data, &data->frame, x);
@@ -29,14 +32,13 @@ int
 		draw_column(data, &data->frame, text_img, x);
 		x++;
 	}
-	sort_sprites(&data->settings, &data->frame);
 	draw_sprites(data, &data->settings, &data->frame, &data->frame.s_img);
-	if (data->save == 1)
+	if (data->save)
 	{
 		create_bmp(data, &data->img, "start.bmp");
 		close_program(data, "First image of the game saved ", "\\o/\n");
 	}
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
+	mlx_put_image_to_window(data->mlx, data->win, data->img.ptr, 0, 0);
 	return (0);
 }
 
