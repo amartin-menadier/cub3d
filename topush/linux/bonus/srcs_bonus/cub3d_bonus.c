@@ -6,17 +6,20 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/21 15:47:37 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/22 16:50:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes_bonus/cub3d_bonus.h"
 
+/*
+**if (ft_memcmp(str, "\\o/\n", 4))
+**		ft_putstr_fd("Error\n", 1);
+*/
+
 void
 	close_program(t_data *data, char *error_msg, char *str)
 {
-	if (ft_memcmp(str, "\\o/\n", 4))
-		ft_putstr_fd("Error\n", 1);
 	ft_putstr_fd(error_msg, 1);
 	ft_putstr_fd(str, 1);
 	free_all(data);
@@ -51,12 +54,17 @@ int
 	return (0);
 }
 
+/*
+**	check_args_errors(&data, argc, argv); removed
+*/
+
 int
 	main(int argc, char **argv)
 {
 	t_data	data;
 
-	check_args_errors(&data, argc, argv);
+	(void)argc;
+	data.cub_path = ft_strdup(argv[1]);
 	start_game(&data);
 	return (0);
 }

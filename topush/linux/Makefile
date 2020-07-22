@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/20 16:28:24 by user42            #+#    #+#              #
-#    Updated: 2020/07/20 17:16:55 by user42           ###   ########.fr        #
+#    Updated: 2020/07/22 17:03:45 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ OBJS_DIR_BONUS	= ./bonus/objs_bonus/
 INCLUDES_DIR_BONUS	= ./bonus/includes_bonus/
 INCLUDES_BONUS	= $(addprefix -I, $(INCLUDES_DIR_BONUS) $(LIBFT_DIR) $(LIBVECT_DIR) $(MLX_DIR))
 HEADER_BONUS	= $(INCLUDES_DIR_BONUS)cub3d_bonus.h
+BONUS_MAP		= ./cub/bonus/42_start1.cub
 LIBFT_DIR		= ./libft/
 MLX_DIR			= ./mlx/
 LIBFT			= $(LIBFT_DIR)libft.a
@@ -62,9 +63,8 @@ _HIDE_CURS	= "\033[?25l"
 _SHOW_CURS	= "\033[?25h"
 _UP			= "\033[A"
 _CUT		= "\033[k"
-.PHONY: all launch clean fclean re norme title bonus 
+.PHONY: all launch clean fclean re norme title bonus
 .SILENT: 
-
 
 all: launch
 launch:
@@ -104,6 +104,7 @@ bonus:
 	echo $(_CLEAR)$(_YELLOW)"building - "$(_GREEN)$(NAME_BONUS)$(_END)
 	$(MAKE) $(NAME_BONUS)
 	echo $(_GREEN)"\nDone."$(_END)$(_SHOW_CURS)
+	./$(NAME_BONUS) $(BONUS_MAP)
 
 $(NAME_BONUS): $(LIBFT) $(MINILIBX) $(OBJS_DIR_BONUS) $(OBJS_BONUS)
 	$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT) $(MLXFLAGS) $(MINILIBX) -o $(NAME_BONUS)
@@ -119,6 +120,9 @@ bonus_clean:
 bonus_fclean: bonus_clean
 	$(RM) $(LIBFT)
 	$(RM) $(NAME_BONUS)
+
+norme:
+	~/.norminette/norminette.rb $(LIBFT_DIR) $(SRCS_DIR) $(HEADER) $(SRCS_DIR_BONUS) $(HEADER_BONUS)
 
 #check leak avec valgrind
 #valgrind --tool=memcheck --leak-check=full --leak-resolution=high --show-reachable=yes ./Cub3D maps/resolution_double.cub > valgrind_log 2>&1

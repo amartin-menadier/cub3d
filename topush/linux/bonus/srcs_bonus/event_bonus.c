@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/22 16:30:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,6 @@ void
 	deal_current_event(data);
 	mlx_hook(data->window, 2, 1L << 0, press_key, data);
 	mlx_hook(data->window, 3, 1L << 1, release_key, data);
-	mlx_hook(data->window, 0, 1L << 17, red_cross, data);
+	mlx_hook(data->window, 17, 1L << 17, red_cross, data);
 	return ;
 }

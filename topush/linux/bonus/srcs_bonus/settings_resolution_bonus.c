@@ -6,16 +6,27 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/22 16:15:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes_bonus/cub3d_bonus.h"
 
 void
+	check_resolution(t_data *data)
+{
+	int	x_max;
+	int y_max;
+
+	mlx_get_screen_size(data->mlx, &x_max, &y_max);
+	data->win.size.x = x_max;
+	data->win.size.y = y_max;
+}
+
+void
 	get_resolution(t_data *data, char *line)
 {
-	int	i;
+	int		i;
 
 	i = 1;
 	data->win.size.x = 0;
@@ -32,10 +43,4 @@ void
 		i++;
 	if (line[i])
 		close_program(data, "Wrong resolution in .cub file\n", "");
-	if (data->win.size.x < 50 || data->win.size.y < 50)
-		close_program(data, "Resolution is too small\n", "");
-	if (data->win.size.x > 1400)
-		data->win.size.x = 1400;
-	if (data->win.size.y > 800)
-		data->win.size.y = 800;
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/22 16:17:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,24 @@ void
 }
 
 void
-	set_mlx(t_data *data, t_img *win, t_int win_size)
+	set_mlx(t_data *data, t_img *win, t_int *win_size)
 {
 	data->mlx = mlx_init();
+	check_resolution(data);
 	data->window =
-		mlx_new_window(data->mlx, win_size.x, win_size.y, "Gaminet");
-	win->ptr = mlx_new_image(data->mlx, win_size.x, win_size.y);
+		mlx_new_window(data->mlx, win_size->x, win_size->y, "Gaminet");
+	win->ptr = mlx_new_image(data->mlx, win_size->x, win_size->y);
 	win->colors = (int *)mlx_get_data_addr(win->ptr, &win->bpp,
 			&win->line_length, &win->endian);
-	win->size.x = win_size.x;
-	win->size.y = win_size.y;
+	win->size.x = win_size->x;
+	win->size.y = win_size->y;
 }
 
 void
 	set_game(t_data *data)
 {
 	parse_cub_file(data);
-	set_mlx(data, &data->win, data->win.size);
+	set_mlx(data, &data->win, &data->win.size);
 	data->cam.y = data->win.size.y / 2;
 	create_piclib(data, &data->piclib);
 	if (!(data->z_buffer = malloc(sizeof(double *) * data->win.size.x)))

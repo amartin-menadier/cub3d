@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/20 14:35:51 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/22 16:14:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ void			get_resolution(t_data *data, char *line);
 int				check_map_errors(t_data *data);
 void			get_map(t_data *data, char *line, int i);
 void			replace_cub_path(t_data *data, char *new_path);
+void			check_resolution(t_data *data);
 
 /*
 ** tools.c and family files
