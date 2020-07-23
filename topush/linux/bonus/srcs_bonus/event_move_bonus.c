@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/20 17:35:19 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 20:34:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,7 @@ void
 	new_x = cam->x + dir.x * MOVE_SPEED;
 	new_z = cam->z + dir.z * MOVE_SPEED;
 	if (map[new_z][new_x] && map[new_z][new_x] >= STAIRS_DOWN)
-	{
-		ft_putstr_fd("\nORDER = ", 1);
-		ft_putchar_fd(map[new_z][new_x], 1);
 		load_new_level(data, map[new_z][new_x]);
-	}
 	if (!is_obstacle(map[(int)cam->z][(int)(cam->x + dir.x * MOVE_SPEED)]))
 		cam->x += dir.x * MOVE_SPEED;
 	if (!is_obstacle(map[(int)(cam->z + dir.z * MOVE_SPEED)][(int)cam->x]))
@@ -85,13 +81,6 @@ void
 {
 	t_dbl	dir;
 
-	if (key == SPACE && data->current_event != KNEEL)
-	{
-		data->time = clock();
-		data->current_event = JUMP;
-	}
-	if (key == V && data->current_event != JUMP)
-		data->current_event = KNEEL;
 	dir.x = cos(data->angle.x);
 	dir.z = sin(data->angle.x);
 	if (key == Z || key == W)

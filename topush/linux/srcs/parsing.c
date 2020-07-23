@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 13:30:05 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/21 16:43:16 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 19:28:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int
 		(!ft_memcmp(line, "F ", 2) && settings->floor_color > -1) ||
 		(!ft_memcmp(line, "C ", 2) && settings->ceiling_color > -1))
 		close_program(data, "One parameter is set twice\n", "");
-	if (settings->win_size.x == -1 || settings->win_size.y == -1 ||
+	if (settings->win_size.x == 0 || settings->win_size.y == 0 ||
 		settings->so_path == NULL || settings->we_path == NULL ||
 		settings->ea_path == NULL || settings->no_path == NULL ||
 		settings->s_path == NULL || settings->floor_color == -1 ||
@@ -43,7 +43,9 @@ int
 	while (line[i] && line[i] == ' ')
 		i++;
 	if (line[i] == '\0' && settings->map_size.y)
-		close_program(data, "Empty line in map", "");
+		settings->map_done++;
+	if (line[i] && settings->map_done)
+		close_program(data, "Map not last or empty line in it\n", "");
 	else if (line[i] == '\0')
 		return (-1);
 	if (line[i] == '1' && !settings_ok(data, settings, &line[i]))
@@ -121,11 +123,13 @@ void
 
 	line = NULL;
 	init_settings(&data->settings);
-	while ((ret = get_next_line(data->settings.fd, &line)) > 0)
+	while ((ret = get_next_line(data->settings.fd, &line)) >= 0)
 	{
 		parse_line(data, line);
 		free(line);
 		line = NULL;
+		if (ret == 0)
+			break ;
 	}
 	free(line);
 	line = NULL;

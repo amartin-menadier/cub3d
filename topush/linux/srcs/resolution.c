@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/21 15:38:14 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 20:03:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ void
 	i += get_res_size(&line[i], &settings->win_size.y);
 	if (line[i])
 		close_program(data, "Wrong resolution format\n", "");
-	if (settings->win_size.x < 50 || settings->win_size.y < 50)
-		close_program(data, "Resolution is too small or wrong format\n", "");
+	if (settings->win_size.x < 1 || settings->win_size.y < 1)
+		close_program(data, "Wrong resolution format\n", "");
 }

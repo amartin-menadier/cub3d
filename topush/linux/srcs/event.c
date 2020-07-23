@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/21 16:06:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 20:31:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void
 int
 	press_key(int key, t_data *data)
 {
-	if (key == KEY_P)
-		create_bmp(data, &data->img, "./screenshots/screenshot");
 	if (key == KEY_ESC)
 		close_program(data, "\nEverything went well ! ", "\\o/\n");
 	if (key == KEY_LEFT)

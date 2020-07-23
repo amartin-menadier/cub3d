@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/22 16:30:48 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 20:31:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ int
 	if (!ft_strncmp(data->cub_path, "./cub/bonus/42_start1.cub", 25)
 		|| !ft_strncmp(data->cub_path, "./cub/bonus/skybox.cub", 22))
 		replace_cub_path(data, "./cub/bonus/42_1.cub");
-	if (data->current_event == JUMP)
-		return (0);
-	if (key == P)
-		create_bmp(data, &data->win, "./screenshots/screenshot");
 	if (is_look(key))
 		look(&data->angle, key);
 	if (is_move(key))
@@ -78,9 +74,7 @@ void
 void
 	hook_event(t_data *data)
 {
-	deal_current_event(data);
 	mlx_hook(data->window, 2, 1L << 0, press_key, data);
-	mlx_hook(data->window, 3, 1L << 1, release_key, data);
 	mlx_hook(data->window, 17, 1L << 17, red_cross, data);
 	return ;
 }

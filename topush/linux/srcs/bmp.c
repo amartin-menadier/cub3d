@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 14:40:31 by amenadier         #+#    #+#             */
-/*   Updated: 2020/07/21 16:37:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 19:46:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ void
 	int				color;
 	int				bmp_fd;
 
-	ft_putstr_fd("\nCreating bmp...\n", 1);
 	path = get_screenshot_path(data, path);
 	pos.x = 0;
 	while (pos.x < img->size.y)

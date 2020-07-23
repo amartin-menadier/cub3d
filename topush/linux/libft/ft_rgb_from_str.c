@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_rgb_from_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amartin- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 00:15:41 by amartin-          #+#    #+#             */
-/*   Updated: 2020/03/07 02:03:12 by amartin-         ###   ########.fr       */
+/*   Updated: 2020/07/23 18:48:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,32 @@ static int	check_between(char *string, int i, int mod)
 		return (i);
 }
 
+int			check_rgb_string(char *string)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	i = check_between(string, i, 0);
+	if (ft_isdigit(string[i]))
+		count++;
+	while (ft_isdigit(string[i]))
+		i++;
+	i = check_between(string, i, 1);
+	if (ft_isdigit(string[i]))
+		count++;
+	while (ft_isdigit(string[i]))
+		i++;
+	i = check_between(string, i, 1);
+	if (ft_isdigit(string[i]))
+		count++;
+	if (count != 3)
+		return (0);
+	else
+		return (1);
+}
+
 int			get_rgb_from_string(char *string)
 {
 	int	rgb;
@@ -41,7 +67,7 @@ int			get_rgb_from_string(char *string)
 	g = 0;
 	b = 0;
 	i = 0;
-	if ((i = check_between(string, i, 0)) == -1)
+	if (!check_rgb_string(string) || (i = check_between(string, i, 0)) == -1)
 		return (-1);
 	while (ft_isdigit(string[i]))
 		rgb = rgb * 10 + string[i++] - '0';

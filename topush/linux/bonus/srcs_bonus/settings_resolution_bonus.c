@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/22 16:15:14 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 20:28:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void
 	int y_max;
 
 	mlx_get_screen_size(data->mlx, &x_max, &y_max);
-	data->win.size.x = x_max;
-	data->win.size.y = y_max;
+	data->win.size.x = 700;
+	data->win.size.y = 400;
 }
 
 void

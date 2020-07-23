@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/21 16:07:55 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 16:20:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int
 		mlx_destroy_image(data->mlx, data->img.ptr);
 		if (!data->save)
 			mlx_destroy_window(data->mlx, data->win);
+		free(data->mlx);
 	}
 	ft_putstr_fd("\n_END_OF_PROGRAM_\n", 1);
 	exit(0);

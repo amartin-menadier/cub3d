@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/21 19:52:35 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 19:07:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct	s_settings{
 	int			ceiling_color;
 	char		**map;
 	t_int		map_size;
+	int			map_done;
 	char		player_orientation;
 	t_int		starting_pos;
 	int			spr_count;

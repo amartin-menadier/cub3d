@@ -6,13 +6,14 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 20:42:54 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 20:33:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes_bonus/cub3d_bonus.h"
 
 /*
+** Update : kneel and jump desactivated in linux :(
 ** NB : cam_height = 0 at the top of the screen and  win_height -1 at the bottom
 ** three steps = some kneeling to gather momentum / jump / gravity to init pos
 */

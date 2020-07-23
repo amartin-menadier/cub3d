@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:30:34 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/21 16:52:45 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 19:08:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void
 	settings->map = NULL;
 	settings->map_size.x = 1;
 	settings->map_size.y = 0;
+	settings->map_done = 0;
 	settings->player_orientation = (char)NULL;
 	settings->starting_pos.x = -1;
 	settings->starting_pos.y = -1;
@@ -106,7 +107,6 @@ void
 	t_img	*img;
 
 	data->mlx = mlx_init();
-	ft_putstr_fd("\nChecking resolution...", 1);
 	check_resolution(data, &data->settings);
 	win_size.x = data->settings.win_size.x;
 	win_size.y = data->settings.win_size.y;
@@ -119,7 +119,5 @@ void
 			&img->line_length, &img->endian);
 	img->size.x = data->settings.win_size.x;
 	img->size.y = data->settings.win_size.y;
-	ft_putstr_fd("\nInitializing frame...", 1);
 	init_frame(data, &data->settings, &data->frame);
-	ft_putstr_fd("\nAll the data has been initialized...", 1);
 }
