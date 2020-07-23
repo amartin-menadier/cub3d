@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 14:34:24 by amartin-          #+#    #+#             */
-/*   Updated: 2020/07/20 17:37:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/23 21:15:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,10 @@
 int
 	game_over_answer(t_data *data, int key)
 {
-	char *path;
-
 	if (key == Y)
 	{
-		path = ft_strdup(data->cub_path);
 		free_all(data);
-		data->cub_path = ft_strdup(path);
-		free(path);
-		path = NULL;
+		data->cub_path = ft_strdup("./cub/bonus/42_start1.cub");
 		start_game(data);
 	}
 	if (key == N || key == ESC)
